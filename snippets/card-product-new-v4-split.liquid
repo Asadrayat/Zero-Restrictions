@@ -1,0 +1,111 @@
+{% comment %} {% render 'product-card-v3-split', product: product, card_variant: color_variant, variant_option: value %} {% endcomment %}
+<div class="--product-card-v3 --august-product-card product-card">
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+  <div class="--image-wrapper">
+    {% render 'card-product-new-v4-media-split',
+      product: product,
+      collection: collection,
+      card_variant: card_variant,
+      variant_option: variant_option
+    %}
+
+
+
+    {% comment %}
+      <button class="--quick-add --quick-add-mobile --quick-add-trigger">
+        {% render 'all-icons', name: 'test-bag' %}
+      </button>
+    {% endcomment %}
+  </div>
+
+  <div class="--product-info product-card__details">
+    <a class="absolute-link" href="{{ product.selected_or_first_available_variant.url | within: collection }}"></a>
+    <div class="product-card__color-rating">
+      <div class="color-swatches --color-options --quick-add-trigger -hidden">
+        {%-# assign color_option = product.options_with_values | where: 'name', 'Color' | first -%}
+        {% assign color_option = null %}
+          {% for option in product.options_with_values %}
+            {% assign option_name = option.name | downcase %}
+            {% if option_name == 'color' %}
+              {% assign color_option = option %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+        {% assign color_handle = card_variant.title | split: ' / ' | first | strip | handle %}
+        {% assign swatch_image = color_handle | append: '.png' | file_img_url: '45x' %}
+        {% comment %} {% assign color_variant = product.variants | where: 'option1', color | first %} {% endcomment %}
+        <a
+          href="{{ card_variant.url | within: collection }}"
+          class="color-swatch --color-swatch --quick-add-trigger"
+          style="{% if images[color_handle] %}background-image: url({{ swatch_image }});{% else %}background-color: {{ color_handle }};{% endif %}"
+          data-url="{{ card_variant.url | within: collection }}"
+        ></a>
+      </div>
+    </div>
+    <div class="--custom-badge-wrapper {% if collection.metafields.custom.is_sale_collection == true  %} hidden {% endif %}">
+      {% if product.metafields.custom.product_badge.value %}
+        {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+          <span class="--single-badge">
+            {% if forloop.last %}
+              <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% else %}
+              <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% endif %}
+          </span>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="product-card__header">
+      <h3 class="--product-title product-card__title">
+        <a class="absolute-link" href="{{ card_variant.url | within: collection }}"></a>
+        {% if product.title contains '|' %}
+          {% assign custom_title = product.title | split: '|' %}
+          {% for piece in custom_title %}
+            {{ piece }}
+            {% unless forloop.last %}<br>{% endunless %}
+          {% endfor %}
+
+        {% else %}
+          {{ product.title }}
+        {% endif %}
+        {{ card_variant.title | split: ' / ' | first | strip }}
+      </h3>
+    </div>
+    <div class="--price-review-wrapper">
+      <div class="product-card__pricing" data-price-container>
+        {% # render 'new-price', product: product %}
+        <div
+          class="price-wrapper"
+          data-product-id="{{ card_variant.id }}"
+          data-variant-id="{{ card_variant.id }}"
+        >
+          <span class="price-regular">
+            {% if card_variant.compare_at_price > card_variant.price %}
+              {% comment %}
+                <span class="price-compare-at">{{ card_variant.price | money }}</span>
+                <span class="price-sale">{{ card_variant.compare_at_price | money }}</span>
+              {% endcomment %}
+              <span class="price-sale">{{ card_variant.price | money }}</span>
+              <span class="price-compare-at">{{ card_variant.compare_at_price | money }}</span>
+
+            {% else %}
+              <span class="price-standard">{{ card_variant.price | money }}</span>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+      <!-- Yotpo Star Rating(Category) | location: snippets/card-product.liquid -->
+      <div
+        class="yotpo-widget-instance"
+        data-yotpo-instance-id="1080298"
+        data-yotpo-product-id="{{product.id}}"
+        data-yotpo-cart-product-id="{{item.product.id}}"
+        data-yotpo-section-id="{{template.name}}"
+      ></div>
+      <!-- End of Yotpo Star Rating(Category) -->
+    </div>
+  </div>
+</div>

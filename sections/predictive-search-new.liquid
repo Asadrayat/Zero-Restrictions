@@ -1,0 +1,62 @@
+{% if predictive_search.performed %}
+  <div class="predictive-search-results">
+    {% if predictive_search.resources.products.size > 0 or predictive_search.resources.collections.size > 0 %}
+      <div class="predictive-search-results-wrapper {% if predictive_search.resources.products.size > 0 and predictive_search.resources.collections.size > 0 %}predictive-search-results-wrapper-grid{% endif %}">
+        {% if predictive_search.resources.collections.size > 0 %}
+          <div class="search-collections">
+            <h4>Category</h4>
+            <ul>
+              {% for collection in predictive_search.resources.collections %}
+                <li>
+                  <a href="{{ collection.url }}">{{ collection.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="search__all-link">
+              <a href="/collections/all">Show all products</a>
+            </div>
+          </div>
+        {% endif %}
+        {% if predictive_search.resources.products.size > 0 %}
+          <div class="search-products">
+            {% for product in predictive_search.resources.products %}
+              {% render 'card-product-new-v4', product: product %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if predictive_search.resources.products.size == 0
+      and predictive_search.resources.collections.size == 0
+      and predictive_search.resources.pages.size == 0
+      and predictive_search.resources.articles.size == 0
+    %}
+      <p class="no-search-results">No results found</p>
+      {% if search.terms == blank or search.performed and search.results_count == 0 %}
+        {% if settings.collection_list != blank %}
+          <div class="searches-content">
+            {% if settings.title != blank %}
+              <h4>{{ settings.title }}</h4>
+            {% endif %}
+            <div class="popular-collections">
+              {% for collection in settings.collection_list %}
+                <div class="popular-item">
+                  <div class="popular__item-image">
+                    {% if collection.image %}
+                      {{ collection.image | image_url: width: collection.image.width | image_tag }}
+                    {% elsif collection.featured_image %}
+                      {{ collection.featured_image | image_url: width: collection.featured_image.width | image_tag }}
+                    {% endif %}
+                  </div>
+                  <p>{{ collection.title }}</p>
+                  <a href="{{ collection.url }}"></a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  </div>
+{% endif %}

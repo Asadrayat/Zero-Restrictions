@@ -1,0 +1,367 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+    #shopify-section-{{id}} {
+      box-sizing: border-box;
+      margin-top: {{section.settings.margin_top | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+      padding-top: {{section.settings.padding_top | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    }
+
+    @media(max-width: 600px) {
+      #shopify-section-{{id}} {
+        margin-top: {{section.settings.margin_top_m | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+        padding-top: {{section.settings.padding_top_m | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+      }
+    }
+
+  .sec-{{ id }}{
+    h2.--section-title {
+        color: var(--Content-Base-main, #1F2937);
+        /* text-align: center; */
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H2, 40px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Heading-H2, 40px);
+        letter-spacing: -0.4px;
+        margin-block: 0 8px;
+         @media(max-width: 600px){
+           text-align: center;
+         }
+    }
+    p.--section-subtitle {
+        color: var(--Content-Base-main, #1F2937);
+        margin-block: 0  var(--Spacing-Container-md);
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px); /* 150% */
+        max-width: 640px;
+         @media(max-width: 600px){
+           text-align: center;
+         }
+    }
+    .--card-container {
+        display: grid;
+        grid-template-columns: repeat({{ section.settings.slides_per_view }},1fr);
+        gap: var(--Spacing-Container-md);
+        @media(max-width: 600px){
+          grid-template-columns: 1fr;
+        }
+    }
+  .--card-wrapper {
+    position: relative;
+  }
+  .--image-wrapper img , svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      width: 100%;
+      margin: 0 0 var(--Spacing-Container-sm);
+      {% if section.settings.img_ratio == 'portrait' %}
+        aspect-ratio: 100/123;
+      {% elsif section.settings.img_ratio == 'landecape' %}
+        aspect-ratio: 123/100;
+      {% elsif section.settings.img_ratio == 'square' %}
+        aspect-ratio: 1;
+      {% endif %}
+      object-fit: cover;
+      object-position: center;
+      overflow: hidden;
+      border-radius: 16px;
+      @media(max-width: 600px){
+      {% if section.settings.img_ratio == 'portrait' %}
+        aspect-ratio: 3/4;
+      {% elsif section.settings.img_ratio == 'landecape' %}
+        aspect-ratio: 4/3;
+      {% elsif section.settings.img_ratio == 'square' %}
+        aspect-ratio: 1;
+      {% endif %}
+      }
+  }
+    svg {
+        border: 1px solid #0000004a;
+    }
+    h4.--card-title {
+        color: var(--Content-Base-main, #1F2937);
+        font-family: var(--font-family-Title, "Neue Plak");
+        font-size: var(--Font-Size-Heading-H4, 20px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Heading-H4, 24px);
+        letter-spacing: -0.4px;
+        margin-block: var(--Spacing-Container-xs);
+    }
+    .--content {
+        overflow: hidden;
+        color: var(--Content-Base-main, #1F2937);
+        text-overflow: ellipsis;
+        font-family: var(--font-family-Body, "Neue Plak");
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        align-self: stretch;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <h2 class="--section-title">{{ section.settings.title }}</h2>
+      <p class="--section-subtitle">{{ section.settings.subtitle }}</p>
+      <div class="--card-container">
+        {% if section.settings.related_article == false %}
+          {% for block in section.blocks %}
+            <div class="--card-wrapper">
+              {% if block.settings.article.url != blank %}
+                <a class="absolute-link" href="{{ block.settings.article.url  }}"></a>
+              {% endif %}
+              <div class="--image-wrapper">
+                {% unless block.settings.image == blank %}
+                  {{ block.settings.image | image_url: width: block.settings.image.width | image_tag }}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag }}
+                {% endunless %}
+              </div>
+              <div class="--text-block">
+                <h4 class="--card-title">{{ block.settings.title }}</h4>
+                <div class="--content">
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          {% assign itaration_count = 3 %}
+          {% for related_article in blog.articles %}
+            {% if related_article.handle == article.handle %}
+              {% assign itaration_count = 4 %}
+            {% endif %}
+          {% endfor %}
+          {% for related_article in blog.articles limit: itaration_count %}
+            {% if related_article.handle != article.handle %}
+              <div class="--card-wrapper">
+                {% if related_article.url != blank %}
+                  <a class="absolute-link" href="{{ related_article.url  }}"></a>
+                {% endif %}
+                <div class="--image-wrapper">
+                  {% unless related_article.image == blank %}
+                    {{ related_article.image | image_url: width: related_article.width | image_tag }}
+                  {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                  {% endunless %}
+                </div>
+                <div class="--text-block">
+                  <h4 class="--card-title">{{ related_article.title }}</h4>
+                  <div class="--content">
+                    {{ related_article.content }}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          {% for block in section.blocks %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Blog",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "related_article",
+      "label": "Enable Dynamic Blog ",
+      "default": false,
+      "info": "Works only in Blog Posts"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Slides Per View",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "img_ratio",
+      "label": "Image Ratio",
+      "options": [
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landecape",
+          "label": "Landecape"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "original",
+          "label": "Original"
+        }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "blog",
+      "name": "Blog",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "content",
+          "label": "Short Description"
+        },
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Select Article"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Blog"
+    }
+  ]
+}
+{% endschema %}

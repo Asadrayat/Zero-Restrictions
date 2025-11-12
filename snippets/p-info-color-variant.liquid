@@ -1,0 +1,73 @@
+<color-variant
+  class="p-info-color-filter-wrapper"
+  data-update-url="true"
+  data-section="{{ section.id }}"
+  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+>
+  {% liquid
+    for option in product.options_with_values
+      if option.name == 'Color' or option.name == 'color'
+        assign selected_color = option.selected_value
+      endif
+    endfor
+  %}
+  <input id="selected-color-variant" type="hidden" value="{{ selected_color }}">
+  <p class="p-info-filter-label">Color: {{ selected_color | downcase }}</p>
+  <div class="p-info-cf-items">
+    {% assign metafield = product.metafields.variants.color.value %}
+    {% if metafield.products == blank %}
+      <div class="p-info-color-product">
+        <input
+          checked
+          data-selected-color="{{ selected_color }}"
+          data-product-id="{{ product.id }}"
+          class="hidden"
+          id="color-{{ product.id }}"
+          type="radio"
+          name="color-product"
+          value="{{ product.url }}"
+        >
+        <label for="color-{{ product.id }}">
+          {% unless product.featured_image == blank %}
+            {{ product.featured_image | image_url: width: 100 | image_tag }}
+          {% endunless %}
+        </label>
+      </div>
+      <script type="application/ld+json-{{ product.id }}">
+        {{ product | json }}
+      </script>
+    {% else %}
+      {% for product_ in metafield.products.value %}
+        {% liquid
+          for opt in product_.options_with_values
+            if opt.name == 'Color' or opt.name == 'color'
+              assign selected_color = opt.selected_value
+            endif
+          endfor
+        %}
+        <div class="p-info-color-product">
+          <input
+            {% if product.id == product_.id %}
+              checked
+            {% endif %}
+            data-selected-color="{{ selected_color }}"
+            data-product-id="{{ product_.id }}"
+            class="hidden"
+            id="color-{{ product_.id }}"
+            type="radio"
+            name="color-product"
+            value="{{ product_.url }}"
+          >
+          <label for="color-{{ product_.id }}">
+            {% unless product_.featured_image == blank %}
+              {{ product_.featured_image | image_url: width: 100 | image_tag }}
+            {% endunless %}
+          </label>
+        </div>
+        <script type="application/ld+json-{{ product_.id }}">
+          {{ product_ | json }}
+        </script>
+      {% endfor %}
+    {% endif %}
+  </div>
+</color-variant>

@@ -1,0 +1,17 @@
+<div class="popular-searches" role="navigation" aria-label="Popular searches">
+  <h4>Popular Searches</h4>
+  <ul class="popular-searches__list" role="list">
+    {% for i in (1..5) %}
+      {% capture sid %}popular_search_{{ i }}{% endcapture %}
+      {% assign term = settings[sid] | strip %}
+      {% if term != blank %}
+        {% assign qparam = term | url_encode %}
+        <li class="popular-searches__item">
+          <a class="popular-searches__link" href="{{ routes.search_url }}?q={{ qparam }}">
+            {{ term }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,999 @@
+{{ 'set-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'set-product-card.js' | asset_url }}" defer></script>
+{% liquid
+  assign id = section.id
+  assign short_desc = product.metafields.custom.description_romance_copy
+  assign custom_bullets = product.metafields.custom.bullet_points
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    ul {
+      padding: 16px 0 16px 16px;
+    }
+    li {
+      list-style-type: disc;
+    }
+  }
+  @media screen and (min-width: 769px){
+    #shopify-section-{{id}} .page-width{
+      {% comment %} padding: 0; {% endcomment %}
+    }
+  }
+  .wrapper-{{ id }} {
+    position: sticky;
+    top: 48px;
+  }
+  .wrapper-{{ id }} > div {
+    max-width: 65%;
+    margin: auto;
+    {% comment %} padding-block: 48px; {% endcomment %}
+    @media(max-width: 768px) {
+      max-width: 100%;
+      margin: auto;
+      padding: 0 15px;
+    }
+  }
+  .sec-{{ id }} {
+    .faq-container-{{ id }} {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 0;
+      justify-content: center;
+      position: relative;
+      align-items: flex-start;
+      @media(max-width: 768px) {
+        grid-template-columns: minmax(0,1fr);
+      }
+      .pd__feature-image img{
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+      video{
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: var(--rounded-2xl, 16px);
+            position: sticky;
+      top: 128px;
+      @media(max-width: 768px) {
+        display: none;
+      }
+      }
+    }
+    .pd__feature-image {
+      {% comment %} flex: 0 0 50%; {% endcomment %}
+      position: sticky;
+      top: 48px;
+      @media(max-width: 768px) {
+        display: none;
+      }
+    }
+    .faq__wrapp {
+      border-bottom: 1px solid #efefef;
+    }
+    .faq__wrapp .intro h3{
+
+    }
+    .faq__wrapp:first-child {
+      border-top: 0;
+    }
+    .faq__wrapp:last-child {
+      border-bottom: 1px solid #efefef;;
+    }
+    [data-faq-content] {
+     overflow: hidden;
+     opacity: 0;
+     max-height: 0;
+     transition: all 0.4s ease-in-out;
+    }
+    [data-faq-content] *{
+      font-size: 14px;
+      line-height: 20px;
+    }
+    [data-faq-content] .richtext p:nth-child(1){
+      margin-top: 0;
+    }
+    [data-faq-content] .richtext p:first-of-type {
+      margin-top: 0;
+    }
+
+    [data-faq-content].active {
+      opacity: 1;
+    }
+    .intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      h2 {
+        margin: 0;
+        padding: 20px 0;
+        color: var(--Content-Base-main);
+        font-family: var(--font-family-Body);
+        font-size: 16px;
+        line-height: 18px;
+        @media(max-width: 768px) {
+          padding: 16px 0;
+        }
+      }
+      .icons {
+        font-size: var(--Font-Size-Heading-H3);
+        line-height: var(--Line-Height-Heading-H3);
+        font-family: var(--font-family-Title);
+        padding: 20px;
+        position: relative;
+      }
+      .icons span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translate(-50%, -50%);
+        svg{
+          width: 16px;
+          height: 16px;
+        }
+      }
+      .plus {
+        transition: all 0.4s;
+      }
+      .minus {
+        opacity: 0;
+        transition: all 0.4s;
+        svg {
+
+        }
+      }
+    }
+    .intro.active{
+      .minus {
+        opacity: 1;
+      }
+      .plus {
+        opacity: 0;
+        svg {
+          /* rotate: 15deg; */
+        }
+      }
+    }
+  }
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .faq-container-{{ id }}.page-width {
+      {% comment %} padding: 0; {% endcomment %}
+    }
+  }
+
+  .faq__wrapp-review{
+    .yotpo-display-m .yotpo-main-layout .yotpo-head{
+      margin-bottom: 50px !important;
+      margin-top: 50px !important;
+    }
+    .yotpo-main-layout .yotpo-layout-header-wrapper{
+      justify-content: center !important;
+      flex-direction: column !important;
+    }
+    .yotpo-bottom-line{
+      align-items: center !important;
+      margin: 0 !important;
+      flex-direction: column !important;
+    }
+    .yotpo-review{
+      margin: 20px 0 !important;
+    }
+    .yotpo-review-left-panel{
+      order: 0 !important;
+      min-width: 50% !important;
+    }
+   .yotpo-review-center-panel{
+      flex-basis: 100% !important;
+      margin: 20px 0 0 !important;
+    }
+    .yotpo-review-right-panel{
+      text-align: end !important;
+      order: 0 !important;
+      min-width: 50% !important;
+    }
+  }
+</style>
+
+<!-- Yotpo Star Rating(Category) | location: snippets/card-product.liquid -->
+<style>
+  .faq__wrapp-review{
+    .intro{
+      h2{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
+    .yotpo-widget-instance{
+       margin-top: 0 !important;
+      .yotpo-reviews-star-ratings-widget{
+        margin: 0 !important;
+      }
+      .yotpo-sr-bottom-line-summary{
+        align-items: center !important;
+        /* flex-direction: row !important; */
+        flex-direction: row-reverse !important ;
+        width: 100%;
+        /* justify-content: center !important; */
+        /* gap: 0px !important; */
+        gap: 10px !important;
+        span{
+          height: auto !important;
+        }
+        .star-container:last-child{
+          margin-inline-end: 4px !important;
+        }
+        @media(max-width: 768px){
+          /* flex-direction: column !important; */
+          gap: 5px !important;
+        }
+      }
+      div#yotpo-star-rating-reviews-summary {
+        display: none!important;
+      }
+      .yotpo-sr-bottom-line-text{
+        font-size: 14px !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        font-weight: 500 !important;
+        font-family: var(--font-family-Body) !important;
+        @media(max-width: 768px){
+          padding-top: 0 !important;
+          line-height: normal !important;
+        }
+      }
+    }
+  }
+</style>
+<!-- End of Yotpo Star Rating(Category) -->
+<!-- Set products -->
+<style>
+    .sec-{{ id }}{
+  .--set-products-wrapper {
+      {% comment %} display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px; {% endcomment %}
+  }
+  .prev-{{ section.id }} , .next-{{ section.id }}{
+    position: absolute;
+    top: 35%;
+  }
+  .prev-{{ section.id }}.swiper-button-disabled , .next-{{ section.id }}.swiper-button-disabled{
+    display: none;
+  }
+  .prev-{{ section.id }}{
+    left: 0;
+  }
+  .next-{{ section.id }}{
+    right: 0;
+  }
+  .--custom-badge-wrapper span.--single-badge a{
+      font-size: 10px;
+      line-height: 1;
+  }
+  .size-selector {
+      position: unset;
+      background: unset;
+      padding: 0;
+      justify-content: flex-start;
+  }
+  button.size-btn{
+    padding: 0;
+    color: #000;
+  }
+
+  }
+</style>
+
+<div
+  {% if section.settings.id != blank %}
+    id="{{ section.settings.id }}"
+  {% endif %}
+  class="sec-{{ id }}"
+>
+  <div class="faq-container-{{ id }} {% unless section.settings.full_width %}page-width{% endunless %}">
+    {% if product.metafields.custom.product_feature_video.value %}
+      {{
+        product.metafields.custom.product_feature_video.value
+        | video_tag: autoplay: true, loop: true, muted: true, controls: true
+      }}
+    {% elsif product.selected_or_first_available_variant.featured_image %}
+      <div class="pd__feature-image">
+        {{
+          product.selected_or_first_available_variant.featured_image
+          | image_url: width: product.selected_or_first_available_variant.featured_image.width
+          | image_tag
+        }}
+      </div>
+    {% else %}
+      <div class="pd__feature-image">
+        {{ product.featured_image | image_url: width: product.featured_image.width | image_tag }}
+      </div>
+    {% endif %}
+    <div class="wrapper-{{ id }}">
+      <div>
+        <div class="faq__wrapp">
+          <div class="intro" data-faq-title>
+            <h2>Description</h2>
+            <div class="icons">
+              <span class="plus">{% render 'all-icons', name: 'faq-plus' %}</span
+              ><span class="minus">{% render 'all-icons', name: 'faq-minus' %}</span>
+            </div>
+          </div>
+          <div class="content" data-faq-content>
+            <div class="richtext">
+              {% if product.metafields.custom.description_romance_copy != blank %}
+               <p>{{ product.metafields.custom.description_romance_copy }}</p> 
+              {% else %}
+                {{ product.description }}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% if product.metafields.custom.description_romance_copy != blank %}
+          <div class="faq__wrapp">
+            <div class="intro" data-faq-title>
+              <h2>Material & Care</h2>
+              <div class="icons">
+                <span class="plus">{% render 'all-icons', name: 'faq-plus' %}</span
+                ><span class="minus">{% render 'all-icons', name: 'faq-minus' %}</span>
+              </div>
+            </div>
+            <div class="content" data-faq-content>
+              <div class="richtext">
+                {% comment %} {{ product.metafields.custom.bullet_points }} {% endcomment %}
+                <ul>
+                  {% for bullet in product.metafields.custom.bullet_points.value %}
+                    <li>{{ bullet }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% for block in section.blocks %}
+          {% if block.type == 'accordion' %}
+            {% if short_desc != blank
+              or custom_bullets != blank
+              or block.settings.rte != blank
+              or block.settings.irte != blank
+              or block.settings.textarea != blank
+            %}
+              <div class="faq__wrapp">
+                <div class="intro" data-faq-title>
+                  {% unless block.settings.title == blank %}
+                    <h2>{{ block.settings.title }}</h2>
+                    <div class="icons">
+                      <span class="plus">{% render 'all-icons', name: 'faq-plus' %}</span
+                      ><span class="minus">{% render 'all-icons', name: 'faq-minus' %}</span>
+                    </div>
+                  {% endunless %}
+                </div>
+                <div class="content" data-faq-content>
+                  {% if block.settings.rte != blank %}
+                    <div class="richtext">{{ block.settings.rte }}</div>
+                  {% elsif block.settings.irte != blank %}
+                    <p class="irte">{{ block.settings.irte }}</p>
+                  {% else %}
+                    <p class="textarea">{{ block.settings.textarea }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+          {% if block.type == 'set_products' and product.metafields.custom.outfit_products.value != blank %}
+            <div class="faq__wrapp" id="faq__wrapp--container">
+              <div class="intro" data-faq-title>
+                {% unless block.settings.title == blank %}
+                  <h2>{{ block.settings.title }}</h2>
+                  <div class="icons">
+                    <span class="plus">{% render 'all-icons', name: 'faq-plus' %}</span
+                    ><span class="minus">{% render 'all-icons', name: 'faq-minus' %}</span>
+                  </div>
+                {% endunless %}
+              </div>
+              <div class="content" data-faq-content>
+                {% comment %}
+                  <div class="--set-products-wrapper">
+                    {% for bproduct in product.metafields.custom.outfit_products.value limit: 2 %}
+
+                      {% render 'card-product-new-v4-set', product: bproduct %}
+                    {% endfor %}
+                  </div>
+                {% endcomment %}
+                <div class="swiper --set-product-wrapper-{{section.id }}">
+                  <div class="swiper-wrapper">
+                    {% for bproduct in product.metafields.custom.outfit_products.value %}
+                      <div class="swiper-slide">
+                        {% render 'card-product-new-v4-set', product: bproduct %}
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="prev-{{ section.id }} --nav-icon">
+                    {% render 'all-icons', name: 'left_arrow' %}
+                  </div>
+                  <div class="next-{{ section.id }} --nav-icon">
+                    {% render 'all-icons', name: 'right_arrow' %}
+                  </div>
+                  {% comment %}
+                    <div class="--arrow-wrapper">
+                      <div class="prev-{{ section.id }} --nav-icon">
+                        {% render 'all-icons', name: 'left_arrow' %}
+                      </div>
+                      <div class="next-{{ section.id }} --nav-icon">
+                        {% render 'all-icons', name: 'right_arrow' %}
+                      </div>
+                    </div>
+                  {% endcomment %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if block.type == '@app' %}
+            <div class="faq__wrapp faq__wrapp-review">
+              <div class="intro" data-faq-title>
+                <h2>
+                  Reviews
+                  <div
+                    class="yotpo-widget-instance"
+                    data-yotpo-instance-id="1080298"
+                    data-yotpo-product-id="{{ product.id }}"
+                    data-yotpo-cart-product-id="{{ item.product.id }}"
+                    data-yotpo-section-id="{{template.name}}"
+                  ></div>
+                </h2>
+                <div class="icons">
+                  <span class="plus">{% render 'all-icons', name: 'faq-plus' %}</span
+                  ><span class="minus">{% render 'all-icons', name: 'faq-minus' %}</span>
+                </div>
+              </div>
+              <div class="content" data-faq-content>
+                {% render block %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% unless product.metafields.custom.style_no == blank %}
+          <p class="--custom-style {{ class }}">STYLE # {{ product.metafields.custom.style_no.value }}</p>
+        {% endunless %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+window.initAccordion = function () {
+  const faqIntros = document.querySelectorAll('[data-faq-title]');
+  const faqContents = document.querySelectorAll('[data-faq-content]');
+
+  const toggleAccordion = (faqIntro, faqContent) => {
+    const isActive = faqIntro.classList.contains('active');
+
+    // Toggle only the clicked accordion
+    faqIntro.classList.toggle('active');
+    faqContent.classList.toggle('active');
+    faqContent.style.maxHeight = isActive ? '0' : `${faqContent.scrollHeight}px`;
+    faqContent.setAttribute('aria-hidden', isActive ? 'true' : 'false');
+    faqIntro.setAttribute('aria-expanded', isActive ? 'false' : 'true');
+    {% comment %} yotpoWidgetsContainer.initWidgets(); {% endcomment %}
+  };
+
+  faqIntros.forEach((faqIntro, index) => {
+    const faqContent = faqIntro.parentElement.querySelector('[data-faq-content]');
+
+    // Set initial ARIA attributes
+    faqIntro.setAttribute('aria-expanded', 'false');
+    faqIntro.setAttribute('aria-controls', `faq-content-${index}`);
+    faqContent.setAttribute('aria-hidden', 'true');
+    faqContent.id = `faq-content-${index}`;
+
+    // Click event
+    faqIntro.addEventListener('click', () => toggleAccordion(faqIntro, faqContent));
+
+    // Keyboard accessibility
+    faqIntro.setAttribute('tabindex', '0');
+    faqIntro.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleAccordion(faqIntro, faqContent);
+      }
+    });
+  });
+
+  // Open the first accordion by default
+  if (faqIntros.length > 0) {
+    const firstIntro = faqIntros[0];
+    const firstContent = firstIntro.parentElement.querySelector('[data-faq-content]');
+    firstIntro.classList.add('active');
+    firstIntro.setAttribute('aria-expanded', 'true');
+    firstContent.classList.add('active');
+    firstContent.setAttribute('aria-hidden', 'false');
+    firstContent.style.maxHeight = `${firstContent.scrollHeight}px`;
+
+    const styleWithIntro = document.querySelector('#faq__wrapp--container [data-faq-title]');
+    const styleWithContent = document.querySelector('#faq__wrapp--container [data-faq-content]');
+    if(styleWithIntro){
+      styleWithIntro.classList.add('active');
+      styleWithIntro.setAttribute('aria-expanded', 'true');
+      styleWithContent.classList.add('active');
+      styleWithContent.setAttribute('aria-hidden', 'false');
+      styleWithContent.style.maxHeight = `${styleWithContent.scrollHeight}px`;
+    }
+  }
+
+  // Add event listener for the "Style With" link
+  const styleWithLink = document.querySelector('.style--with--link-btn');
+  if (styleWithLink) {
+    styleWithLink.addEventListener('click', (e) => {
+      const targetIntro = document.querySelector('#faq__wrapp--container [data-faq-title]');
+      const targetContent = document.querySelector('#faq__wrapp--container [data-faq-content]');
+      if (targetIntro && targetContent) {
+        // Scroll to the accordion
+        targetIntro.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Open the accordion if not already active
+        if (!targetIntro.classList.contains('active')) {
+          targetIntro.classList.add('active');
+          targetContent.classList.add('active');
+          targetContent.style.maxHeight = `${targetContent.scrollHeight}px`;
+          targetContent.setAttribute('aria-hidden', 'false');
+          targetIntro.setAttribute('aria-expanded', 'true');
+        }
+      }
+    });
+  }
+
+  yotpoWidgetsContainer.initWidgets();
+};
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initAccordion);
+
+{% comment %} below one close previous open one automaticaly {% endcomment %}
+
+  {% comment %} window.initAccordion = function () {
+    const faqIntros = document.querySelectorAll('[data-faq-title]');
+    const faqContents = document.querySelectorAll('[data-faq-content]');
+
+    const toggleAccordion = (faqIntro, faqContent) => {
+      const isActive = faqIntro.classList.contains('active');
+
+      // Close all accordions
+      faqIntros.forEach((fi) => fi.classList.remove('active'));
+      faqContents.forEach((fc) => {
+        fc.classList.remove('active');
+        fc.style.maxHeight = null;
+        fc.setAttribute('aria-hidden', 'true');
+      });
+
+      // Toggle the clicked accordion
+      if (!isActive) {
+        faqIntro.classList.add('active');
+        faqContent.classList.add('active');
+        faqContent.style.maxHeight = `${faqContent.scrollHeight}px`;
+        faqContent.setAttribute('aria-hidden', 'false');
+      }
+    };
+
+    faqIntros.forEach((faqIntro, index) => {
+      const faqContent = faqIntro.parentElement.querySelector('[data-faq-content]');
+
+      // Set initial ARIA attributes
+      faqIntro.setAttribute('aria-expanded', 'false');
+      faqIntro.setAttribute('aria-controls', `faq-content-${index}`);
+      faqContent.setAttribute('aria-hidden', 'true');
+      faqContent.id = `faq-content-${index}`;
+
+      // Click event
+      faqIntro.addEventListener('click', () => toggleAccordion(faqIntro, faqContent));
+
+      // Keyboard accessibility
+      faqIntro.setAttribute('tabindex', '0');
+      faqIntro.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAccordion(faqIntro, faqContent);
+        }
+      });
+    });
+
+    // Open the first accordion by default
+    if (faqIntros.length > 0) {
+      const firstIntro = faqIntros[0];
+      const firstContent = firstIntro.parentElement.querySelector('[data-faq-content]');
+      firstIntro.classList.add('active');
+      firstIntro.setAttribute('aria-expanded', 'true');
+      firstContent.classList.add('active');
+      firstContent.setAttribute('aria-hidden', 'false');
+      firstContent.style.maxHeight = `${firstContent.scrollHeight}px`;
+    }
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initAccordion); {% endcomment %}
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.--set-product').forEach((productCard) => {
+      const form = productCard.querySelector('.product-form');
+      const variantIdInput = form.querySelector('input[name="id"]');
+      const button = productCard.querySelector('.--atc-button');
+      const imageWrapper = productCard.querySelector('.--image-wrapper img');
+      const priceWrapper = productCard.querySelector('.sec-{{ id }} .price-wrapper');
+      const colorSwatches = productCard.querySelectorAll('.color-swatch');
+      const sizeInputs = productCard.querySelectorAll('.size-radio');
+      const sizeDisplay = productCard.querySelectorAll('.selected_value-display');
+      const productData = JSON.parse(productCard.querySelector('[data-json-set-product]').textContent);
+
+      function updateProductCard(variantId) {
+        const variant = productData.variants.find((v) => v.id.toString() === variantId);
+        if (!variant) return;
+
+        variantIdInput.value = variant.id;
+        button.textContent = variant.available ? 'Add to Bag' : 'Out of stock';
+        button.disabled = !variant.available;
+        if (variant.featured_image) {
+          imageWrapper.src = variant.featured_image.src;
+        }
+
+        priceWrapper.innerHTML =
+          variant.compare_at_price > variant.price
+            ? `<span class="price-regular"><span class="price-sale">${Shopify.formatMoney(
+                variant.price
+              )}</span><span class="price-compare-at">${Shopify.formatMoney(variant.compare_at_price)}</span></span>`
+            : `<span class="price-regular"><span class="price-standard">${Shopify.formatMoney(
+                variant.price
+              )}</span></span>`;
+      }
+
+      function getSelectedOptions() {
+        const selectedColor = productCard.querySelector('.color-swatch--selected')?.dataset.colorValue;
+        const selectedSize = productCard.querySelector('.size-radio:checked')?.dataset.sizeValue;
+        return { color: selectedColor, size: selectedSize };
+      }
+
+      function findVariantByOptions(color, size) {
+        return productData.variants.find((v) => {
+          const options = v.options;
+          return (color ? options.includes(color) : true) && (size ? options.includes(size) : true);
+        });
+      }
+
+      function updateSizeOptions(selectedColor) {
+        const sizeOptionIndex = productData.options.indexOf('Size');
+        const colorOptionIndex = productData.options.indexOf('Color');
+
+        if (sizeOptionIndex === -1 || colorOptionIndex === -1) return;
+
+        const availableSizes = productData.variants
+          .filter((v) => v.options[colorOptionIndex] === selectedColor && v.available)
+          .map((v) => v.options[sizeOptionIndex]);
+
+        sizeInputs.forEach((input) => {
+          const sizeValue = input.dataset.sizeValue;
+          const isAvailable = availableSizes.includes(sizeValue);
+          const sizeVariant = productData.variants.find(
+            (v) => v.options[colorOptionIndex] === selectedColor && v.options[sizeOptionIndex] === sizeValue
+          );
+
+          input.disabled = !isAvailable;
+          const label = productCard.querySelector(`label[for="${input.id}"]`);
+          if (label) {
+            label.classList.toggle('size-radio--disabled', !isAvailable);
+          }
+          input.setAttribute('aria-label', isAvailable ? sizeValue : `${sizeValue} (Out of stock)`);
+          if (sizeVariant) {
+            input.dataset.variantId = sizeVariant.id;
+            input.dataset.variantUrl = `/products/${productData.handle}?variant=${sizeVariant.id}`;
+          }
+          if (!isAvailable && input.checked) {
+            input.checked = false;
+            sizeDisplay.forEach((display) => (display.textContent = ''));
+          }
+        });
+
+        const selectedOptions = getSelectedOptions();
+        if (availableSizes.length > 0 && !selectedOptions.size) {
+          const firstAvailableSize = Array.from(sizeInputs).find((input) => !input.disabled);
+          if (firstAvailableSize) {
+            firstAvailableSize.checked = true;
+            sizeDisplay.forEach((display) => (display.textContent = firstAvailableSize.dataset.sizeValue));
+            const variant = findVariantByOptions(selectedColor, firstAvailableSize.dataset.sizeValue);
+            if (variant) updateProductCard(variant.id.toString());
+          }
+        }
+      }
+
+      colorSwatches.forEach((swatch) => {
+        swatch.addEventListener('click', () => {
+          if (swatch.disabled) return;
+          productCard.querySelectorAll('.color-swatch').forEach((s) => s.classList.remove('color-swatch--selected'));
+          swatch.classList.add('color-swatch--selected');
+          const selectedOptions = getSelectedOptions();
+          const variant = findVariantByOptions(selectedOptions.color, selectedOptions.size);
+          if (variant) {
+            updateProductCard(variant.id.toString());
+          }
+          updateSizeOptions(selectedOptions.color);
+        });
+      });
+
+      sizeInputs.forEach((input) => {
+        input.addEventListener('change', () => {
+          sizeDisplay.forEach((display) => (display.textContent = input.dataset.sizeValue));
+          const selectedOptions = getSelectedOptions();
+          const variant = findVariantByOptions(selectedOptions.color, selectedOptions.size);
+          if (variant) {
+            updateProductCard(variant.id.toString());
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<script>
+  function initAddToCartButtons() {
+    document.querySelectorAll('.--set-product').forEach((card) => {
+      const button = card.querySelector('.--atc-button');
+      const form = card.querySelector('.product-form');
+
+      if (button && form) {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          handleProductFormSubmit(form);
+        });
+      }
+    });
+  }
+
+  function handleProductFormSubmit(form) {
+    const cartDrawer = document.querySelector('cart-drawer') || document.querySelector('cart-notification');
+    const formData = new FormData(form);
+    const variantId = formData.get('id');
+
+    if (!variantId) {
+      console.warn('Variant ID not found in form');
+      return;
+    }
+
+    if (cartDrawer) {
+      const sections = getSectionsToRender(cartDrawer);
+      formData.append(
+        'sections',
+        sections.map((section) => section.id)
+      );
+      formData.append('sections_url', window.location.pathname);
+    }
+
+    fetch(`${window.Shopify.routes.root}cart/add.js`, {
+      method: 'POST',
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.status) throw new Error(response.message);
+        if (cartDrawer) {
+          cartDrawer.renderContents(response);
+          openCartDrawer();
+        }
+      })
+      .catch((error) => {
+        console.error('Error adding product to cart:', error);
+      });
+  }
+
+  function getSectionsToRender(cartDrawer) {
+    return typeof cartDrawer.getSectionsToRender === 'function' ? cartDrawer.getSectionsToRender() : [];
+  }
+
+  function openCartDrawer() {
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer) {
+      cartDrawer.classList.remove('is-empty');
+      cartDrawer.open();
+    }
+  }
+
+  initAddToCartButtons();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.--set-product-wrapper-{{ section.id }}', {
+      slidesPerView: 1.4,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: '.next-{{ section.id }}',
+        prevEl: '.prev-{{ section.id }}',
+      },
+      breakpoints: {
+        600: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Details",
+  "class": "product-details-new",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "id",
+      "label": "Section ID"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "set_products",
+      "name": "Set Products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Buy As a Set"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Description"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "irte",
+          "label": "Inline Richtext"
+        },
+        {
+          "type": "richtext",
+          "id": "rte",
+          "label": "Richtext"
+        },
+        {
+          "type": "textarea",
+          "id": "textarea",
+          "label": "Text Area"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Details"
+    }
+  ]
+}
+{% endschema %}

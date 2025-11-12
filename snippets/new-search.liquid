@@ -1,0 +1,49 @@
+<predictive-search-new class="predictive-search-container glass__bg-full page-width">
+  <div class="predictive-search-wrapper">
+    <div class="sm-hide">
+      <button class="close-search" aria-label="Close search">{% comment %}{% render 'all-icons', name: 'close' %}{% endcomment %}Close</button>
+    </div>
+    <form action="/search" method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        id="predictive-search"
+        placeholder="What are you looking for?"
+        autocomplete="off"
+      >
+      <button class="search-btn" type="submit">{% render 'header-icons', name: 'search' %}</button>
+    </form>
+    <div class="search-popular {% unless settings.popular_search %}no-popular-search{% endunless %}">
+      {% if settings.popular_search %}
+        {% render 'popular-searches' %}
+      {% endif %}
+    {% if settings.collection_list != blank %}
+      <div class="searches-content">
+        {% if settings.title != blank %}
+          <h4>{{ settings.title }}</h4>
+        {% endif %}
+        <div class="popular-collections">
+          {% for collection in settings.collection_list %}
+            <div class="popular-item">
+              <div class="popular__item-image">
+                {% if collection.image %}
+                  {{ collection.image | image_url: width: collection.image.width | image_tag }}
+                {% elsif collection.featured_image %}
+                  {{ collection.featured_image | image_url: width: collection.featured_image.width | image_tag }}
+                {% endif %}
+              </div>
+              <p>{{ collection.title }}</p>
+              <a href="{{ collection.url }}"></a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    </div>
+    <div id="predictive-results" class="predictive-results"></div>
+  </div>
+</predictive-search-new>
+<button class="close-search close-search-mbl lg-hide" aria-label="Close search">
+  {% comment %} {% render 'all-icons', name: 'close' %} {% endcomment %}
+   Close
+</button>

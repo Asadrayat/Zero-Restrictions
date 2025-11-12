@@ -1,0 +1,208 @@
+{% assign has_mega_item = false %}
+{% for link in section.settings.menu.links %}
+  {% assign title_handle = link.title | handleize %}
+  {% for block in section.blocks %}
+    {% if block.type == 'mega-menu' %}
+      {% assign menu_title = block.settings.heading | handleize %}
+      {% if menu_title == title_handle %}
+        {% assign has_mega_item = true %}
+        {% break %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if has_mega_item %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if section.settings.menu != blank %}
+  <div class="header__megamenus">
+    <div class="header__megamenus-wrapper">
+      {% for link in section.settings.menu.links %}
+        {% liquid
+          assign title_handle = link.title | handleize
+          assign has_mega_item = false
+        %}
+        {% for block in section.blocks %}
+          {% if block.type == 'mega-menu' %}
+            {% liquid
+              assign menu_title = block.settings.heading | handleize
+
+              if menu_title == blank or menu_title != title_handle
+                continue
+              endif
+
+              if menu_title == title_handle
+                assign has_mega_item = true
+              endif
+            %}
+          {% endif %}
+        {% endfor %}
+        {% if has_mega_item or link.links != blank %}
+          <div data-mega="{{ link.title | handleize }}" class="mega__menu-item glass__bg-full page-width">
+            <div class="mega__menu-exit">
+              <button class="close__mega-menu">
+                {% comment %} {% render 'all-icons', name: 'close' %} {% endcomment %}
+                Close
+              </button>
+            </div>
+
+            <div class="mega__menu-item-wrapper {% if has_mega_item %}grid-split{% endif %}">
+              <div class="mega-menu-menus-wrapper">
+                {% liquid
+                  assign title_handle = link.title | handleize
+                  assign has_mega_item = false
+                %}
+                {% for block in section.blocks %}
+                  {% if block.type == 'mega-menu' %}
+                    {% liquid
+                      assign menu_title = block.settings.heading | handleize
+
+                      if menu_title == blank or menu_title != title_handle
+                        continue
+                      endif
+
+                      if menu_title == title_handle
+                        assign has_mega_item = true
+                      endif
+                    %}
+                    {% if has_mega_item %}
+                      {% if block.settings.collection_list != blank %}
+                      <div class="megamenu__utilities">
+                          <div class="megamenu__links">
+                            <div class="megamenu__links-wrapper">
+                              <a href="{{ link.url }}">Shop all {{ link.title }}</a>
+                              {% for collection in block.settings.collection_list %}
+                                <a href="{{ collection.url }}">{{ collection.title }}</a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                      </div>
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                {% if link.links != blank %}
+                  <div class="megamenu__down-menus">
+                    {% assign no_grand_children_links = '' %}
+
+                    {% for child_link in link.links %}
+                      {% if child_link.links == blank %}
+                        {% assign no_grand_children_links = no_grand_children_links
+                          | append: '<a href="'
+                          | append: child_link.url
+                          | append: '">'
+                          | append: child_link.title
+                          | append: '</a>'
+                        %}
+                      {% endif %}
+                    {% endfor %}
+
+                    {% if no_grand_children_links != '' %}
+                      <div class="megamenu-down-item">
+                        <div class="megamenu-down-item-no-grands">{{ no_grand_children_links }}</div>
+                      </div>
+                    {% endif %}
+
+                    {% for child_link in link.links %}
+                      {% if child_link.links != blank %}
+                        <div class="megamenu-down-item">
+                          {% comment %} <p>{{ child_link.title }}</p> {% endcomment %}
+                        <a href="{{ child_link.url }}" class="megamenu-child-item">{{ child_link.title }}</a>
+                          <ul>
+                            {% comment %} <li>
+                              <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                            </li> {% endcomment %}
+                            {% for grand_child in child_link.links %}
+                              <li>
+                                <a href="{{ grand_child.url }}">{{ grand_child.title }}</a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              {% for block in section.blocks %}
+                {% if block.type == 'mega-menu' %}
+                  {% liquid
+                    assign menu_title = block.settings.heading | handleize
+
+                    if menu_title == blank or menu_title != title_handle
+                      continue
+                    endif
+
+                    if menu_title == title_handle
+                      assign has_mega_item = true
+                    endif
+                  %}
+                  {% if has_mega_item %}
+                    <div class="megamenu__image-wrapper">
+                      {% assign valid_image_count = 0 %}
+
+                      {% for i in (1..2) %}
+                        {% liquid
+                          capture collection
+                            echo 'collection_' | append: i
+                          endcapture
+                          capture image
+                            echo 'image_' | append: i
+                          endcapture
+                          capture title
+                            echo 'title_' | append: i
+                          endcapture
+                        %}
+
+                        {% if block.settings[collection] != blank %}
+                          {% assign valid_image_count = valid_image_count | plus: 1 %}
+                        {% endif %}
+                      {% endfor %}
+
+                      {% for i in (1..2) %}
+                        {% liquid
+                          capture collection
+                            echo 'collection_' | append: i
+                          endcapture
+                          capture image
+                            echo 'image_' | append: i
+                          endcapture
+                          capture title
+                            echo 'title_' | append: i
+                          endcapture
+                        %}
+
+                        {% if block.settings[collection] != blank %}
+                          <div class="megamenu__image {% if valid_image_count == 1 %}single-image{% endif %}">
+                            {% if block.settings[image] %}
+                              {{ block.settings[image] | image_url: width: block.settings[image].width | image_tag }}
+                            {% elsif block.settings[collection].image %}
+                              {{
+                                block.settings[collection].image
+                                | image_url: width: block.settings[collection].image
+                                | image_tag
+                              }}
+                            {% endif %}
+                            <p>
+                              {% if block.settings[title] != blank %}
+                                {{ block.settings[title] }}
+                              {% else %}
+                                {{ block.settings[collection].title }}
+                              {% endif %}
+                            </p>
+                            <a href="{{ block.settings[collection].url }}"></a>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

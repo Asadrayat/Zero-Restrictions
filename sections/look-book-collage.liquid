@@ -1,0 +1,275 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  #shopify-section-{{id}} {
+    .title, .subtitle{
+      color: #000;
+      text-align: center;
+      margin: 0;
+      /* font-family: var(--font-family-Title, "Neue Plak"); */
+      font-size: var(--Font-Size-Heading-H2, 40px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--Line-Height-Heading-H2, 40px); /* 100% */
+      letter-spacing: -0.4px;      
+    }
+    .content-container{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));  
+      gap: var(--Spacing-Container-sm, 16px);
+      @media(max-width: 768px){
+        grid-template-columns: minmax(0,1fr); 
+      }
+    }
+    .content--wrapper{
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: var(--Spacing-Container-sm, 16px);      
+    }
+    .img-wrapper{
+      grid-row: span 2;  
+      line-height: 0;
+    }
+    .img-wrapper img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--rounded-lg, 8px);
+    }
+    .product--wrapper{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));  
+      gap: var(--Spacing-Container-sm, 16px);
+      @media(max-width: 768px){
+        
+      }      
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="title-wrapper">
+        <h2 class="title">{{ section.settings.title }}</h2>
+        <h2 class="subtitle">{{ section.settings.subtitle }}</h2>
+      </div>
+      <div class="content-container">
+        {% for block in section.blocks %}
+          {% if block.type == 'collage' %}
+            <style>
+              .product--wrapper--{{ block.id }}{
+                {% if block.settings.first_to_show == 'product_first' %}
+                  grid-row: 1;
+                  @media(max-width: 768px){
+                    grid-row: unset;
+                  }
+                {% endif %}                
+               }
+            </style>
+            <div class="content--wrapper">
+              <div class="img-wrapper">
+                {% if block.settings.image != null %}
+                  {{
+                    block.settings.image
+                    | image_url: width: block.settings.image.width
+                    | image_tag: class: 'collage-img'
+                  }}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag }}
+                {% endif %}
+              </div>  
+              <div class="product--wrapper product--wrapper--{{ block.id }}">
+                <div class="first-product">
+                  {% if block.settings.product_1 != blank %}
+                    {% render 'card-product-new-v4', product: block.settings.product_1, forloop: forloop, class: 'swiper-slide' %}
+                  {% endif %}
+                </div>
+                <div class="secound-product">
+                  {% if block.settings.product_2 != blank %}
+                    {% render 'card-product-new-v4', product: block.settings.product_2, forloop: forloop, class: 'swiper-slide' %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>          
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Look Book Collage",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collage",
+      "name": "Collage",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "id": "first_to_show",
+          "label": "First To Show",
+          "options": [
+            {
+              "value": "image_first",
+              "label": "Show Image First"
+            },
+            {
+              "value": "product_first",
+              "label": "Show Product First"
+            }
+          ],
+          "default": "image_first"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Look Book Collage"
+    }
+  ]
+}
+{% endschema %}

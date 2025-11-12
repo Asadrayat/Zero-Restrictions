@@ -1,0 +1,646 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+      #shopify-section-{{id}} {
+        box-sizing: border-box;
+        margin-top: {{section.settings.margin_top | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+        padding-top: {{section.settings.padding_top | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+
+      }
+
+      @media(max-width: 600px) {
+        #shopify-section-{{id}} {
+          margin-top: {{section.settings.margin_top_m | append: 'px'}};
+          margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+          padding-top: {{section.settings.padding_top_m | append: 'px'}};
+          padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+        }
+      }
+
+    .wrapper-{{ id }}{
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: var(--Spacing-Container-md);
+       @media(max-width: 600px) {
+         display: block;
+       }
+    .--top-block {
+        display: flex;
+        gap: var(--Spacing-Container-xxs);
+        flex-direction: column;
+        justify-content: space-between;
+        @media(max-width: 600px){
+          gap: var(--Spacing-Container-xs);
+          margin-bottom: var(--Spacing-Container-sm);
+        }
+    }
+      h2.--section-title {
+          color: var(--Content-Base-main, #1F2937);
+          font-family: var(--font-family-Title, "Neue Plak");
+          /* font-size: var(--Font-Size-Heading-H2, 40px); */
+          font-weight: 500;
+          /* line-height: var(--Line-Height-Heading-H2, 40px); */
+          letter-spacing: -0.4px;
+          margin-block: 0 var(--Spacing-Container-sm);
+      }
+    .--section-subtitle {
+        color: var(--Content-Base-main, #1F2937);
+        font-family: var(--font-family-Body, "Neue Plak");
+        font-size: var(--Font-Size-Paragraph-Medium);
+        line-height: var(--Line-Height-Paragraph-Medium);
+    }
+
+     h3.--filter-title {
+        color: var(--Content-Base-subtle, #9CA3AF);
+        font-family: var(--font-family-Title, "Neue Plak");
+        font-weight: 400;
+        margin-block: var(--Spacing-Container-sm);
+        padding-left: var(--Spacing-Container-sm, 16px);
+       cursor: pointer;
+
+     }
+     h3.--filter-title.--active-tab {
+       color: var(--Content-Base-main, #1F2937);
+       border-left: 2px solid var(--Border-Base-dense, #4B5563);
+     }
+
+
+
+    /* Swiper Styling */
+
+    .tabs__contents{
+      height: auto;
+      position: relative;
+      grid-column: 2/-1;
+       @media(max-width: 600px){
+         grid-column: unset;
+      }
+    }
+    .--static-container{
+      visibilty: hidden;
+      opacity: 0;
+    }
+    .--slider-wrapper{
+      position: absolute;
+      top: 0;
+      /* left: 150%; */
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transition: 0.5s ease, opacity 0.1s ;
+      /* display: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s; */
+      @media(max-width: 600px){
+
+      }
+    }
+      .swiper:not(.swiper-initialized) .swiper-slide {
+            max-width: calc(var(--page-width)/4) !important;
+            margin-right: 16px;
+            overflow: hidden;
+        }
+    .--slider-wrapper.--tab-collection.--active-tab{
+
+      opacity: 1;
+      @media(max-width: 600px){
+
+      }
+    }
+
+    .--nav-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        background: #fff;
+        line-height: 1;
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-50%);
+        box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10);
+        cursor: pointer;
+        @media(max-width: 600px){
+          display: none;
+        }
+    }
+    .--nav-icon.swiper-button-disabled {
+        display: none;
+    }
+      .prev-{{ section.id }}.--nav-icon {
+        left: -20px;
+      }
+      .next-{{ section.id }}.--nav-icon {
+        right: -20px;
+      }
+
+
+
+  /* Card Styling Copied */
+  .collection-card-wrapper- {
+      position: relative;
+    .card-collection-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      cursor: pointer;
+      display: block;
+  }
+.media-wrapper {
+    border-radius: var(--rounded-2xl, 16px);
+    overflow: hidden;
+}
+  .collection-media-img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: var(--rounded-2xl, 16px);
+  }
+.media-wrapper video {
+    filter: brightness(.8);
+}
+  .card-content-wrapper {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: var(--Spacing-Container-md);
+      box-sizing: border-box;
+  }
+  .card-title {
+      color: var(--Content-Inverted-main, #F3F4F6);
+      /* font-family: var(--font-family-Title, "Neue Plak"); */
+      font-size: var(--Font-Size-Heading-H3, 24px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--Line-Height-Heading-H3, 28px);
+      letter-spacing: -0.48px;
+      margin: 0;
+     @media (max-width: 768px) {
+        font-size: var(--Font-Size-Heading-H4, 18px);
+        line-height: var(--Line-Height-Heading-H4, 22px);
+      }
+  }
+
+
+  .icon-wrapper {
+      line-height: 0;
+      display: flex;
+      padding: var(--Spacing-Container-xxs, 8px);
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--rounded-3xl, 24px);
+      border: 1px solid rgba(255, 255, 255, 0.40);
+      background: rgba(255, 255, 255, 0.20);
+  }
+  }
+
+
+  /* Video Card  */
+  video {
+      display: block;
+      width: 100%;
+  }
+
+
+
+    }
+</style>
+
+<div id="{{ section.settings.id_nav | downcase }}" class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="--top-block">
+        <div class="--text-content">
+          <h2 class="--section-title">{{ section.settings.title }}</h2>
+          <div class="--section-subtitle">{{ section.settings.subtitle }}</div>
+        </div>
+        <div class="--filter-labels-wrapper">
+          {% for block in section.blocks %}
+            {% if block.type == 'category' %}
+              <h3
+                class=" --filter-title {% if forloop.first %} --active-tab {% endif %}"
+                data-title="collection-{{ section.id }}-{{ block.id }} "
+                data-x="{{ block.settings.title | strip | downcase | replace: ' ', '-'  }}"
+              >
+                {{ block.settings.title }}
+              </h3>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="tabs__contents" id="slidersContainer">
+        {% assign categories = section.blocks | where: 'type', 'category' %}
+        {% assign videos = section.blocks | where: 'type', 'video' %}
+        {% assign cards = section.blocks | where: 'type', 'card' %}
+        {% for block in categories %}
+          <div
+            class="--slider-wrapper swiper__container__ --tab-collection {{ block.settings.title }} {% if forloop.first %} --active-tab {% endif %}"
+            data-title="collection-{{ section.id }}-{{ block.id }}  "
+            id="{% if forloop.first %}--onLoad-active-tab-{{ section.id }}{% endif %}"
+          >
+            <div class="swiper swiper-{{ section.id }}--{{ block.id }}">
+              <div class="swiper-wrapper">
+                {% for videoblock in videos %}
+                  {% if videoblock.settings.category == block.settings.title %}
+                    <div class="swiper-slide {{ videoblock.settings.category }}">
+                      <div class="collection-card-wrapper- --video-card">
+                        <a href="" class="card-collection-link --video-popup-trigger" data-link="{{ videoblock.settings.title | remove: " " | append: videoblock.id }}"></a>
+
+                        <div class="media-wrapper">
+                          {{
+                            videoblock.settings.video
+                            | video_tag: autoplay: true, loop: true, muted: true, controls: false
+                          }}
+                        </div>
+                        <div class="card-content-wrapper">
+                          <h5 class="card-title">{{ videoblock.settings.title }}</h5>
+                          <div class="icon-wrapper">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 25 24"
+                              fill="none"
+                            >
+                              <path d="M7.66666 17L17.6667 7M17.6667 7H7.66666M17.6667 7V17" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% for cardblock in cards %}
+                  {% if cardblock.settings.category == block.settings.title %}
+                    <div class="swiper-slide {{ cardblock.settings.category }}">
+                      <div class="collection-card-wrapper-">
+                        <a href="{{ cardblock.settings.url }}" class="card-collection-link"></a>
+
+                        <div class="media-wrapper">
+                          {{
+                            cardblock.settings.image
+                            | image_url: width: 500
+                            | image_tag: class: 'collection-media-img'
+                          }}
+                        </div>
+                        <div class="card-content-wrapper">
+                          <h5 class="card-title">{{ cardblock.settings.title }}</h5>
+                          <div class="icon-wrapper">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 25 24"
+                              fill="none"
+                            >
+                              <path d="M7.66666 17L17.6667 7M17.6667 7H7.66666M17.6667 7V17" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="prev-{{ section.id }} --nav-icon prev-{{ section.id }}--{{ block.id }}">
+              {% render 'all-icons', name: 'left_arrow' %}
+            </div>
+            <div class="next-{{ section.id }} --nav-icon next-{{ section.id }}--{{ block.id }}">
+              {% render 'all-icons', name: 'right_arrow' %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+</div>
+{% render 'mclbx-video-popup', section: section %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    function initmySwiper(classname,prev,next) {
+      if(classname){
+            new Swiper(classname, {
+            slidesPerView: 1.2,
+            spaceBetween: 12,
+            autoHeight: true,
+            // slideToClickedSlide: false,
+            // allowTouchMove: false,
+            navigation: {
+              nextEl: next ,
+              prevEl: prev
+            },
+            breakpoints: {
+              600:{
+                slidesPerView: 3,
+                spaceBetween: 16
+              }
+            }
+          });
+      } else {
+        console.log(" No class Found");
+      }
+    }
+
+      {% for block in section.blocks %}
+        initmySwiper(".swiper-{{ section.id }}--{{ block.id }}",".prev-{{ section.id }}--{{ block.id }}",".next-{{ section.id }}--{{ block.id }}");
+      {% endfor %}
+
+        window.addEventListener('resize', function() {
+          {% for block in section.blocks %}
+            initmySwiper(".swiper-{{ section.id }}--{{ block.id }}",".prev-{{ section.id }}--{{ block.id }}",".next-{{ section.id }}--{{ block.id }}");
+          {% endfor %}
+        });
+
+        let slidersContainer = document.getElementById('slidersContainer')
+        let onLoadActivetab = document.getElementById('--onLoad-active-tab-{{ section.id }}')
+        if(onLoadActivetab){
+          slidersContainer.style.minHeight = window.getComputedStyle(onLoadActivetab).height;
+          console.log("Adjusted")
+        }
+        let tabCollections = document.querySelectorAll('.--tab-collection');
+        let tabTitles = document.querySelectorAll('.--filter-title');
+        tabTitles.forEach((title) => {
+          title.addEventListener('click', () => {
+            // Remove active class from all titles
+            tabTitles.forEach((x) => x.classList.remove('--active-tab'));
+            tabCollections.forEach((x) =>{
+              x.classList.remove('--active-tab')
+              if (x.dataset.title && title.dataset.title && x.dataset.title.trim() === title.dataset.title.trim()) {
+                  x.classList.add('--active-tab');
+                  slidersContainer.style.minHeight = window.getComputedStyle(x).height;
+              }
+            } );
+            // Add active class to the clicked title
+            title.classList.add('--active-tab');
+          });
+        });
+
+
+  function videoPopupControl(srcUrl, activeStatus) {
+      // Get the video popup container
+      let videoPopupContainer = document.getElementById('--overlay-video-container');
+      if (!videoPopupContainer) {
+          console.warn("⚠️ Video popup container not found!");
+          return;
+      }
+
+      // Get elements inside the container
+      let videoElement = videoPopupContainer.querySelector("video source");
+      let bg = videoPopupContainer.querySelector(".--overlay-bg");
+      let closeButton = videoPopupContainer.querySelector(".--close");
+
+      // Ensure the video element exists
+      if (!videoElement) {
+          console.warn("⚠️ Video element not found inside the popup container.");
+          return;
+      }
+
+      if (activeStatus) {
+          // Open the video popup
+          videoPopupContainer.classList.add("active");
+          videoElement.src = srcUrl;
+          videoElement.play(); // ✅ Autoplay video when opened
+
+          // Attach event listeners to close when clicking bg or close button
+          if (bg) bg.addEventListener("click", () => closeVideoPopup(videoPopupContainer, videoElement));
+          if (closeButton) closeButton.addEventListener("click", () => closeVideoPopup(videoPopupContainer, videoElement));
+      } else {
+          closeVideoPopup(videoPopupContainer, videoElement);
+      }
+  }
+
+  // Helper function to close the video popup
+  function closeVideoPopup(container, video) {
+      container.classList.remove("active");
+      video.pause(); // ✅ Pause before clearing the src
+      video.src = ""; // ✅ Properly reset src
+  }
+
+  // Example Usage:
+  // Open the video popup
+  videoPopupControl("", true);
+
+  // Close the video popup manually if needed
+  // videoPopupControl("", false);
+
+
+
+    });
+
+    // Optional: Add an event listener to handle window resize events
+</script>
+
+{% schema %}
+{
+  "name": "Service Repair Tab",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+      {
+      "type": "text",
+      "id": "id_nav",
+      "label": "Id for Navigtion"
+    },
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Avoid using any special Character"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Thumbnail"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Card",
+      "limit": 10,
+      "settings": [
+         {
+          "type": "text",
+          "id": "category",
+          "label": "Category"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Thumbnail"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Service Repair Tab"
+    }
+  ]
+}
+{% endschema %}

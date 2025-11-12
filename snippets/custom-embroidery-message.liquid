@@ -1,0 +1,49 @@
+{% if product.tags contains 'EMBROIDER' or product.tags contains 'Ryder Cup 2025' %}
+  <style>
+          .--custom-embroidery-message-wrapper{
+                {% comment %} padding: 10px; {% endcomment %}
+                padding: var(--Spacing-Container-xs, 12px) var(--Spacing-Container-sm, 16px) var(--Spacing-Container-xs, 12px) var(--Spacing-Container-xs, 12px);
+                margin-block: 12px;
+                width: 100%;
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                border-radius: var(--rounded-lg, 8px);
+                border: 1px solid var(--Border-Base-subtle, #E5E7EB);
+                background: var(--Background-base, #FFF);
+        .--icon-wrapper {
+            svg {
+              width: 80px;
+              height: auto;
+            }
+        }
+        h4 {
+        color: #000;
+            letter-spacing: -0.4px;
+            text-transform: capitalize;
+            margin-block: 0 var(--Spacing-Container-xxs, 8px);
+        }
+        p{
+          margin-block: var(--Spacing-Container-xxs, 8px);
+           font-size: var(--Font-Size-Paragraph-Tiny, 12px); 
+          line-height: 1.5em;
+          text-align: left;
+        }
+          }
+  </style>
+  <div class="--custom-embroidery-message-wrapper">
+    <div class="--icon-wrapper">
+      {% render 'all-icons', name: 'sewing' %}
+    </div>
+
+    <div>
+      {{ settings.embroidery_message_pdp }}
+      {% comment %}
+        <p>DECORATED ITEM</p>
+        <p>
+          Please note that decorated items are made to order and require additional processing before shipping. Place your order today to receive it within 2 weeks. Additionally, decorated items are final sale and may not be returned or exchanged.
+        </p>
+      {% endcomment %}
+    </div>
+  </div>
+{% endif %}

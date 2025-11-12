@@ -1,0 +1,148 @@
+<style>
+  .country-selector {
+    position: relative;
+    display: inline-block;
+  }
+
+  .country-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .country-flag {
+    width: 24px;
+    height: 16px;
+    border-radius: 3px;
+  }
+
+  .country-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 180px;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .country-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  .country-list li:hover {
+    background: #f0f0f0;
+  }
+</style>
+
+<div class="curreny__selector-options">
+  {%- form 'localization', class: 'country-selector-form' -%}
+    <div class="country-selector">
+      <!-- Button to show the selected country -->
+      <button type="button" class="country-button">
+        <img
+          class="country-flag"
+          src="https://flagcdn.com/w40/{{ localization.country.iso_code | downcase }}.png"
+          alt="Flag"
+        >
+        <span class="country-currency">{{ localization.country.currency.iso_code }}</span>-(
+        {{- localization.country.currency.symbol -}}
+        )
+      </button>
+
+      <!-- Dropdown list -->
+      <ul class="country-list">
+        {%- for country in localization.available_countries -%}
+          <li
+            data-value="{{ country.iso_code }}"
+            data-currency="{{ country.currency.iso_code }}"
+            data-symbol="{{ country.currency.symbol }}"
+          >
+            <img class="country-flag" src="https://flagcdn.com/w40/{{ country.iso_code | downcase }}.png" alt="Flag">
+            <span class="country-currency">{{ country.currency.iso_code }}</span>-({{ country.currency.symbol }})
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <!-- Hidden input for form submission -->
+      <input
+        type="hidden"
+        name="country_code"
+        class="selected-country-code"
+        value="{{ localization.country.iso_code }}"
+      >
+    </div>
+  {%- endform -%}
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".curreny__selector-options").forEach(selector => {
+    const button = selector.querySelector(".country-button");
+    const countryList = selector.querySelector(".country-list");
+    const countryInput = selector.querySelector(".selected-country-code");
+    const form = selector.querySelector(".country-selector-form");
+
+    button.addEventListener("click", function () {
+      countryList.style.display = countryList.style.display === "block" ? "none" : "block";
+    });
+
+    selector.querySelectorAll(".country-list li").forEach(item => {
+      item.addEventListener("click", function () {
+        const selectedCountry = this.dataset.value;
+        const selectedCurrency = this.dataset.currency;
+        const selectedSymbol = this.dataset.symbol;
+        const flagSrc = this.querySelector(".country-flag").src;
+
+        // Update button content
+        button.innerHTML = `
+          <img class="country-flag" src="${flagSrc}" alt="Flag">
+          <span class="country-currency">${selectedCurrency}</span>-(${selectedSymbol})
+        `;
+
+        // Update hidden input
+        countryInput.value = selectedCountry;
+
+        // Hide dropdown
+        countryList.style.display = "none";
+
+        // Submit form automatically
+        form.submit();
+      });
+    });
+
+    // Close the dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+      if (!selector.contains(event.target)) {
+        countryList.style.display = "none";
+      }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Currency",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Currency"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+<style>
+  .--collection-promotion-card-wrapper {
+    /* max-width: 500px; */
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .--promotion-card-image-wrapper {
+        line-height: 0;
+        width: inherit;
+        height: inherit;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .--promotion-card-content-wrapper{{ uniq | prepend:"." }} {
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        {% if collection_promotion_card.content_position == "Top" %}
+          align-items: flex-start;
+        {% elsif collection_promotion_card.content_position == "Middle" %}
+          align-items: center;
+        {% elsif collection_promotion_card.content_position == "Bottom" %}
+          align-items: flex-end;
+        {% endif %}
+
+
+    }
+    .--promotion-card-content-wrapper{{ uniq | prepend:"." }} .--promotion-card-title ,
+    .--promotion-card-content-wrapper{{ uniq | prepend:"." }} .--promotion-card-content {
+        margin-block: 0;
+        color: {{ collection_promotion_card.content_color }};
+    }
+    p.--promotion-card-content {
+      font-size:  var(--Font-Size-Paragraph-Regular);
+    }
+    .banner--btn {
+      display: block;
+      margin-block: 5px;
+      color: #fff;
+      text-decoration: underline;
+      line-height: 1;
+      font-size: var(--Font-Size-Paragraph-Small);
+      transition: all .4s ease-in;
+      background: transparent;
+      text-underline-offset: 3px;
+      text-transform: uppercase;
+    }
+  }
+</style>
+
+<div class="--collection-promotion-card-wrapper">
+  {% if collection_promotion_card.url %}
+    <a class="absolute-link" href="{{ collection_promotion_card.url }}"></a>
+  {% endif %}
+  <div class="--promotion-card-image-wrapper">
+    {% if collection_promotion_card.image != blank %}
+      <img src="{{ collection_promotion_card.image | image_url: width: 500 }}">
+    {% endif %}
+  </div>
+  <div class="--promotion-card-content-wrapper {{ uniq }}">
+    <div class="--promotion-card-content-block">
+      <h3 class="--promotion-card-title">{{ collection_promotion_card.title }}</h3>
+      <p class="--promotion-card-content">{{ collection_promotion_card.content }}</p>
+      {% if collection_promotion_card.url and collection_promotion_card.button_label %}
+        <a class="banner--btn" href="{{ collection_promotion_card.url }}">
+          {{- collection_promotion_card.button_label -}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

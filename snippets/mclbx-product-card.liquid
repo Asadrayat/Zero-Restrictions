@@ -1,0 +1,107 @@
+<style>
+        .--quick-add-wrapper {
+          background: rgba(0, 0, 0, 0.60);
+          backdrop-filter: blur(12px);
+          color: #fff;
+          padding: 8px 16px;
+      }
+        .quick-add-bar {
+          display: flex;
+          justify-content: space-between;
+          padding-bottom: 8px;
+          border-bottom: 1px solid rgba(243, 244, 246, 0.50);
+      }
+      .--size-options {
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-block: 8px;
+      }
+    .--color-variant-block {
+      background: red;
+      display: flex;
+      gap: 8px;
+      /* justify-content: center; */
+      padding: 8px;
+        input {
+          display: none;
+        }
+    }
+  .--color--image {
+      padding: 0px;
+      background: blue;
+      border-radius: 8px;
+      overflow: hidden;
+  }
+</style>
+<div class="--product-card-wrapper">
+  <a href="{{ product.url }}">Url</a>
+  <div class="--image-wrapper">
+    {{ product.featured_image | image_url: width: 400 | image_tag: class: '--first-image' }}
+    {{ product.media[1] | image_url: width: 400 | image_tag: class: '--second-image' }}
+    <div class="--quick-add-wrapper">
+      <div class="quick-add-bar">
+        <span>Quick add</span>
+
+        <span>+</span>
+      </div>
+      <div class="--size-options">
+        {% for option in product.options_with_values %}
+          {% if option.name == 'Size' %}
+            {% for value in option.values %}
+              <button>{{ value }}</button>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="--text-block">
+    <div class="--product-title">{{ product.title }}</div>
+    <div class="--color-count">
+      <span class="--selected-color"></span>
+      {% for option in product.options %}
+        {% if option == 'Color' %}
+          {{ option.size }}
+          {% if option.size > 1 %} Color {% else %} Color {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="--price-rating">
+      <div class="--price-wrapper">
+        {% if product.compare_at_price > product.price %}
+          <span class="--old-price">{{ product.compare_at_price | money }}</span>
+          <span class="--regular-price">{{ product.price | money }}</span>
+        {% else %}
+          <span class="--regular-price">{{ product.price | money }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="--color-variant-block">
+    {% comment %}{% endcomment %}
+    {% for option in product.options_with_values %}
+      {% if option.name == 'Color' %}
+        {% for value in option.values %}
+          <input
+            type="radio"
+            name="--color_variant"
+            id="variant-{{ value }}"
+            value="{{ value }}"
+            {% if product.selected_variant.id == value %}
+              checked
+            {% endif %}
+          >
+
+          <label for="variant-{{ value }}">
+            {%- assign matching_variants = product.variants | where: 'option1', value %}
+            <div class="--color--image">
+              {{ matching_variants[0].image | image_url: width: 50 | image_tag }}
+            </div>
+          </label>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<style>
+.--inventory-status-wrapper {
+    padding: 0 0 16px;
+    border-bottom: 1px solid #C6C8CA;
+} 
+</style>
+
+<div class="--inventory-status-wrapper {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+  {% assign quantity = product.selected_or_first_available_variant.inventory_quantity %}
+  <div
+    class="
+      inventory-status 
+      {% if quantity < 1 or product.selected_or_first_available_variant.available == false %}status-circle--red
+      {% elsif quantity > 0 and quantity < 16 %} status-circle--orange
+        {% else %} status-circle--green
+        {% endif %}
+    "
+  >
+
+    {% if quantity < 1 or product.selected_or_first_available_variant.available == false %}
+      <span class="status-circle"></span><span class="status-text">Out of Stock</span>
+    {% elsif quantity > 0 and quantity < 16 %}
+      {% comment %}
+        <span class="status-number">{{ quantity }}</span><span class="status-circle"></span
+        ><span class="status-text">Low Inventory</span>
+      {% endcomment %}
+      <span class="status-circle"></span
+      ><span class="status-text"
+        >low inventory
+      </span>
+    {% else %}
+      <span class="status-circle"></span><span class="status-text">In Stock</span>
+    {% endif %}
+  </div>
+</div>

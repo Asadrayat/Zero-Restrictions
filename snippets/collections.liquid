@@ -1,0 +1,12 @@
+{% if product.collections.size > 0 %}
+    <div class="pinfo-collection-wrapper {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+        {% for collection in product.collections limit: 2 %}
+            <a class="pinfo-collection" href="{{ collection.url }}">{{ collection.title }}</a>
+            {% unless forloop.last %}
+                <svg width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="4" height="4" rx="2" fill="currentColor"/>
+                </svg>
+            {% endunless %}
+        {% endfor %}
+    </div>
+{% endif %}

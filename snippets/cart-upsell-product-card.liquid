@@ -1,0 +1,24 @@
+{% comment %}
+  {% render 'cart-upsell-product-card', cartUpsellProduct: cartUpsellProduct  %}
+{% endcomment %}
+
+<div class="--upsell-product-wrapper">
+  <a class="--absolute-link" href="{{ cartUpsellProduct.url }}"></a>
+  <div class="--media-wrapper">
+    {{ cartUpsellProduct.featured_image | image_url: width: 500 | image_tag }}
+  </div>
+  <div class="--card-info">
+    <div>
+      <h5 class="--card-title">{{ cartUpsellProduct.title }}</h5>
+      <div class="--card-price">{{ cartUpsellProduct.price | money }}</div>
+    </div>
+
+    <button class="--upsell-button">View Product</button>
+  </div>
+</div>
+<product-card class="product-card" data-product-handle="{{ product.handle }}" data-product-url="{{ product.url }}">
+  <!-- Hidden product data for JS -->
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+</product-card>

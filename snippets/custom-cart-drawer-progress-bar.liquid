@@ -1,0 +1,102 @@
+{% assign milestone_value = settings.free_shipping_threshold | times: 100 %}
+{% assign remaining_amount = milestone_value | minus: cart.total_price %}
+{% assign remaining_amountinmoney = remaining_amount | money %}
+{% assign preGoalMessageTemplate = settings.cart_pre_goal_message
+  | replace: '[remainingForGoalFormatted]', remaining_amountinmoney
+%}
+{% assign postGoalMessage = settings.cart_post_goal_message %}
+{%# assign postGoalMessageIcon = settings.cart_post_goal_message_icon %}
+{% assign progress_in_percentage = cart.total_price | times: 100 | divided_by: milestone_value %}
+{% if progress_in_percentage > 100 %}
+  {% assign progress_in_percentage = 100 %}
+{% endif %}
+<style>
+  .--free-shipping-container {
+    padding: 0 25px 20px;
+    box-sizing: border-box;
+}
+  .--custom-progress-bar-container {
+      display: block;
+      height: 40px;
+      /* background: aliceblue; */
+      position: relative;
+  }
+  .--progress-bar {
+      height: 6px;
+      /* margin-top: 12px; */
+      display: block!important;
+      width: 100%;
+      background: #E6E6E6;
+      position: absolute;
+      top: 12px;
+      left: 0;
+  }
+  .--progress-bar::after {
+      content: "";
+      width: 40%;
+      height: 6px;
+      background: #000; /* or any color you want for the progress */
+      display: block;
+      width: {{progress_in_percentage | append: "%"}};
+    {% if progress_in_percentage < 100 %}
+      width: calc({{progress_in_percentage | append: "%"}} - 50px);
+    {% endif %}
+    
+  }
+  .--icon-container {
+      position: absolute;
+      /* top: 6px; */
+      top: -3px;
+      right: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      @media(max-width: 786px){
+        right: 0px;
+      }
+  }
+  .--icon-container  svg {
+      background: #f0f0f0;
+      width: 32px;
+      height: 32px;
+      padding: 4px;
+      border-radius: 99px;
+      border: 1px solid #1f2937;
+    }
+  .--icon-container  span {
+      color: #6C7884;
+      font-family: var(--font-body-family);
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: -0.22px;
+  }
+  .post--goal--message{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>
+<div class="--free-shipping-container">
+  <div class="--custom-deliver-range">
+    {% if remaining_amount > 0 %}
+      {{ preGoalMessageTemplate }}
+    {% else %}
+      <div class="post--goal--message">
+        {% comment %} {{ postGoalMessageIcon }} {% endcomment %}
+        {{ postGoalMessage }}
+      </div>
+    {% endif %}
+  </div>
+  <div class="--custom-progress-bar-container">
+    <div class="--progress-bar"></div>
+    <div class="--icon-container">
+      {% render 'all-icons', name: 'truck' %}
+      <span>
+        {{ milestone_value | money }}
+      </span>
+      {% comment %} <span>FREE DELIVERY</span> {% endcomment %}
+    </div>
+  </div>
+</div>

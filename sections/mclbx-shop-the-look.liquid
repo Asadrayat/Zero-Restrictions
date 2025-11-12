@@ -1,0 +1,296 @@
+{% comment %} {{ 'component-card.css' | asset_url | stylesheet_tag }} {% endcomment %}
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+          #shopify-section-{{id}} {
+            box-sizing: border-box;
+            margin-top: {{section.settings.margin_top | append: 'px'}};
+            margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+            padding-top: {{section.settings.padding_top | append: 'px'}};
+            padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+            background: var(--Background-base-subtle, #F3F4F6);
+          }
+
+          @media(max-width: 768px) {
+            #shopify-section-{{id}} {
+              margin-top: {{section.settings.margin_top_m | append: 'px'}};
+              margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+              padding-top: {{section.settings.padding_top_m | append: 'px'}};
+              padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+            }
+          }
+        .wrapper-{{ id }} {
+      h2.--section-title {
+          color: #000;
+          /* font-family: var(--font-family-Title, "Neue Plak"); */
+          /* font-size: var(--Font-Size-Heading-H2); */
+          font-weight: 400;
+          /* line-height: var(--Line-Height-Heading-H2, 40px); */
+          letter-spacing: -0.4px;
+          margin-block: 0 var(--Spacing-Container-md);
+      }
+          .--content-wrapper {
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: var(--Spacing-Container-md);
+              @media(max-width:768px){
+                grid-template-columns: minmax(0, 1fr);
+              }
+          }
+
+      .--image-wrapper img {
+        border-radius: 16px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        @media(max-width:768px){
+          aspect-ratio: 361/441;
+          object-fit: cover;
+          object-position: center;
+        }
+      }
+    /* Swiper Styiling for only desktop */
+      @media(min-width:745px){
+          .swiper.swiper-{{ section.id }}.--parent-swiper-{{ section.id }}{
+            height: 100%;
+            .swiper-wrapper.--parent{
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: var(--Spacing-Container-sm);
+            }
+        }
+
+      }
+
+
+          /* .--product-card-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--Spacing-Container-sm);
+            @media(max-width:768px){
+                display: flex;
+                flex-wrap: no-wrap;
+                overflow-x: scroll;
+            }
+        } */
+        }
+
+  /* Product Card Styling For this Section */
+  .sec-{{ id }} .swiper-slide.parent-slide {
+     max-width: 100%;
+  }
+  .sec-{{ id }} product-card {
+      /* background: unset; */
+      /* border: 2px solid red; */
+      border-radius: 12px 12px 0 0;
+      max-width: 100%;
+      overflow: hidden;
+  }
+  .sec-{{ id }} .card-info-wrapper {
+      padding-inline: 8px;
+  }
+  .sec-{{ id }} pc-color-variant.pc-color-variants-wrapper {
+      left: 8px;
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <h2 class="--section-title">
+        {{ section.settings.title }}
+      </h2>
+      <div class="--content-wrapper">
+        <div class="--image-wrapper">
+          {% if section.settings.image != blank %}
+            {{ section.settings.image | image_url: width: section.settings.image.width | image_tag }}
+          {% else %}
+            {{ 'image' | placeholder_svg_tag }}
+          {% endif %}
+        </div>
+        <div class="--product-card-container ">
+          <div class=" swiper swiper-{{ section.id }} --parent-swiper-{{ section.id }}">
+            <div class="swiper-wrapper --parent">
+              {% for block in section.blocks %}
+                <div class="swiper-slide parent-slide">
+                  {%# render 'card-product-new-v3', product: all_products[block.settings.product] %}
+                  {% render 'card-product-new-v4', product: block.settings.product, forloop: forloop %}
+                </div>
+                
+                {% comment %}
+                    <div class="swiper-slide">
+                    {% render 'card-product',
+                      card_product: block.settings.product,
+                      media_aspect_ratio: section.settings.image_ratio,
+                      image_shape: section.settings.image_shape,
+                      show_secondary_image: section.settings.show_secondary_image,
+                      show_vendor: section.settings.show_vendor,
+                      show_rating: section.settings.show_rating,
+                      skip_styles: skip_card_product_styles,
+                      section_id: section.id,
+                      quick_add: section.settings.quick_add
+                    %}
+                  </div>
+                {% endcomment %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let swiperInstance = null; // Store the swiper instance globally
+
+  function initSwiper() {
+   new Swiper(".swiper-{{ section.id }}", {
+          slidesPerView: 1.2,
+          spaceBetween: 30,
+          loop: true, // Optional looping
+
+  });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if(screen.width <= 768 ){
+      initSwiper();
+    }
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Shop The Look",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop The Look"
+    }
+  ]
+}
+{% endschema %}

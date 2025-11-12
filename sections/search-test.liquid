@@ -1,0 +1,149 @@
+<h2>Ajax Login</h2>
+{% form 'customer_login' %}
+  {{ form.errors | default_errors }}
+
+  <div class="email">
+    <label for="email">Email</label>
+    <input type="email" name="customer[email]">
+  </div>
+
+  <div class="password">
+    <label for="password">Password</label>
+    <input type="password" name="customer[password]">
+  </div>
+
+  <div class="submit">
+    <input type="submit" value="Sign in">
+  </div>
+{% endform %}
+<h2>Ajax Reset Password</h2>
+{%- form 'reset_customer_password' -%}
+  {{ form.errors | default_errors }}
+
+  <div class="password">
+    <input
+      type="password"
+      name="customer[password]"
+      id="password"
+    >
+    <label for="password">Password</label>
+  </div>
+
+  <div class="password_confirm">
+    <input
+      type="password"
+      name="customer[password_confirmation]"
+      id="password_confirmation"
+    >
+    <label for="password_confirmation">Confirm password</label>
+  </div>
+
+  <button>Reset password</button>
+{%- endform -%}
+<h2>Ajax Sign Up</h2>
+<div class="test-signup">
+  {% form 'create_customer' %}
+    {{ form.errors | default_errors }}
+
+    <div class="first-name">
+      <label for="first-name">First name</label>
+      <input type="text" name="customer[first_name]">
+    </div>
+
+    <div class="last-name">
+      <label for="last-name">Last name</label>
+      <input type="text" name="customer[last_name]">
+    </div>
+
+    <div class="email">
+      <label for="email">Email</label>
+      <input type="email" name="customer[email]">
+    </div>
+
+    <div class="password">
+      <label for="password">Password</label>
+      <input type="password" name="customer[password]">
+    </div>
+
+    <div class="submit">
+      <input type="submit" value="Create">
+    </div>
+  {% endform %}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const signupForm = document.querySelector("form[action='/account']");
+      const loginForm = document.querySelector("form[action='/account/login']");
+
+      if (signupForm) {
+          signupForm.addEventListener("submit", function (event) {
+              event.preventDefault();
+
+              const formData = new FormData(signupForm);
+
+              fetch("/account", {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                      "X-Requested-With": "XMLHttpRequest"
+                  }
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.status && data.status === "success") {
+                      alert("Signup successful!");
+                      signupForm.reset();
+                  } else {
+                      alert("Signup failed. Please try again.");
+                  }
+              })
+              .catch(error => {
+                  console.error("Error:", error);
+                  alert("Signup successful!");
+              });
+          });
+      }
+
+      if (loginForm) {
+          loginForm.addEventListener("submit", function (event) {
+              event.preventDefault();
+
+              const formData = new FormData(loginForm);
+
+              fetch("/account/login", {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                      "X-Requested-With": "XMLHttpRequest"
+                  }
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.status && data.status === "success") {
+                      alert("Login successful!");
+                      loginForm.reset();
+                      window.location.href = "/account";
+                  } else {
+                      alert("Login failed. Please check your credentials and try again.");
+                  }
+              })
+              .catch(error => {
+                  console.error("Error:", error);
+                  alert("Login successful!.");
+              });
+          });
+      }
+  });
+</script>
+{% schema %}
+{
+  "name": "Search Test",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Search Test"
+    }
+  ]
+}
+{% endschema %}

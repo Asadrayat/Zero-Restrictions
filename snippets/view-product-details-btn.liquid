@@ -1,0 +1,44 @@
+<style>
+.view--product-details--btn {
+  .fabric__features--btn {
+    display: flex;
+    gap: var(--Spacing-Container-xs, 12px);
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+  }
+  .fabric__features--btn p {
+    color: var(--Content-Base-main, #1F2937);
+    -webkit-text-stroke-width: 0.2px;
+    -webkit-text-stroke-color: var(--Content-Base-main, #1F2937);
+    font-family: var(--font-family-Body, Archivo);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px; /* 133.333% */
+    letter-spacing: 0.72px;
+    text-transform: uppercase;
+    margin: 0;
+    position: relative; /* Needed for pseudo-element or background positioning */
+    display: inline-block; /* Ensure underline respects text width */
+    background-image: linear-gradient(#1F2937, #1F2937); /* Solid #1F2937 underline */
+    background-size: 100% 1px; /* Start with 0 width, 2px height */
+    background-position: 0 100%; /* Position at bottom */
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease-in-out; /* Animate width */
+    padding-bottom: 4px;
+  }
+  {% comment %} .fabric__features--btn:hover p {
+    background-size: 100% 2px; /* Expand to full width on hover */
+  } {% endcomment %}
+}
+</style>
+
+<div class="view--product-details--btn {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+  <a class="fabric__features--btn" href="#key--features--sec">
+    <p>{{ block.settings.title }}</p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3.33301 6L7.99967 10.6667L12.6663 6" stroke="black" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>

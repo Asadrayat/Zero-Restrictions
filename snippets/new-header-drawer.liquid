@@ -1,0 +1,34 @@
+<div class="header__drawer">
+  <div class="header__drawer-wrapper">
+    <div class="drawer__logo">
+      <a class="site__main-logo" site-logo href="/">
+        {% unless logo_sm and logo_lg %}
+          <h2>{{ shop.name }}</h2>
+        {% else %}
+          <picture>
+            <source media="(min-width: 744px)" srcset="{{ logo_lg | image_url: width: logo_lg_width }}">
+            {{ logo_sm | image_url: width: logo_sm_width | image_tag: loading: 'lazy' }}
+          </picture>
+        {% endunless %}
+      </a>
+      <button class="btn-reset" header-drawer-close>{% render 'all-icons', name: 'close' %}</button>
+    </div>
+    <div class="drawer-menu">
+      {% render 'drawer-menu' %}
+    </div>
+    <div class="drawer__utensils">
+      {% comment %}
+        <div class="drawer__search">
+          {% render 'drawer-search' %}
+        </div>
+      {% endcomment %}
+
+      <div class="drawer__account">
+        <a account-drawer href="/account">{% render 'all-icons', name: 'account' %}Account </a>
+      </div>
+      <div class="drawer__currency">
+        {% render 'currency-switcher' %}
+      </div>
+    </div>
+  </div>
+</div>

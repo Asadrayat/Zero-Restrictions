@@ -1,0 +1,265 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+  .wrapper-{{ id }} .block__wrapper {
+    display: flex;
+    justify-content: center;
+    gap: var(--Spacing-Container-lg); 
+    @media(max-width: 768px) {
+      flex-wrap: wrap;
+      gap: 12px;
+    }    
+  }
+  .wrapper-{{ id }} .block__wrapper:not(:last-child) {
+    padding-bottom: var(--Spacing-Container-lg);
+  }  
+  .wrapper-{{ id }} .heading {
+    padding-bottom: var(--Spacing-Container-lg);
+  }
+  .wrapper-{{ id }} .heading__info h2 {
+    color: #000;
+    
+    /* Headings/H2 */
+    font-family: var(--font-family-Title);
+    font-size: var(--Font-Size-Heading-H2);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Heading-H2); /* 100% */
+    letter-spacing: -0.4px;    
+    margin: 0 0 12px;
+    em {
+      display: block;
+      font-style: normal;
+      @media(max-width: 768px) {
+        display: unset;
+      }
+    }
+  }
+  .wrapper-{{ id }} .heading__info p {
+    color: #000;
+    
+    /* Paragraph/M */
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Regular);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Paragraph-Regular); /* 150% */
+    margin: 0;
+  }
+  .wrapper-{{ id }} .block__title {
+    flex: 0 0 30%;
+    color: var(--Content-Base-main, #1F2937);    
+    /* Headings/H3 */
+    font-family: var(--font-family-Title);
+    font-size: var(--Font-Size-Heading-H3);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Heading-H3); /* 116.667% */   
+    margin: 0;
+    @media(max-width: 768px) {
+      flex: 0 0 100%;
+    }
+  }
+  .wrapper-{{ id }} .block__content {
+    color: #000;    
+    /* Paragraph/M */
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Regular);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Paragraph-Regular); /* 150% */    
+    p{
+      margin: 0;
+    }
+  }
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .heading.block__wrapper {
+      gap: var(--Spacing-Container-lg);
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="heading block__wrapper">
+        <div class="heading__info block__title {% if section.settings.image == blank %}w-full{% endif %}">
+          {% if section.settings.title %}<h2>{{ section.settings.title }}</h2>{% endif %}
+          {% if section.settings.subtitle %}<p class="subtitle">{{ section.settings.subtitle }}</p>{% endif %}          
+          </div>
+          {% if section.settings.image %}
+          <div class="image-wrap block__content">
+            {{ section.settings.image | image_url: width: section.settings.image.width | image_tag }}
+          </div>
+        {% endif %}        
+      </div>
+      {% for block in section.blocks %}
+        {% assign title = block.settings.title %}
+        {% assign desc = block.settings.description %}
+        {% if title != blank or desc != blank %}
+          <div class="block__wrapper">
+            {% if title != blank %}<h3 class="block__title {% if desc == blank %}w-full{% endif %}">{{ title }}</h3>{% endif %}
+            {% if desc != blank %}<div class="block__content">{{ desc }}</div>{% endif %}
+          </div>          
+        {% endif %}          
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Description List",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Merino Wool & Cashmere Care Guide"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Merino wool is a smooth, fine, luxury wool. In order to make your Merino garments last a long time it’s important to take good care of them. Here are a few tips on how to do that."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Heading Image"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description_list",
+      "name": "Description List",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Description List"
+    }
+  ]
+}
+{% endschema %}

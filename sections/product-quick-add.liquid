@@ -1,0 +1,774 @@
+<style>
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    z-index: 3;
+  }
+  pqa-new{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #e3e3e385;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 99;
+  }
+
+  pqa-new .page-width{
+    max-width: 100%;
+    padding-block: 12px;
+    padding-inline: 20px;
+    @media screen and (max-width: 1200px){
+      padding: 0;
+    }
+  }
+  .pqa-new-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    @media screen and (max-width: 1200px){
+      display: grid;
+      grid-gap: 24px;
+      grid-template-columns: minmax(0,1fr);
+    }
+  }
+
+  .pqa-new-title{
+    box-sizing: border-box;
+    padding-inline-start: 12px;
+  }
+  .pqa-new-title p{
+    color: #000;
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Regular);
+    line-height: var(--Line-Height-Paragraph-Regular); /* 150% */
+    margin: 0;
+  }
+  .pqa-new-variants{
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    align-items: center;
+    gap: 24px;
+  }
+  .pqa-new-option select{
+    width: 100%;
+    color: #000;
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Small);
+    line-height: var(--Line-Height-Paragraph-Small); /* 142.857% */
+    cursor: pointer;
+    -webkit-appearance: none; /* Fix for Safari */
+    -moz-appearance: none; /* Fix for Firefox */
+    appearance: none; /* Fix for other browsers */
+
+    background: url('data:image/svg+xml;utf8,<svg fill="%23000000" width="20px" height="20px" viewBox="-5 -8 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin"><path d="M7.071 5.314l4.95-4.95a1 1 0 1 1 1.414 1.414L7.778 7.435a1 1 0 0 1-1.414 0L.707 1.778A1 1 0 1 1 2.121.364l4.95 4.95z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 16px;
+  }
+  .pqa-new-option select:focus{
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+
+
+  @media screen and (max-width: 1200px){
+    .pqa-new-wrapper{
+      grid-gap: 0;
+    }
+
+    .pqa-new-title, .pqa-new-variants{
+      padding: 0;
+    }
+    .pqa-new-option select{
+      font-size: 11px;
+    }
+    .pqa-new-variants{
+      /* display: grid;
+      grid-template-columns: minmax(0,1fr);
+      align-items: center;
+      gap: 5px; */
+    }
+    .pqa-new-form form {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 1201px){
+    .pqa-sm{
+      display: none !important;
+    }
+    pqa-new{
+      display: none;
+    }
+    .sticky-visible pqa-new{
+      display: block;
+    }
+    .pqa-new-form{
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .pqa-container .notify-stock-button-x:hover,
+    .pqa-new-form button:hover, .pqa-new-form a:hover{
+      background: #000;
+    }
+    .pqa-container .notify-stock-button-x,
+    .pqa-new-form button, .pqa-new-form a{
+      border-radius: 50px;
+      display: block;
+      width: 100%;
+      margin: 0 auto;
+      /* background: #000; */
+      background: #666766;
+      color: #FFF;
+      font-family: var(--font-family-Body);
+      font-size: var(--Font-Size-Paragraph-Regular);
+      line-height: var(--Line-Height-Paragraph-Regular);
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 10px 30px;
+      transition: 0.5s ease;
+      /* border-radius: 0; */
+    }
+  }
+  
+  @media screen and (max-width: 1200px){
+    .pqa-popup{
+      bottom: -100%;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+    .pqa-popup.active{
+      bottom: 0;
+    }
+    .pqa-new-variants{
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .pqa-lg{
+      display: none !important;
+    }
+    .pqa__popup-opener{
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 2;
+      background-color: #e3e3e385;
+      -webkit-backdrop-filter: saturate(180%) blur(10px);
+      backdrop-filter: saturate(180%) blur(10px);
+      width: 100%;
+      padding: 10px 41px 10px 24px;
+
+    }
+
+    .pqa__opner-wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      max-width: 370px;
+      width: 100%;
+      margin: auto;
+    }
+    .pqa-new-form{
+      {% comment %} display: flex;
+      align-items: center;
+      justify-content: center; {% endcomment %}
+    }
+    .pqa__popup-opener button, .pqa-container .notify-stock-button-x, .pqa-new-form button{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: #FFF;
+      font-family: var(--font-family-Body);
+      font-size: 16px;
+      line-height: 20px;
+      text-transform: uppercase;
+      padding: 14px 40px;
+      border-radius: 50px;
+      width: 100%;
+      max-width: 500px;
+    }
+    .pqa-new-title{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0 12px;
+      border-bottom: 1px solid #8080802b;
+    }
+    label.pqa-new-radio-label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+    }
+    .pqa-new-option-values label.pqa-new-radio-label:not(:last-child){
+      border-bottom: 1px solid #8080802b;
+    }
+    label.pqa-new-radio-label p{
+      margin: 0;
+    }
+    label.pqa-new-radio-label input{
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      visibility: hidden;
+    }
+    .pqa-selected{
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      visibility: hidden;
+    }
+    label.pqa-new-radio-label input:checked ~ .pqa-selected{
+      visibility: visible;
+    }
+    .pqa-size-guide{
+      border-top: 1px solid #8080802b;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pqa-size-guide p{
+      margin: 0;
+    }
+  }
+
+
+  .pqa-new-form .shopify-product-form{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .pqa-title-price-lg{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: max-content;
+  }
+  .pqa-title-price-lg h4{
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+  }
+  .pqa-title-price-lg span{
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    color: #000;
+  }
+  .pqa-redirects{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .pqa-redirects a{
+    display: inline-block;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .pqa-redirects a:hover{
+    text-decoration: underline;
+  }
+</style>
+
+<div class="pqa-container sticky-visible" id="product-sticky-quick-add">
+  <div class="pqa__popup-opener pqa-sm">
+    <div class="pqa__opner-wrapper">
+      <button open-pqa-popup>ADD TO BAG</button>
+      <a class="header-icon lg-hide mobile-drawer-open mobile-drawer-pqa pos-rel" mobile-drawer-opener href="#">
+        <div class="burger__icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        {% comment %} <span
+          id="cart-icon-bubble-3"
+          class="cart-icon-bubble-- new-header-cart-icon new-header-cart-icon-pdp hidden"
+          cart-drawer
+        >              
+          {% if cart != empty %}
+            <span class="cart__count-pdp">{{ cart.item_count }}</span>
+          {% else %}
+            <span class="cart__count-pdp">0</span>
+          {% endif %}
+        </span> {% endcomment %}
+      </a>
+
+    </div>
+  </div>
+  <pqa-new class="pqa-popup">
+    <div class="page-width">
+      <div class="pqa-new-wrapper">
+        {% if section.blocks.size > 0 %}
+          <div class="pqa-redirects pqa-lg">
+            {% for block in section.blocks %}
+              {% if block.settings.title != blank %}
+                <a href="{{ block.settings.link | default: '#' }}">{{ block.settings.title }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        <div class="pqa-new-title">
+          <p class="pqa-sm">Select Your Size</p>
+          <p class="pqa-lg pqa-sm hidden">{{ product.title }}</p>
+          <button class="pqa-sm pqa-popup-close" pqa-popup-close>{% render 'all-icons', name: 'close' %}</button>
+        </div>
+        <div class="pqa-new-variants pqa-sm">
+          {% for option in product.options_with_values %}
+            {% if option.name == 'Size' %}
+              <div class="pqa-new-option">
+                <div class="pqa-new-option-values">
+                  {% for value in option.values %}
+                    {% unless value.variant.id == blank %}
+                      <label
+                        class="pqa-new-radio-label"
+                        for="option-{{ option.name | handleize }}-{{ value.variant.id }}"
+                      >
+                        <input
+                          type="radio"
+                          id="option-{{ option.name | handleize }}-{{ value.variant.id }}"
+                          name="option-{{ option.name | handleize }}"
+                          data-label="{{ value.name }}"
+                          value="{{ value.variant.url }}"
+                          {% if value.selected %}
+                            checked
+                          {% endif %}
+                          {% comment %}
+                            {% unless value.available %}disabled{% endunless %}
+                          {% endcomment %}
+                        >
+                        {% if value.available %}
+                          <span>{{ value.name }}</span>
+                          {% if value.variant.inventory_quantity < 10 and value.variant.inventory_quantity > 0 %}
+                            <p>Only {{ value.variant.inventory_quantity }} left in this size</p>
+                          {% endif %}
+                          <span class="pqa-selected">
+                            {% comment %}
+                              {% if value.selected %}
+                            {% endcomment %}
+                            <svg
+                              width="20px"
+                              height="20px"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M15.3742 5.98559L10.3742 14.9856C9.72664 16.1511 7.97832 15.1798 8.62585 14.0143L13.6258 5.01431C14.2734 3.84876 16.0217 4.82005 15.3742 5.98559Z" fill="#000000"/>
+                              <path d="M5.1247 9.71907L10.1247 13.7191C11.1659 14.552 9.91646 16.1137 8.87531 15.2808L3.87531 11.2808C2.83415 10.4479 4.08354 8.88615 5.1247 9.71907Z" fill="#000000"/>
+                            </svg>
+                            {% comment %}
+                              {% endif %}
+                            {% endcomment %}
+                          </span>
+                        {% else %}
+                          <s>{{ value.name }}</s>
+                          <span class="pqa-selected">
+                            {% comment %}
+                              {% if value.selected %}
+                            {% endcomment %}
+                            <svg
+                              width="20px"
+                              height="20px"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M15.3742 5.98559L10.3742 14.9856C9.72664 16.1511 7.97832 15.1798 8.62585 14.0143L13.6258 5.01431C14.2734 3.84876 16.0217 4.82005 15.3742 5.98559Z" fill="#000000"/>
+                              <path d="M5.1247 9.71907L10.1247 13.7191C11.1659 14.552 9.91646 16.1137 8.87531 15.2808L3.87531 11.2808C2.83415 10.4479 4.08354 8.88615 5.1247 9.71907Z" fill="#000000"/>
+                            </svg>
+                            {% comment %}
+                              {% endif %}
+                            {% endcomment %}
+                          </span>
+                        {% endif %}
+                      </label>
+                    {% endunless %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="pqa-new-variants pqa-lg pqa-sm hidden">
+          {% for option in product.options_with_values %}
+            <div class="pqa-new-option">
+              <select>
+                {% for value in option.values %}
+                  {% unless value.variant.id == blank %}
+                    <option
+                      {% if value.selected %}
+                        selected
+                      {% endif %}
+                      value="{{ value.variant.url }}"
+                    >
+                      {% if value.available %}
+                        {{ value.name }}
+                      {% else %}
+                        <s>{{ value.name }}</s>
+                      {% endif %}
+                    </option>
+                  {% endunless %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="pqa-size-guide pqa-sm">
+          <div class="p-info-size-guide openPopup">
+            {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M12.0832 4.58328L13.3332 5.83328M9.58322 7.08328L10.8332 8.33328M7.08322 9.58328L8.33322 10.8333M4.58322 12.0833L5.83322 13.3333M2.13793 14.638L5.36178 17.8619C5.52679 18.0269 5.6093 18.1094 5.70443 18.1403C5.78812 18.1675 5.87826 18.1675 5.96195 18.1403C6.05708 18.1094 6.13959 18.0269 6.30459 17.8619L17.8618 6.30472C18.0268 6.13971 18.1093 6.05721 18.1402 5.96207C18.1674 5.87838 18.1674 5.78824 18.1402 5.70455C18.1093 5.60942 18.0268 5.52691 17.8618 5.36191L14.6379 2.13805C14.4729 1.97304 14.3904 1.89054 14.2953 1.85963C14.2116 1.83244 14.1215 1.83244 14.0378 1.85963C13.9426 1.89054 13.8601 1.97304 13.6951 2.13805L2.13793 13.6952C1.97292 13.8602 1.89042 13.9428 1.8595 14.0379C1.83231 14.1216 1.83231 14.2117 1.8595 14.2954C1.89042 14.3905 1.97292 14.473 2.13793 14.638Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg> {% endcomment %}
+            <span>Size Guide</span>
+          </div>
+          <p>True to size</p>
+        </div>
+        <div class="pqa-new-form">
+          <div class="pqa-title-price-lg pqa-lg">
+            <h4>{{ product.title }}</h4>
+            <span>{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+          </div>
+          {% unless product.selected_or_first_available_variant.available %}
+            <button
+              class="notify-stock-button-x"
+              type=""
+              data-variant="{{ product.selected_or_first_available_variant.id }}"
+            >
+              Notify Me
+            </button>
+          {% endunless %}
+          {% form 'product', product, class: 'pqa-sm' %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+
+    <input type="hidden" name="properties[_Front Design]" id="front-design-input">
+    <input type="hidden" name="properties[_Back Design]" id="back-design-input">
+
+    <input type="hidden" name="properties[_Front Placement]" id="front-placement-input">
+    <input type="hidden" name="properties[_Back Placement]" id="back-placement-input">
+    
+    <input type="hidden" name="properties[_Left Sleeve Design]" id="left-sleeve-design-input">
+    <input type="hidden" name="properties[_Right Sleeve Design]" id="right-sleeve-design-input">
+
+            <button
+              type="submit"
+              {% unless product.selected_or_first_available_variant.available %}
+                disabled
+              {% endunless %}
+              class="pqa-sm {% unless product.selected_or_first_available_variant.available %} hidden  {% endunless %}"
+            >
+              {% if product.selected_or_first_available_variant.available %}
+                ADD TO BAG &nbsp;—&nbsp;<span class="pqa-sm">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          {% endform %}
+          <a
+              href="#main-product-information"
+              {% unless product.selected_or_first_available_variant.available %}
+                aria-disabled="true"
+              {% endunless %}
+              class="pqa-lg {% unless product.selected_or_first_available_variant.available %} hidden {% endunless %}"
+            >
+              {% if product.selected_or_first_available_variant.available %}
+                Add To Bag <span class="pqa-sm">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+              {% else %}
+                Sold Out
+              {% endif %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </pqa-new>
+</div>
+
+<script>
+ /* 
+document.addEventListener("DOMContentLoaded", function() {
+    const mainProductInfo = document.querySelector('#main-product-information');
+    const siteHeader = document.querySelector('.site__header');
+    const pqaContainer = document.querySelector('.pqa-container');
+    {% comment %} const footer = document.querySelector(".footer__section");
+
+    if (pqaContainer) {
+        if (screen.width < 989) {
+            footer.parentElement.style.paddingBottom = '150px';
+        }
+    } {% endcomment %}
+
+    if (!mainProductInfo || !pqaContainer) return;
+
+
+    {% comment %} hide from bottom footer  {% endcomment %}
+    const BOTTOM_THRESHOLD_PX = 12;
+    function isAtBottom() {
+      const doc = document.documentElement;
+      const scrolledBottom = Math.ceil(window.scrollY + window.innerHeight);
+      return scrolledBottom >= (doc.scrollHeight - BOTTOM_THRESHOLD_PX);
+    }
+    setTimeout(() => {
+      if (isAtBottom()) {
+        pqaContainer.classList.remove('sticky-visible');
+        return;
+      }
+      const targetRect = mainProductInfo.getBoundingClientRect();
+      const pqaRect = pqaContainer.getBoundingClientRect();
+      const scrollPosition = window.scrollY + window.innerHeight;
+      if (scrollPosition >= targetRect.top + window.scrollY && targetRect.top > pqaRect.bottom) {
+        pqaContainer.classList.add('sticky-visible');
+      }
+    }, 100);
+
+
+
+    const handleIntersection = (entries) => {
+        entries.forEach(entry => {
+            if (screen.width < 1200) {
+                pqaContainer.classList.add('sticky-visible');
+                if (siteHeader) {
+                    siteHeader.classList.remove('active');
+                }
+            } else {
+                if (entry.isIntersecting) {
+                    pqaContainer.classList.remove('sticky-visible');
+                    if (siteHeader) {
+                        siteHeader.classList.add('active');
+                    }
+                } else {
+                    pqaContainer.classList.add('sticky-visible');
+                    if (siteHeader) {
+                        siteHeader.classList.remove('active');
+                    }
+                }
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, 
+      {% comment %} hide from bottom footer  {% endcomment %}
+      (entries) => {
+        if (isAtBottom()) {
+          pqaContainer.classList.remove('sticky-visible');
+          return;
+        }
+        const scrollDirection = getScrollDirection();
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            if (scrollDirection === 'down') {
+              pqaContainer.classList.add('sticky-visible');
+            }
+          } else {
+            pqaContainer.classList.remove('sticky-visible');
+          }
+        });
+      },
+      {
+        root: null,
+        threshold: 0,
+      }
+  );
+
+    observer.observe(mainProductInfo);
+
+    function handleScreenSizeChange() {
+        if (screen.width < 1200) {
+            pqaContainer.classList.add('sticky-visible');
+            if (siteHeader) {
+                siteHeader.classList.remove('active');
+            }
+        }
+    }
+
+    handleScreenSizeChange();
+
+    {% comment %} hide from bottom footer  {% endcomment %}
+    window.addEventListener('scroll', () => {
+      if (isAtBottom()) pqaContainer.classList.remove('sticky-visible');
+    }, { passive: true });
+
+    window.addEventListener('resize', handleScreenSizeChange);
+});
+*/
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const mainProductInfo = document.querySelector('#main-product-information');
+    const siteHeader = document.querySelector('.site__header');
+    const pqaContainer = document.querySelector('.pqa-container');
+
+    if (!mainProductInfo || !pqaContainer) return;
+
+    let lastScrollY = window.scrollY;
+
+    const BOTTOM_THRESHOLD_PX = 12;
+    function isAtBottom() {
+      const scrolledBottom = Math.ceil(window.scrollY + window.innerHeight);
+      return scrolledBottom >= (document.documentElement.scrollHeight - BOTTOM_THRESHOLD_PX);
+    }
+
+    function isTargetAboveViewport() {
+      return mainProductInfo.getBoundingClientRect().bottom < 0;
+    }
+
+    function getScrollDirection() {
+      const current = window.scrollY;
+      const direction = current > lastScrollY ? 'down' : 'up';
+      lastScrollY = current;
+      return direction;
+    }
+
+    setTimeout(() => {
+      if (isAtBottom()) {
+        pqaContainer.classList.remove('sticky-visible');
+        return;
+      }
+      if (isTargetAboveViewport()) {
+        pqaContainer.classList.add('sticky-visible');
+      }
+    }, 100);
+
+    const handleIntersection = (entries) => {
+        entries.forEach(entry => {
+            if (screen.width < 1200) {
+                pqaContainer.classList.add('sticky-visible');
+                if (siteHeader) {
+                    siteHeader.classList.remove('active');
+                }
+            } else {
+                if (isAtBottom()) {
+                    pqaContainer.classList.remove('sticky-visible');
+                    return;
+                }
+                const scrollDirection = getScrollDirection();
+                if (!entry.isIntersecting && isTargetAboveViewport()) {
+                    pqaContainer.classList.add('sticky-visible');
+                } else if (entry.isIntersecting) {
+                    pqaContainer.classList.remove('sticky-visible');
+                } else if (scrollDirection === 'up' && isTargetAboveViewport()) {
+                    pqaContainer.classList.add('sticky-visible');
+                }
+                if (siteHeader) {
+                    siteHeader.classList.toggle('active', entry.isIntersecting);
+                }
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+        root: null,
+        threshold: 0,
+    });
+
+    observer.observe(mainProductInfo);
+
+    function handleScreenSizeChange() {
+        if (screen.width < 1200) {
+            pqaContainer.classList.add('sticky-visible');
+            if (siteHeader) {
+                siteHeader.classList.remove('active');
+            }
+        }
+    }
+
+    handleScreenSizeChange();
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                if (isAtBottom()) {
+                    pqaContainer.classList.remove('sticky-visible');
+                } else if (isTargetAboveViewport() && screen.width >= 1200) {
+                    pqaContainer.classList.add('sticky-visible');
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', handleScreenSizeChange);
+});
+
+window.pqaManage = function() {
+    const openBtns = document.querySelectorAll('[open-pqa-popup]');
+    const closeBtn = document.querySelector('[pqa-popup-close]');
+    const popup = document.querySelector('.pqa-popup');
+
+    if (openBtns.length > 0 && popup) {
+        openBtns.forEach(openBtn => {
+            openBtn.addEventListener('click', function() {
+                if (!popup.classList.contains('active')) {
+                    popup.classList.add('active');
+                    document.querySelector("body").style.height = "100svh";
+                    document.querySelector("body").style.overflow = "hidden";
+                }
+            });
+        });
+    }
+};
+{% comment %} document.addEventListener('click', function(event) {
+    // Check if the device is mobile (screen width <= 768px)
+    if (window.innerWidth <= 768) {
+        const popup = document.querySelector('.pqa-popup.active');
+        
+        // Check if popup exists and the click is outside the popup
+        if (popup && !popup.contains(event.target)) {
+            popup.classList.remove('active');
+        }
+    }
+}); {% endcomment %}
+document.addEventListener('DOMContentLoaded', function() {
+    window.pqaManage();
+});
+
+</script>
+{% schema %}
+{
+  "name": "Product Quick Add Backup",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "blocks": [
+      {
+        "type": "link",
+        "name": "Link",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }
+        ]
+      }
+  ],
+  "presets": [
+    {
+      "name": "Product Quick Add Backup"
+    }
+  ],
+  "settings": []
+}
+{% endschema %}

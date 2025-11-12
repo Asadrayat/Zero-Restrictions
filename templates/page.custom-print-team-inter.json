@@ -1,0 +1,836 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "hero_slider_custom_print_CAkEgW": {
+      "type": "hero-slider-custom-print",
+      "blocks": {
+        "image_Jr4gHV": {
+          "type": "image",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/20240620-PGA-Presidents_Cup-Staged-1182.jpg",
+            "image_overlay_opacity": 100,
+            "image_overlay_opacity_m": 100,
+            "content_position": "middle_center",
+            "content_position_m": "middle_center",
+            "color__info": "#f3f4f6",
+            "color__info_m": "#f3f4f6",
+            "info_align": "center",
+            "info_align_m": "center",
+            "pretitle": "LIMITED EDITION",
+            "heading_size": "medium",
+            "title": "2026 PRESIDENTS CUP",
+            "subtitle": "INTERNATIONAL TEAM",
+            "subtitle_width": "",
+            "enable_clickable_slide": false,
+            "clickable_slide_cta": "primary",
+            "btn_label1": "U.S. TEAM",
+            "btn_url1": "shopify://pages/u-s-team",
+            "btn_label2": "INTERNATIONAL TEAM",
+            "btn_url2": "shopify://pages/international-team",
+            "btn_label3": "PRESIDENTS CUP ICONS",
+            "btn_url3": "shopify://pages/presidents-cup-icons",
+            "selected_btn": "secound",
+            "btn_color": "#f3f4f6",
+            "btn_bgcolor": "#000000",
+            "custom_css": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_Jr4gHV"
+      ],
+      "name": "Hero Slider Custom Print",
+      "settings": {
+        "full_width": true,
+        "disable_linebr": false,
+        "hide_subtitle": false,
+        "banner_height": "custom",
+        "banner_max_height": 500,
+        "enable_autoslide": false,
+        "show_pagination": false,
+        "show_arrow": false,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 0,
+        "padding_bottom_m": 0
+      }
+    },
+    "floating_nav_hs_rdPPmi": {
+      "type": "floating-nav-hs",
+      "blocks": {
+        "button_6NFfEn": {
+          "type": "button",
+          "settings": {
+            "text": "Z425 L/S 1/4 ZIP",
+            "url": "#custom-print-team-inter-1"
+          }
+        },
+        "button_gCQBmH": {
+          "type": "button",
+          "settings": {
+            "text": "TKO HOODIE",
+            "url": "#custom-print-team-inter-2"
+          }
+        },
+        "button_LFB9Up": {
+          "type": "button",
+          "settings": {
+            "text": "Z700 Vest",
+            "url": "#custom-print-team-inter-3"
+          }
+        },
+        "button_jFzzGk": {
+          "type": "button",
+          "settings": {
+            "text": "BOND JACKET",
+            "url": "#custom-print-team-inter-4"
+          }
+        },
+        "button_VVyA6p": {
+          "type": "button",
+          "settings": {
+            "text": "Z500 1/4 Zip Pullover",
+            "url": "#custom-print-team-inter-5"
+          }
+        },
+        "button_gc3iid": {
+          "type": "button",
+          "settings": {
+            "text": "Z710 Full Zip Jacket",
+            "url": "#custom-print-team-inter-6"
+          }
+        },
+        "button_DY9N9K": {
+          "type": "button",
+          "settings": {
+            "text": "TYSON HOODIE FULL ZIP",
+            "url": "#custom-print-team-inter-7"
+          }
+        },
+        "button_LQBAVb": {
+          "type": "button",
+          "settings": {
+            "text": "Z2000 Jacket",
+            "url": "#custom-print-team-inter-8"
+          }
+        },
+        "button_8RT87e": {
+          "type": "button",
+          "settings": {
+            "text": "JIM HOODIE",
+            "url": "#custom-print-team-inter-9"
+          }
+        },
+        "button_ThKRcd": {
+          "type": "button",
+          "settings": {
+            "text": "JIM TEE",
+            "url": "#custom-print-team-inter-10"
+          }
+        },
+        "button_4bRmJJ": {
+          "type": "button",
+          "settings": {
+            "text": "JIM LONG SLEEVE TEE",
+            "url": "#custom-print-team-inter-11"
+          }
+        },
+        "button_NgUmBV": {
+          "type": "button",
+          "settings": {
+            "text": "MIKAELA FULL ZIP",
+            "url": "#custom-print-team-inter-12"
+          }
+        },
+        "button_rCkp7j": {
+          "type": "button",
+          "settings": {
+            "text": "SUMMER SLEEVELESS POLO",
+            "url": "#custom-print-team-inter-13"
+          }
+        },
+        "button_H6x7kB": {
+          "type": "button",
+          "settings": {
+            "text": "Tess Vest",
+            "url": "#custom-print-team-inter-14"
+          }
+        },
+        "button_3j6Ktx": {
+          "type": "button",
+          "settings": {
+            "text": "REGAN ZIP MOCK",
+            "url": "#custom-print-team-inter-15"
+          }
+        }
+      },
+      "block_order": [
+        "button_6NFfEn",
+        "button_gCQBmH",
+        "button_LFB9Up",
+        "button_jFzzGk",
+        "button_VVyA6p",
+        "button_gc3iid",
+        "button_DY9N9K",
+        "button_LQBAVb",
+        "button_8RT87e",
+        "button_ThKRcd",
+        "button_4bRmJJ",
+        "button_NgUmBV",
+        "button_rCkp7j",
+        "button_H6x7kB",
+        "button_3j6Ktx"
+      ],
+      "name": "Floating Nav Ryder Cup",
+      "settings": {
+        "full_width": false,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 0,
+        "padding_bottom_m": 0
+      }
+    },
+    "custom_print_card_slider_hs_DxgPBY": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_Jydh6G": {
+          "type": "product",
+          "settings": {
+            "product": "z425-l-s-1-4-zip-international-team-black"
+          }
+        },
+        "product_PMyMKJ": {
+          "type": "product",
+          "settings": {
+            "product": "z425-l-s-1-4-zip-international-team-charcoal-heather-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_Jydh6G",
+        "product_PMyMKJ"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-1",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_hErfrH": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_itydAW": {
+          "type": "product",
+          "settings": {
+            "product": "tko-hoodie-international-team-white"
+          }
+        },
+        "product_kLBTwk": {
+          "type": "product",
+          "settings": {
+            "product": "tko-hoodie-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_itydAW",
+        "product_kLBTwk"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-2",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_gjD8dw": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_JYKzVH": {
+          "type": "product",
+          "settings": {
+            "product": "z700-vest-international-team-black"
+          }
+        },
+        "product_dBEykL": {
+          "type": "product",
+          "settings": {
+            "product": "z700-vest-international-team-shadow-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_JYKzVH",
+        "product_dBEykL"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-3",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_zmaRU6": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_P6zf3f": {
+          "type": "product",
+          "settings": {
+            "product": "bond-jacket-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_P6zf3f"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-4",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_WtGGbA": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_bBradm": {
+          "type": "product",
+          "settings": {
+            "product": "z500-1-4-zip-pullover-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_bBradm"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-5",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_J6FwRk": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_KCQ4VM": {
+          "type": "product",
+          "settings": {
+            "product": "z710-full-zip-jacket-international-team-black-charcol"
+          }
+        }
+      },
+      "block_order": [
+        "product_KCQ4VM"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-6",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_PRYkLR": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_hDtggT": {
+          "type": "product",
+          "settings": {
+            "product": "tyson-hoodie-full-zip-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_hDtggT"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-7",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_LfTKXG": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_dRXR8n": {
+          "type": "product",
+          "settings": {
+            "product": "z2000-jacket-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_dRXR8n"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-8",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_WXAw9H": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_BgMknr": {
+          "type": "product",
+          "settings": {
+            "product": "jim-hoodie-international-team-white"
+          }
+        }
+      },
+      "block_order": [
+        "product_BgMknr"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-9",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_KqD3iX": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_MiaHgk": {
+          "type": "product",
+          "settings": {
+            "product": "jim-tee-international-team-white"
+          }
+        },
+        "product_gePCDr": {
+          "type": "product",
+          "settings": {
+            "product": "jim-tee-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_MiaHgk",
+        "product_gePCDr"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-10",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_mnBY8t": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_zaHNKT": {
+          "type": "product",
+          "settings": {
+            "product": "jim-long-sleeve-tee-international-team-black"
+          }
+        },
+        "product_yC788T": {
+          "type": "product",
+          "settings": {
+            "product": "jim-long-sleeve-tee-international-team-white"
+          }
+        }
+      },
+      "block_order": [
+        "product_zaHNKT",
+        "product_yC788T"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-11",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_XzqPM6": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_HKcPc3": {
+          "type": "product",
+          "settings": {
+            "product": "mikaela-full-zip-international-team-black-white"
+          }
+        }
+      },
+      "block_order": [
+        "product_HKcPc3"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-12",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_jKja9Q": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_RLKRTh": {
+          "type": "product",
+          "settings": {
+            "product": "summer-sleeveless-polo-international-team-white"
+          }
+        }
+      },
+      "block_order": [
+        "product_RLKRTh"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-13",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_Qehjw7": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_h7pKRT": {
+          "type": "product",
+          "settings": {
+            "product": "tess-vest-international-team-white"
+          }
+        },
+        "product_mAd9Dk": {
+          "type": "product",
+          "settings": {
+            "product": "tess-vest-international-team-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_h7pKRT",
+        "product_mAd9Dk"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-14",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    },
+    "custom_print_card_slider_hs_fJPcER": {
+      "type": "custom-print-card-slider-hs",
+      "blocks": {
+        "product_qHCkAf": {
+          "type": "product",
+          "settings": {
+            "product": "regan-zip-mock-international-team-stingray"
+          }
+        }
+      },
+      "block_order": [
+        "product_qHCkAf"
+      ],
+      "name": "Custom Print Card Slider",
+      "settings": {
+        "id_nav": "custom-print-team-inter-14",
+        "product": "",
+        "full_width": false,
+        "title": "",
+        "subtitle": "",
+        "p_to_show": 6,
+        "grid_desktop": 3,
+        "grid_desktop_mbl": 1,
+        "enable_slider": true,
+        "show_slider_arrow": true,
+        "slides_per_view": 3,
+        "slides_per_view_mbl": 1.2,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "margin_top_m": 0,
+        "margin_bottom_m": 0,
+        "padding_top_m": 32,
+        "padding_bottom_m": 32
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hero_slider_custom_print_CAkEgW",
+    "floating_nav_hs_rdPPmi",
+    "custom_print_card_slider_hs_DxgPBY",
+    "custom_print_card_slider_hs_hErfrH",
+    "custom_print_card_slider_hs_gjD8dw",
+    "custom_print_card_slider_hs_zmaRU6",
+    "custom_print_card_slider_hs_WtGGbA",
+    "custom_print_card_slider_hs_J6FwRk",
+    "custom_print_card_slider_hs_PRYkLR",
+    "custom_print_card_slider_hs_LfTKXG",
+    "custom_print_card_slider_hs_WXAw9H",
+    "custom_print_card_slider_hs_KqD3iX",
+    "custom_print_card_slider_hs_mnBY8t",
+    "custom_print_card_slider_hs_XzqPM6",
+    "custom_print_card_slider_hs_jKja9Q",
+    "custom_print_card_slider_hs_Qehjw7",
+    "custom_print_card_slider_hs_fJPcER"
+  ]
+}

@@ -1,0 +1,26 @@
+<h2 class="p-info-title {{ class }}">{{ product.title }}</h2>
+<div class="p-info-price-wrapper {{ class }}">
+  <div class="p-info-price">
+    {% if product.selected_or_first_available_variant.price
+        < product.selected_or_first_available_variant.compare_at_price
+    %}
+      <h3 class="p-info-rgular-price">{{ product.selected_or_first_available_variant.price | money }}</h3>
+      <h4 class="p-info-compare-price">
+        <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+      </h4>
+    {% else %}
+      <h3 class="p-info-rgular-price">{{ product.selected_or_first_available_variant.price | money }}</h3>
+    {% endif %}
+  </div>
+  <div class="p-info-review">
+    <div
+      class="ruk_rating_snippet"
+      data-sku="{{ product.handle }};{{ product.variants | map: 'sku' | join: ';' }};{{ product.variants | map: 'id' | join: ';' }}"
+    ></div>
+  </div>
+</div>
+<div class="p-info-divider {{ class }}"></div>
+<h5 class="p-info-short-desc {{ class }}">
+  These sweatpants are super comfy and stylish, perfect for anything from warming up to just hanging out.
+</h5>
+<div class="p-info-divider {{ class }}"></div>

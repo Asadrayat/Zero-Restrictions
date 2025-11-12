@@ -1,0 +1,117 @@
+{% comment %}
+  Minimal Subcategory filter with button-style values for Shopify Dawn theme
+  Accepts:
+  - results: {Object} Collection or Search object
+  Usage:
+  {% render 'subcategory-filter', results: collection %}
+{% endcomment %}
+<style>
+    .subcategory-filter .facets__form{
+      grid-template-columns: 1fr;
+      overflow: scroll;
+      scrollbar-width: none;
+    }
+    /* Collection Lists */
+    .collections__nav-wrapper{
+      margin: 32px auto 0;
+    }
+
+      .collections__lists {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: auto;
+        gap: 16px;
+        padding: 8px 16px;
+        {% comment %} border-top: 1px solid #4B5563;
+        border-bottom: 1px solid #4B5563; {% endcomment %}
+        flex-wrap: wrap;
+        margin-block: 16px;
+      }
+
+      @media screen and (max-width: 989px) {
+        .collections__lists {
+          justify-content: flex-start;
+          flex-wrap: nowrap;
+          overflow: scroll;
+          scrollbar-width: none;
+          padding-inline: 0;
+          gap: 8px; 
+        }
+      }
+
+      .collections__lists .--top-filter-value {
+          text-align: center;
+          display: inline-block;
+          color: rgba(121,121,121,var(--tw-text-opacity,1));
+          font-size: var(--Font-Size-Paragraph-Tiny);
+          line-height: 2.5em;
+          padding: 0px 16px;
+          min-width: max-content;
+          text-decoration: none;
+          cursor: pointer;
+          border-radius: var(--rounded-full, 999999px);
+          border: 1px solid var(--Border-Base-main, #D1D5DB);
+      }
+
+      .collections__lists .--top-filter-value.active {
+        color: #000;
+        border-color: #000;
+        {% comment %} background: #1F2937; {% endcomment %}
+      }
+
+      .collections__lists .--top-filter-value span {
+        position: relative;
+      }
+
+      {% comment %} .collections__lists .--top-filter-value span::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: {% if section.settings.image or collection.image %}#1F2937{% else %}#1F2937{% endif %};
+        transition: width 0.3s ease;
+      } {% endcomment %}
+      .collections__lists .--top-filter-value.active span::after {
+        background-color: {% if section.settings.image or collection.image %}#fff{% else %}#1F2937{% endif %};
+
+      }
+
+      {% comment %} .collections__lists .--top-filter-value:hover span::after {
+        width: 100%;
+      } {% endcomment %}
+      .collections__lists .--top-filter-value:hover span {
+        color: #000;
+      }
+
+</style>
+
+<div class="subcategory-filter page-width">
+  <facet-filters-form>
+    {%- for filter in results.filters -%}
+      {% if filter.label == 'Subcategory' and filter.type == 'list' %}
+        <div class=" collections__lists">
+          {%- for value in filter.values -%}
+            <div
+              {% comment %} href="" {% endcomment %}
+              class="--top-filter-value {% if value.active %} active{% endif %}{% if is_disabled %} disabled{% endif %}"
+              data-value="{{- value.value -}}"
+              data-id="{{- 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index -}}"
+            >
+              <span
+                data-value="{{- value.value -}}"
+                data-id="{{- 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index -}}"
+              >
+                {{- value.value -}}
+              </span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </facet-filters-form>
+</div>
+
+<script></script>

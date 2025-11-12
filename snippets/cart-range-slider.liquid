@@ -1,0 +1,50 @@
+{% liquid
+  assign cartTotalPrice = cart.total_price | divided_by: 100.00
+  assign rangeToValue = cartTotalPrice | divided_by: freeShippingRange | times: 100
+  if rangeToValue > freeShippingRange
+    assign rangeToValue = freeShippingRange
+  endif
+  assign rangeToValue = rangeToValue | append: '%'
+%}
+
+<style>
+  .mcart-range-slider {
+    height: 6px;
+    width: 100%;
+    border-radius: 19px;
+    background: #E8E8E8;
+    box-sizing: border-box;
+    position: relative;
+    transition: .3s;
+    overflow: hidden;
+    display: block !important;
+  }
+  .mcart-range-slider:before{
+    position: absolute;
+    content: "";
+    width: {{rangeToValue}};
+    height: 100%;
+    background: #322F74;
+    transition: .3s;
+  }
+  .mcart-range-title{
+    color: #212121;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0 0 11px 0;
+  }
+  .mcart-range-title span{
+    color: #E60000;
+  }
+</style>
+<h2 class="mcart-range-title">
+  {% if cartTotalPrice >= freeShippingRange %}
+    You Just Unlocked Free Shipping
+  {% else %}
+    Add <span>{{ freeShippingRange | minus: cartTotalPrice | times: 100 | money }}</span> to Unlock free Shipping
+  {% endif %}
+</h2>
+<div class="mcart-range-slider"></div>

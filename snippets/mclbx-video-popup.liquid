@@ -1,0 +1,197 @@
+<style>
+    .--video-modal-container {
+        position: fixed;
+        left: -100%;
+        top: 0;
+    }
+    .--video-modal-container.mclbx-active-container {
+        display: block;
+        position: fixed;
+        /* background: #ff000047; */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 4;
+
+
+    .--dark-bg {
+        width: 100%;
+        height: 100%;
+        background: #00000080;
+    }
+    .--video-element-wrapper {
+        position: absolute;
+        width: 400px;
+        height: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 5;
+      @media(max-width: 600px){
+        width: 85%;
+      }
+    }
+  button.--close-video {
+      position: absolute;
+      right: -30px;
+      top: -30px;
+  }
+  button.--close-video    svg {
+          width: 30px;
+          height: 30px;
+      }
+    .--video-element-wrapper video {
+        width: 100%;
+        height: auto;
+    }
+    }
+    .--video-modal-wrapper {
+        position: absolute;
+        left: -100%;
+        top: 0;
+    }
+</style>
+
+{% assign videoblocks = section.blocks | where: 'type', 'video' %}
+{% unless videoblocks == blank %}
+  <div class="--video-modal-wrapper hidden">
+    {% for videoblock in videoblocks %}
+      {% assign video = videoblock.settings.video %}
+      {% unless video == blank %}
+        <div
+          class="--single-video-popup "
+          data-link="{{ videoblock.settings.title | remove: " " | append: videoblock.id }}"
+        >
+          {% comment %}{% endcomment %}
+            <button class="--close-video" >
+              <svg
+                fill="#fff"
+                width="20px"
+                height="20px"
+                viewBox="0 0 1024 1024"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512 282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01 0-247.024 200.976-448 448-448s448 200.977 448 448-200.976 449.01-448 449.01zm181.008-630.016c-12.496-12.496-32.752-12.496-45.248 0L512 466.752l-135.76-135.76c-12.496-12.496-32.752-12.496-45.264 0-12.496 12.496-12.496 32.752 0 45.248L466.736 512l-135.76 135.76c-12.496 12.48-12.496 32.769 0 45.249 12.496 12.496 32.752 12.496 45.264 0L512 557.249l135.76 135.76c12.496 12.496 32.752 12.496 45.248 0 12.496-12.48 12.496-32.769 0-45.249L557.248 512l135.76-135.76c12.512-12.512 12.512-32.768 0-45.248z"/>
+              </svg>
+            </button>
+          
+
+          {{ video | video_tag: autoplay: false, loop: true, muted: false, controls: false }}
+        </div>
+      {% endunless %}
+    {% endfor %}
+  </div>
+{% endunless %}
+<div class="--video-modal-container" id="--video-modal-container">
+  <div class="--dark-bg --close-video"></div>
+  <div class="--video-element-wrapper" id="--video-element-wrapper"></div>
+</div>
+<script>
+     let videoitems = document.querySelectorAll(".--video-popup-trigger");
+     let videopopupitems = document.querySelectorAll(".--single-video-popup");
+     let closevideoicons = document.querySelectorAll(".--close-video");
+     let videoModalContainer = document.getElementById("--video-modal-container");
+     let videoElement = videoModalContainer.querySelector(".--video-element-wrapper");
+
+     function videocontrol(videoitem){
+       videoitem.addEventListener('click',()=>{
+         if(videoitem.paused){
+           videoitem.play()
+         } else {
+           videoitem.pause()
+         }
+       })
+     }
+     function closecontrol(closebutton) {
+      closebutton.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        console.log("Close button clicked.");
+    
+        const modalContainer = e.target.closest(".--video-modal-container");
+        // if (!modalContainer) {
+        //   console.warn("Modal container not found.");
+        //   return;
+        // }
+        // console.log("Modal container:", modalContainer);
+        const popupVideo = modalContainer.querySelector('video');
+        if (popupVideo) {
+          popupVideo.pause(); 
+        } else {
+          console.warn("Video element not found in the modal container.");
+        }
+        modalContainer.classList.remove('mclbx-active-container');
+        document.body.style.overflow = "";
+         if (videoElement) {
+          videoElement.innerHTML = "";
+        } else {
+          console.warn("Video Element Not removed");
+        }
+        
+      });
+    }
+
+     function modalvideohandler(){
+       let modal_video = videoModalContainer.querySelector('video')
+       let closebutton = videoModalContainer.querySelector('button.--close-video')
+       if(modal_video){
+         modal_video.play();
+         videocontrol(modal_video)
+       }
+       closecontrol(closebutton)
+     }
+  // globalcontainer.addEventListener('click',()=>{
+  //      modalvideohandler()
+  //    });
+
+
+   videoitems.forEach((item) => {
+     item.addEventListener('click',(e)=>{
+       // item.classList.toggle('--popup-activated');
+       e.preventDefault();
+       console.log(e.target)
+       videopopupitems.forEach((checkitem) => {
+         // let popupvideo = checkitem.querySelector('video')
+         if(checkitem.dataset.link == item.dataset.link){
+           // checkitem.classList.add('--popup-activated');
+           // popupvideo.muted = !popupvideo.muted;
+           // popupvideo.play()
+           // videocontrol(popupvideo)
+           console.log(checkitem)
+           videoElement.innerHTML =  checkitem.innerHTML
+           videoModalContainer.classList.add("mclbx-active-container");
+           document.body.style.overflow = "hidden";
+
+           // let popupvideo = globalcontainer.querySelector('video')
+           // popupvideo.play()
+           // videocontrol(popupvideo)
+           modalvideohandler()
+         } else {
+           // let popupvideo = globalcontainer.querySelector('video')
+           // checkitem.classList.remove('--popup-activated');
+           // if(popupvideo){
+           //   popupvideo.pause()
+           // }
+
+         }
+       });
+
+
+     closevideoicons.forEach((closeicon) => {
+       closeicon.addEventListener('click',(e)=>{
+         e.preventDefault();
+         // document.this.parentElement.classList.remove('--popup-activated');
+         // let parentdiv = e.target.parentElement;
+         let parentdiv = e.target.closest(".--video-modal-container");;
+         let popupvideo = parentdiv.querySelector('video');
+         popupvideo.pause()
+         parentdiv.classList.remove('mclbx-active-container');
+         document.body.style.overflow = "";
+
+       })
+     })
+
+
+     })
+   });
+</script>

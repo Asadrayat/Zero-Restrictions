@@ -1,0 +1,378 @@
+{% liquid
+  assign id = section.id
+%}
+{% assign page_handle = page.handle | downcase %}
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    {% if page_handle == 'about-us' %}
+        display: none;
+    {% endif %}
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  .sec-{{ id }}{
+    {% if section.settings.mbl_img %}
+        .image-wrap--pc{
+            line-height: 0;
+            @media(max-width: 768px){
+                display: none;
+            }
+        }
+        .image-wrap--mbl{
+            line-height: 0;
+            display: none;
+            @media(max-width: 768px){
+                display: block;
+            }
+        }
+    {% else %}
+        .image-wrap--pc{
+            line-height: 0;
+        }
+    {% endif %}
+    .image--wrapper img{
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        line-height: 0;
+    }
+    .video--wrapper {
+        line-height: 0;
+        aspect-ratio: 16/7;
+        @media(max-width: 768px){
+            aspect-ratio: 9 / 16;
+        }
+    }
+    .video--wrapper video{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        line-height: 0;
+    }
+    .content--wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--Spacing-Container-lg, 40px);
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        padding-bottom: var(--Spacing-Section-Section-Vertical-Padding, 48px);
+        z-index: -1;
+    }
+    .content--wrapper .text--content{
+        color: #FFF;
+        text-align: center;
+
+        /* Paragraph/XL */
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Large, 20px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Large, 30px); /* 150% */
+        margin: 0;
+        max-width: 734px;
+        @media(max-width: 768px){
+            font-size: var(--Font-Size-Paragraph-Medium, 16px);
+            font-weight: 400;
+            line-height: var(--Line-Height-Paragraph-Medium, 24px); /* 150% */
+            max-width: 90%;
+        }
+    }
+    .wrapper-{{ id }}{
+        position: relative;
+    }
+    .__play__btn {
+      align-items: center;
+      /* background-color: #e5e5e5; */
+      background-color: transparent;
+      left: 50%;
+      display: flex;
+      height: 64px;
+      justify-content: center;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      width: 64px;
+      z-index: 3;
+      transform: translate(-50%, -50%);
+      svg {
+        width: 64px;
+        height: 64px;
+      }      
+    }
+    .mute__btn {
+      align-items: center;
+      background-color: transparent;
+      bottom: 3em;
+      display: flex;
+      height: 64px;
+      justify-content: center;
+      line-height: 1;
+      position: absolute;
+      right: 3em;
+      width: 64px;
+      border-radius: 999px;
+      overflow: hidden;
+      @media(max-width: 600px) {
+        right: 2.4em;
+        width: 48px;
+        height: 48px;
+        bottom: 3em;
+      }
+    }
+    .content--wrapper .btn--content{
+        display: flex;
+        padding: 16px var(--Spacing-Container-lg, 40px);
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        color: var(--Content-Inverted-main, #F3F4F6);
+        text-align: center;
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-UI-Controls-Control-Button-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-UI-Controls-Control-Button-Regular, 16px); /* 100% */
+        text-transform: capitalize;
+        margin: 0;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}" data-video-frame>
+      {% if section.settings.video %}
+        <div class="video--wrapper {{ section.settings.video }} ">
+          {{ section.settings.video | video_tag: playsinline: true, loop: true, autoplay: true }}
+        </div>
+      {% else %}
+        {% if section.settings.pc_img %}
+          <div class="image-wrap--pc image--wrapper">
+            {{ section.settings.pc_img | image_url: width: section.settings.pc_img.width | image_tag }}
+          </div>
+        {% endif %}
+        {% if section.settings.mbl_img %}
+          <div class="image-wrap--mbl image--wrapper">
+            {{ section.settings.mbl_img | image_url: width: section.settings.mbl_img.width | image_tag }}
+          </div>
+        {% endif %}
+      {% endif %}
+      <div class="content--wrapper">
+        {% if section.settings.text %}
+          <p class="text--content">{{ section.settings.text }}</p>
+        {% endif %}
+        {% if section.settings.btn %}
+          <a href="{{ section.settings.link }}" class="btn--content">{{ section.settings.btn }}</a>
+        {% endif %}
+      </div>
+      <div class="mute__btn ">{% render 'all-icons', name: 'mute_btn' %}</div>      
+       <div class="__play__btn hidden">{% render 'all-icons', name: 'play-btn' %}</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoFrame = document.querySelector('[data-video-frame]');
+    if (!videoFrame) return;
+    const vfVideos = videoFrame.querySelectorAll('video');
+    vfVideos.forEach((vfVideo) => {
+      vfVideo.muted = true;
+      vfVideo.volume = 1;
+    });
+    const muteBtns = videoFrame.querySelectorAll('.mute__btn');
+    const playBtns = videoFrame.querySelectorAll('.__play__btn');
+
+    function updatePlayButtonVisibility(video) {
+      if (video.paused) {
+        playBtns.forEach((playBtn) => {
+          playBtn.classList.remove('hidden');
+        });
+      } else {
+        playBtns.forEach((playBtn) => {
+          playBtn.classList.add('hidden');
+        });
+      }
+    }
+
+    videoFrame.addEventListener('click', (e) => {
+      videoFrame.classList.add('active');
+      if(muteBtns) {
+        muteBtns.forEach((mutedBtn) => {
+          mutedBtn.classList.add('hidden');
+        });
+      }
+
+      vfVideos.forEach((vfVideo) => {
+        vfVideo.controls = true;
+        vfVideo.muted = false;
+        vfVideo.removeAttribute('muted');
+        vfVideo.volume = 1;
+        vfVideo.parentElement.classList.add('active');
+
+        updatePlayButtonVisibility(vfVideo);
+
+        vfVideo.addEventListener('play', () => {
+          updatePlayButtonVisibility(vfVideo);
+        });
+
+        vfVideo.addEventListener('pause', () => {
+          updatePlayButtonVisibility(vfVideo);
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Our Story",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "pc_img",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mbl_img",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "btn",
+      "label": "Button Label"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Story"
+    }
+  ]
+}
+{% endschema %}

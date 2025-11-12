@@ -1,0 +1,11 @@
+ {% if product.metafields.custom.product_badge.value %}
+    <div class="pinfo-badge-wrapper  {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+        {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+            {% if forloop.last %}
+            <a class="pinfo-single-badge" href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% else %}
+            <a class="pinfo-single-badge" href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

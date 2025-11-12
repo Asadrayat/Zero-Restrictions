@@ -1,0 +1,44 @@
+<div class="--set-product">
+  <div class="--image-wrapper">
+    <a class="--absolute-link" href="{{ product.selected_or_first_available_variant.url }}"></a>
+    {% if product.selected_or_first_available_variant.featured_media %}
+      <img
+        src="{{ product.selected_or_first_available_variant.featured_media | image_url: width: product.selected_or_first_available_variant.featured_media.width }}"
+        alt="{{ product.selected_or_first_available_variant.featured_media.alt | escape }}"
+        loading="lazy"
+      >
+    {% else %}
+      <img
+        src="{{ product.featured_image | image_url: width: product.featured_image.width }}"
+        alt="{{ product.featured_image.alt | escape }}"
+        loading="lazy"
+      >
+    {% endif %}
+  </div>
+  <div class="--product-details">
+    <div class="--product-title-wrapper">
+      <a class="--absolute-link" href="{{ product.selected_or_first_available_variant.url }}"></a>
+      <span class="--name">{{ product.title }}</span>
+      <span>{% render 'new-price', product: product %}</span>
+    </div>
+    <div class="--options-wrapper">
+      {% render 'color-swatch-v4', product: product %}
+      {% render 'size-swatch-v4-set', product: product %}
+    </div>
+    {% form 'product', product, id: 'product-form', class: 'product-form' %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+      <button
+        {% unless product.selected_or_first_available_variant.available %}
+          disabled
+        {% endunless %}
+        class="--atc-button"
+      >
+        Add to bag
+      </button>
+    {% endform %}
+  </div>
+  <script type="application/json" data-json-set-product>
+    {{ product | json }}
+  </script>
+</div>

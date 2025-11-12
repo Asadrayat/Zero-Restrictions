@@ -1,0 +1,130 @@
+<style>
+    .fabric__features.mb {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--Spacing-Container-sm, 16px);
+        align-self: stretch;
+    }
+    .fabric__features-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        {% comment %} justify-content: space-between; {% endcomment %}
+        gap: 8px;
+    }
+
+    .pinfo-fabric__item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        {% comment %} flex: 0 1 calc(50% - 40px); {% endcomment %}
+        justify-content: flex-start;
+        {% comment %} max-width: calc(50% - 40px); {% endcomment %}
+    }
+
+    .pinfo-fabric__item span {
+        font-size: 14px;
+        line-height: 18px;
+        color: #10100f;
+        margin: 0;
+    }
+
+    .pinfo-fabric__item:not(:last-child)::after {
+        content: "•";
+        margin: 0;
+        color: #10100f;
+    }
+
+    @media (max-width: 768px) {
+        .fabric__features-wrapper {
+            {% comment %} justify-content: space-between;
+            gap: 24px 12px; {% endcomment %}
+        }
+        .pinfo-fabric__item {
+            gap: 8px;
+        }
+        .pinfo-fabric__item span {
+            font-size: 14px;
+            line-height: 18px;
+        }
+        .pinfo-fabric__item:not(:last-child)::after {
+            margin: 0 6px;
+        }
+    }
+</style>
+
+{%- liquid
+  assign metafield_title_list = product.metafields.custom.product_attribute_list.value
+-%}
+
+{% unless metafield_title_list == blank %}
+    <div class="fabric__features {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+        <div class="fabric__features-wrapper" data-features-container>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.fabric__features-wrapper[data-features-container]');
+        if (!container) return;
+
+        const metafieldTitles = {{ metafield_title_list | json }};
+
+        function toHandle(str) {
+            return str
+                .toLowerCase()
+                .replace(/['"]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+        }
+
+        // Fabric Feature Group 1
+        const features1 = [
+          {% for feature in shop.metaobjects.fabric_features.values %}
+            {
+              title: {{ feature.title | json }},
+              icon: {{ feature.icon | image_url: width: 64 | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ];
+
+        // Fabric Feature Group 2
+        const features2 = [
+          {% for feature in shop.metaobjects.fabric_features_2.values %}
+            {
+              title: {{ feature.title | json }},
+              icon: {{ feature.icon | image_url: width: 64 | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ];
+
+        const allFeatures = [...features1, ...features2];
+
+        container.innerHTML = '';
+        
+        allFeatures.forEach((feature) => {
+            const featureHandle = toHandle(feature.title);
+            
+            metafieldTitles.forEach((title) => {
+                const titleHandle = toHandle(title);
+                
+                if (featureHandle === titleHandle) {
+                    const itemHTML = `
+                        <div class="pinfo-fabric__item">
+                            {% comment %} <img 
+                                src="${feature.icon.replace('64', '40')}" 
+                                alt="${feature.title}" 
+                                loading="lazy" 
+                                width="40" 
+                                height="40"
+                            > {% endcomment %}
+                            <span>${feature.title}</span>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', itemHTML);
+                }
+            });
+        });
+    });
+    </script>
+{% endunless %}

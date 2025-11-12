@@ -1,0 +1,36 @@
+<div class="curreny__selector-options">
+  {%- form 'localization', class: 'country-selector-form' -%}
+    <div class="country-selector">
+      <button type="button" class="country-button">
+        <img
+          class="country-flag"
+          src="https://flagcdn.com/w40/{{ localization.country.iso_code | downcase }}.png"
+          alt="Flag"
+        >
+        <span class="country-currency">{{ localization.country.currency.iso_code }}</span>(
+        {{- localization.country.currency.symbol -}}
+        )
+      </button>
+
+      <ul class="country-list">
+        {%- for country in localization.available_countries -%}
+          <li
+            data-value="{{ country.iso_code }}"
+            data-currency="{{ country.currency.iso_code }}"
+            data-symbol="{{ country.currency.symbol }}"
+          >
+            <img class="country-flag" src="https://flagcdn.com/w40/{{ country.iso_code | downcase }}.png" alt="Flag">
+            <span class="country-currency">{{ country.currency.iso_code }}</span>-({{ country.currency.symbol }})
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <input
+        type="hidden"
+        name="country_code"
+        class="selected-country-code"
+        value="{{ localization.country.iso_code }}"
+      >
+    </div>
+  {%- endform -%}
+</div>

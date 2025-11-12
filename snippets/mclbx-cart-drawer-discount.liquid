@@ -1,0 +1,59 @@
+<style>
+  form#cart-discount-form {
+    width: 100%;
+     {% if embroidered_product_in_cart == true %}
+      margin-block: 8px; 
+      {% endif %}
+  
+  }
+input#discount-code-input {
+    min-height: 40px;
+    {% comment %} border: 1px solid #101116; {% endcomment %}
+    padding-inline: 10px;
+}
+input#discount-code-input::placeholder {
+  text-transform: uppercase;
+}
+form#cart-discount-form button {
+        /* background: #000; */
+    /* color: #fff; */
+    /* border-radius: 10px; */
+    margin: 2px;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+form#cart-discount-form .--input-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 80px;
+    border-radius: 50px;
+    border: 2px solid #000;
+    overflow: hidden;
+}
+form#cart-discount-form p, form#cart-discount-form label {
+    text-align: center;
+    text-decoration: unset;
+    font-size: var(--Font-Size-Paragraph-Regular);
+    line-height: var(--Line-Height-Paragraph-Regular);
+    letter-spacing: normal;
+    margin: 0;
+}
+
+</style>
+
+
+<form id="cart-discount-form" onsubmit="window.applyCartDiscount(); return false;" >
+  {% comment %} <div>
+    <label for="discount-code-input">Enter a discount code:</label>
+  </div> {% endcomment %}
+  <div class="--input-wrapper" >
+    <input id="discount-code-input" placeholder="Enter code" required />
+    <button type="submit">Apply</button>
+  </div>
+  <p id="discount-code-success" style="color: green; display: none;"></p>
+  <p id="discount-code-error" style="color: red; display: none;"></p>
+</form>
+
+
+
+  
+

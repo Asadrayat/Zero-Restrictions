@@ -1,0 +1,801 @@
+<style>
+  .front-swatch,
+  .back-swatch,
+  .button-group--left-sleeve--custom,
+  .button-group--right-sleeve--custom {
+    border: 2px solid transparent;
+    padding: 2px;
+    margin: 2px;
+    cursor: pointer;
+    background: none;
+    width: 80px;
+    height: 80px;
+  }
+
+  .front-swatch img,
+  .back-swatch img,
+  .button-group--left-sleeve--custom img,
+  .button-group--right-sleeve--custom img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .front-swatch.active,
+  .back-swatch.active,
+  .button-group--left-sleeve--custom.active,
+  .button-group--right-sleeve--custom.active {
+    border-color: #000;
+  }
+
+  .back-swatches-group,
+  .left-sleeve-button-group-wrapper,
+  .right-sleeve-button-group-wrapper {
+    display: none;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .back-swatches-group.active,
+  .left-sleeve-button-group-wrapper.active,
+  .right-sleeve-button-group-wrapper.active {
+    display: flex;
+  }
+
+  .left-sleeve-designs,
+  .right-sleeve-designs {
+    display: none;
+  }
+
+  .left-sleeve-designs.active,
+  .right-sleeve-designs.active {
+    display: block;
+  }
+
+  /* Visibility rules for gallery */
+  .product__media-list .product__media-item {
+    display: none;
+  }
+  .product__media-list .product__media-item.is-active {
+    display: block;
+  }
+
+  .ryder-container--custom {
+    color: #000;
+    font-family: var(--font-family-Body, Archivo);
+    font-size: var(--Font-Size-Paragraph-Small, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-Height-Paragraph-Small, 20px);
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+
+  .linked-product-container--custom {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .linked-product-container--custom p {
+    color: #4B5563;
+    font-size: 14px;
+    line-height: 22px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ryder-cup--custom--blocks {
+    margin-block: 8px;
+  }
+</style>
+
+{% assign ryder_cup_link_products = product.metafields.custom.ryder_cup_linked_products.value %}
+{% if ryder_cup_link_products %}
+    <div class="ryder-cup--custom--blocks">
+    <div class="ryder-container--custom">Color: {{ product.title | split: '|' | last }}</div>
+    <div class="linked-product-container--custom">
+        {% if ryder_cup_link_products %}
+        {% for product in ryder_cup_link_products %}
+            <div class="linked-product-wrapper--custom">
+            <a class="linked-product-link--custom" href="{{ product.url }}">
+                {% if product.featured_image %}
+                {{
+                    product.featured_image
+                    | image_url: width: 60
+                    | image_tag: class: 'linked-product-featured-img--custom'
+                }}
+                {% endif %}
+                {% comment %} <p>{{ product.title | split: '|' | last }}</p> {% endcomment %}
+            </a>
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
+{% endif %}
+
+{% assign ryder_cup = product.metafields.custom.ryder_cup.value %}
+{% assign first_group = ryder_cup | first %}
+{% assign has_left_sleeve = first_group.left_sleeve %}
+{% assign has_right_sleeve = first_group.right_sleeve %}
+{% assign has_back = first_group.back_image_for_swatch %}
+
+<div class="ryder-cup-selector">
+  <!-- FRONT DESIGN SWATCHES -->
+  <div class="front-designs ryder-cup--custom--blocks">
+    <p class="ryder-container--custom">Select Front Design:</p>
+    <div class="front-swatches">
+      {% for group in ryder_cup %}
+        <button
+          class="front-swatch {% if forloop.first %}active{% endif %}"
+          data-group-index="{{ forloop.index0 }}"
+          data-front-image="{{ group.front_image | image_url }}"
+          data-front-logo-placement="{{ group.front_logo_placement }}"
+          data-has-left-sleeve="{% if group.left_sleeve %}true{% else %}false{% endif %}"
+          data-has-right-sleeve="{% if group.right_sleeve %}true{% else %}false{% endif %}"
+        >
+          <img src="{{ group.front_image_for_swatch | img_url: '100x100' }}" alt="Front Swatch {{ forloop.index }}">
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- BACK DESIGN SWATCHES -->
+  {% if has_back %}
+    <div class="back-designs ryder-cup--custom--blocks">
+      <p class="ryder-container--custom">Select Back Design:</p>
+      {% for group in ryder_cup %}
+        <div class="back-swatches-group {% if forloop.first %}active{% endif %}" data-group-index="{{ forloop.index0 }}">
+          {% for back_swatch in group.back_image_for_swatch.value %}
+            {% assign x = forloop.index0 %}
+            {% for back_image in group.back_image.value %}
+              {% assign y = forloop.index0 %}
+              {% if x == y %}
+                {% assign back_image_match = back_image %}
+                <button
+                  class="back-swatch {% if x == 0 and forloop.parentloop.index0 == 0 %}active{% endif %}"
+                  data-back-image="{{ back_image_match | image_url }}"
+                  data-back-logo-placement="{{ group.back_logo_placement }}"
+                >
+                  <img src="{{ back_swatch | img_url: '100x100' }}" alt="Back Swatch {{ x }}">
+                </button>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- LEFT SLEEVE DESIGN SWATCHES -->
+
+    <div class="left-sleeve-designs {% if has_left_sleeve %}active{% endif %} ryder-cup--custom--blocks">
+      <div class="ryder-container--custom text-container--left-sleeve--custom">
+        SELECT LEFT SLEEVE DESIGN:
+      </div>
+      <div class="patter-container--left-sleeve--custom" data-block-id="0">
+        {% for group in ryder_cup %}
+          {% if group.left_sleeve %}
+            <div
+              class="left-sleeve-button-group-wrapper {% if forloop.first %}active{% endif %}"
+              data-group-id="{{ forloop.index0 }}"
+              {% unless forloop.index0 == 0 %}style="display: none;"{% endunless %}
+            >
+              {% for left_sleeve_swatch in group.left_sleeve.value %}
+                <button
+                  class="button-group--left-sleeve--custom {% if forloop.first and forloop.parentloop.first %}active{% endif %}"
+                  data-sleeve-id="{{ forloop.index0 }}"
+                  data-block-id="{{ forloop.parentloop.index0 }}"
+                  data-image-name="{{ left_sleeve_swatch | image_url | split: 'files/' | last | split: '.' | first }}"
+                >
+                  <div class="swatch-preview--left-sleeve--custom">
+                    {{ left_sleeve_swatch | image_url: width: 100 | image_tag: class: 'img' }}
+                  </div>
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+
+  <!-- RIGHT SLEEVE DESIGN SWATCHES -->
+
+    <div class="right-sleeve-designs {% if has_right_sleeve %}active{% endif %} ryder-cup--custom--blocks">
+      <div class="ryder-container--custom text-container--right-sleeve--custom">
+        SELECT RIGHT SLEEVE DESIGN:
+      </div>
+      <div class="patter-container--right-sleeve--custom" data-block-id="0">
+        {% for group in ryder_cup %}
+          {% if group.right_sleeve %}
+            <div
+              class="right-sleeve-button-group-wrapper {% if forloop.first %}active{% endif %}"
+              data-group-id="{{ forloop.index0 }}"
+              {% unless forloop.index0 == 0 %}style="display: none;"{% endunless %}
+            >
+              {% for right_sleeve_swatch in group.right_sleeve.value %}
+                <button
+                  class="button-group--right-sleeve--custom {% if forloop.first and forloop.parentloop.first %}active{% endif %}"
+                  data-sleeve-id="{{ forloop.index0 }}"
+                  data-block-id="{{ forloop.parentloop.index0 }}"
+                  data-image-name="{{ right_sleeve_swatch | image_url | split: 'files/' | last | split: '.' | first }}"
+                >
+                  <div class="swatch-preview--right-sleeve--custom">
+                    {{ right_sleeve_swatch | image_url: width: 100 | image_tag: class: 'img' }}
+                  </div>
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ------------------------------
+  // Persistent State
+  // ------------------------------
+  const STORAGE_KEY = 'product_selected_designs_v1';
+  const defaultState = {
+    frontDesign: '',
+    backDesign: '',
+    leftSleeveDesign: '',
+    rightSleeveDesign: '',
+    frontPlacement: '',
+    backPlacement: '',
+    frontSwatchIndex: 0,
+    backSwatchIndex: 0,
+    leftSleeveSwatchIndex: 0,
+    rightSleeveSwatchIndex: 0
+  };
+  let state = loadState();
+
+  // ------------------------------
+  // Small Utilities
+  // ------------------------------
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const nowCB = () => `cb=${Date.now()}`;
+
+  function loadState() {
+    try { return Object.assign({}, defaultState, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')); }
+    catch { return { ...defaultState }; }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  // IMPORTANT: write to ALL matching inputs across desktop + mobile forms
+  function setHiddenByName(inputName, value) {
+    const escaped = CSS.escape(inputName);
+    $$(`input[name="${escaped}"]`).forEach(el => {
+      el.value = value || '';
+      // fire change so any listeners or form frameworks pick it up
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
+
+  // ------------------------------
+  // Refs wired to NEW layout
+  // ------------------------------
+  function refs() {
+    const root = document;
+    const mainThumb = root.querySelector('.p-info-thumb'); // NEW gallery root
+    const slides = mainThumb ? Array.from(mainThumb.querySelectorAll('.swiper-slide')) : [];
+    return {
+      // swatches
+      frontSwatches: $$('.front-swatch', root),
+      backGroups: $$('.back-swatches-group', root),
+      leftSleeveGroups: $$('.left-sleeve-button-group-wrapper', root),
+      rightSleeveGroups: $$('.right-sleeve-button-group-wrapper', root),
+      leftSleeveDesigns: $('.left-sleeve-designs', root),
+      rightSleeveDesigns: $('.right-sleeve-designs', root),
+
+      // NEW gallery bits
+      mainThumb,
+      slides,
+      slidePictures: slides.map(s => s.querySelector('picture')),
+      slideImgs: slides.map(s => s.querySelector('picture img'))
+    };
+  }
+
+  // ------------------------------
+  // Picture updater for <picture>/<source>/<img>
+  // ------------------------------
+  function updatePicture(pictureEl, baseSrc) {
+    if (!pictureEl || !baseSrc) return;
+    const img = pictureEl.querySelector('img');
+    const sources = Array.from(pictureEl.querySelectorAll('source'));
+
+    const withCB = (src) => {
+      const sep = src.includes('?') ? '&' : '?';
+      return `${src}${sep}${nowCB()}`;
+    };
+
+    if (img) img.src = withCB(baseSrc);
+
+    const clean = baseSrc.split('?')[0];
+    sources.forEach(srcEl => {
+      const media = srcEl.getAttribute('media') || '';
+      let width = 1024;
+      if (/\(max-width:\s*600px\)/i.test(media)) width = 600;
+      if (/\(max-width:\s*1024px\)/i.test(media)) width = 1024;
+      srcEl.srcset = withCB(`${clean}?width=${width}`);
+    });
+  }
+
+  // ------------------------------
+  // Swiper slide jumper for new gallery
+  // ------------------------------
+  function setMainPreviewImage(index /* 0 front, 1 back */) {
+    const r = refs();
+    if (!r.mainThumb) return;
+    const sw = r.mainThumb.swiper;
+    if (sw) {
+      try {
+        sw.update();
+        sw.slideTo(index, 0);
+      } catch (e) { console.warn('Swiper slide failed:', e); }
+    }
+  }
+
+  // ------------------------------
+  // Visibility toggles per group
+  // ------------------------------
+  function applyGroupVisibility(groupIndex) {
+    const r = refs();
+    const front = r.frontSwatches.find(f => f.dataset.groupIndex === groupIndex) || null;
+    const hasLeft = front ? front.dataset.hasLeftSleeve === 'true' : false;
+    const hasRight = front ? front.dataset.hasRightSleeve === 'true' : false;
+
+    if (r.leftSleeveDesigns) r.leftSleeveDesigns.classList.toggle('active', hasLeft);
+    if (r.rightSleeveDesigns) r.rightSleeveDesigns.classList.toggle('active', hasRight);
+
+    r.backGroups.forEach(bg => {
+      const on = bg.dataset.groupIndex === groupIndex;
+      bg.classList.toggle('active', on);
+      if (!on) $$('.back-swatch', bg).forEach(b => b.classList.remove('active'));
+    });
+
+    r.leftSleeveGroups.forEach(lg => {
+      const isActive = lg.dataset.groupId === groupIndex;
+      lg.style.display = isActive ? 'flex' : 'none';
+      lg.classList.toggle('active', isActive);
+      if (!isActive) $$('.button-group--left-sleeve--custom', lg).forEach(b => b.classList.remove('active'));
+    });
+
+    r.rightSleeveGroups.forEach(rg => {
+      const isActive = rg.dataset.groupId === groupIndex;
+      rg.style.display = isActive ? 'flex' : 'none';
+      rg.classList.toggle('active', isActive);
+      if (!isActive) $$('.button-group--right-sleeve--custom', rg).forEach(b => b.classList.remove('active'));
+    });
+  }
+
+  // ------------------------------
+  // Sync hidden inputs from UI  (writes to BOTH forms)
+  // ------------------------------
+  function updateInputsFromUI() {
+    const r = refs();
+    const activeFront = r.frontSwatches.find(s => s.classList.contains('active')) || r.frontSwatches[0] || null;
+    const activeBackGroup = r.backGroups.find(g => g.classList.contains('active')) || null;
+    const activeBack = activeBackGroup ? $$('.back-swatch', activeBackGroup).find(b => b.classList.contains('active')) : null;
+    const activeLeftSleeve = r.leftSleeveDesigns ? $('.button-group--left-sleeve--custom.active', r.leftSleeveDesigns) : null;
+    const activeRightSleeve = r.rightSleeveDesigns ? $('.button-group--right-sleeve--custom.active', r.rightSleeveDesigns) : null;
+
+    // FRONT
+    if (activeFront && activeFront.dataset.frontImage) {
+      const frontName = activeFront.dataset.frontImage.split('files/').pop()?.split('.').shift() || '';
+      const frontPlacement = activeFront.dataset.frontLogoPlacement || 'chest';
+      setHiddenByName('properties[_Front Design]', frontName);
+      setHiddenByName('properties[_Front Placement]', frontPlacement);
+      state.frontDesign = frontName;
+      state.frontPlacement = frontPlacement;
+      state.frontSwatchIndex = r.frontSwatches.findIndex(s => s === activeFront);
+    } else {
+      setHiddenByName('properties[_Front Design]', '');
+      setHiddenByName('properties[_Front Placement]', 'chest');
+      state.frontDesign = '';
+      state.frontPlacement = 'chest';
+      state.frontSwatchIndex = 0;
+    }
+
+    // BACK
+    if (activeBack && activeBack.dataset.backImage) {
+      const backName = activeBack.dataset.backImage.split('files/').pop()?.split('.').shift() || '';
+      const backPlacement = activeBack.dataset.backLogoPlacement || '';
+      setHiddenByName('properties[_Back Design]', backName);
+      setHiddenByName('properties[_Back Placement]', backPlacement);
+      state.backDesign = backName;
+      state.backPlacement = backPlacement;
+      state.backSwatchIndex = activeBackGroup ? $$('.back-swatch', activeBackGroup).findIndex(b => b === activeBack) : 0;
+    } else {
+      setHiddenByName('properties[_Back Design]', '');
+      setHiddenByName('properties[_Back Placement]', '');
+      state.backDesign = '';
+      state.backPlacement = '';
+      state.backSwatchIndex = 0;
+    }
+
+    // SLEEVES
+    const leftName = activeLeftSleeve ? (activeLeftSleeve.dataset.imageName || '') : '';
+    const rightName = activeRightSleeve ? (activeRightSleeve.dataset.imageName || '') : '';
+    setHiddenByName('properties[_Left Sleeve Design]', leftName);
+    setHiddenByName('properties[_Right Sleeve Design]', rightName);
+    state.leftSleeveDesign = leftName;
+    state.rightSleeveDesign = rightName;
+  }
+
+  // ------------------------------
+  // Main image updater (NEW gallery)
+  // ------------------------------
+  function updateMainImages(isBackSwatchClicked = false) {
+    const r = refs();
+    const activeFront = r.frontSwatches.find(s => s.classList.contains('active')) || r.frontSwatches[0] || null;
+    const activeBackGroup = r.backGroups.find(g => g.classList.contains('active')) || null;
+    const activeBack = activeBackGroup ? $$('.back-swatch', activeBackGroup).find(b => b.classList.contains('active')) : null;
+    const activeLeftSleeve = r.leftSleeveDesigns ? $('.button-group--left-sleeve--custom.active', r.leftSleeveDesigns) : null;
+    const activeRightSleeve = r.rightSleeveDesigns ? $('.button-group--right-sleeve--custom.active', r.rightSleeveDesigns) : null;
+
+    if (!r.slidePictures.length) {
+      console.error('No .p-info-thumb slides found');
+      return;
+    }
+
+    // FRONT (slide 0)
+    if (activeFront && activeFront.dataset.frontImage && r.slidePictures[0]) {
+      const src = activeFront.dataset.frontImage;
+      updatePicture(r.slidePictures[0], src);
+
+      state.frontDesign = (src.split('files/').pop() || '').split('.').shift() || '';
+      state.frontPlacement = activeFront.dataset.frontLogoPlacement || 'chest';
+      state.frontSwatchIndex = r.frontSwatches.findIndex(s => s === activeFront);
+
+      if (!isBackSwatchClicked) setMainPreviewImage(0);
+    } else {
+      state.frontDesign = '';
+      state.frontPlacement = '';
+      state.frontSwatchIndex = 0;
+    }
+
+    // BACK (slide 1)
+    if (activeBack && activeBack.dataset.backImage && r.slidePictures[1]) {
+      const src = activeBack.dataset.backImage;
+      updatePicture(r.slidePictures[1], src);
+
+      state.backDesign = (src.split('files/').pop() || '').split('.').shift() || '';
+      state.backPlacement = activeBack.dataset.backLogoPlacement || '';
+      state.backSwatchIndex = activeBackGroup ? $$('.back-swatch', activeBackGroup).findIndex(b => b === activeBack) : 0;
+
+      if (isBackSwatchClicked) setMainPreviewImage(1);
+    } else {
+      state.backDesign = '';
+      state.backPlacement = '';
+      state.backSwatchIndex = 0;
+    }
+
+    // Sleeve state only
+    if (activeLeftSleeve && activeLeftSleeve.dataset.imageName) {
+      const activeGroup = refs().leftSleeveGroups.find(g => g.classList.contains('active'));
+      if (activeGroup) {
+        const btns = $$('.button-group--left-sleeve--custom', activeGroup);
+        state.leftSleeveSwatchIndex = btns.findIndex(b => b.classList.contains('active'));
+      }
+    } else {
+      state.leftSleeveDesign = '';
+      state.leftSleeveSwatchIndex = 0;
+    }
+    if (activeRightSleeve && activeRightSleeve.dataset.imageName) {
+      const activeGroup = refs().rightSleeveGroups.find(g => g.classList.contains('active'));
+      if (activeGroup) {
+        const btns = $$('.button-group--right-sleeve--custom', activeGroup);
+        state.rightSleeveSwatchIndex = btns.findIndex(b => b.classList.contains('active'));
+      }
+    } else {
+      state.rightSleeveDesign = '';
+      state.rightSleeveSwatchIndex = 0;
+    }
+
+    updateInputsFromUI();
+    saveState();
+  }
+
+  // ------------------------------
+  // Click handlers
+  // ------------------------------
+  document.addEventListener('click', (ev) => {
+    const r = refs();
+
+    const front = ev.target.closest('.front-swatch');
+    if (front) {
+      r.frontSwatches.forEach(f => f.classList.remove('active'));
+      front.classList.add('active');
+      state.frontSwatchIndex = r.frontSwatches.findIndex(f => f === front);
+
+      const groupIndex = front.dataset.groupIndex;
+      applyGroupVisibility(groupIndex);
+
+      const group = r.backGroups.find(bg => bg.dataset.groupIndex === groupIndex);
+      if (group) {
+        const backBtns = $$('.back-swatch', group);
+        if (!backBtns.some(b => b.classList.contains('active')) && backBtns.length) {
+          backBtns[0].classList.add('active');
+          state.backSwatchIndex = 0;
+        }
+        r.backGroups.forEach(bg => { if (bg !== group) bg.classList.remove('active'); });
+        group.classList.add('active');
+      }
+
+      r.leftSleeveGroups.forEach(lg => {
+        const isActive = lg.dataset.groupId === groupIndex;
+        if (isActive) {
+          lg.style.display = 'flex';
+          lg.classList.add('active');
+          const leftBtns = $$('.button-group--left-sleeve--custom', lg);
+          if (!leftBtns.some(b => b.classList.contains('active')) && leftBtns.length) {
+            leftBtns[0].classList.add('active');
+            state.leftSleeveSwatchIndex = 0;
+          }
+        } else {
+          lg.style.display = 'none';
+          lg.classList.remove('active');
+          $$('.button-group--left-sleeve--custom', lg).forEach(b => b.classList.remove('active'));
+        }
+      });
+
+      r.rightSleeveGroups.forEach(rg => {
+        const isActive = rg.dataset.groupId === groupIndex;
+        if (isActive) {
+          rg.style.display = 'flex';
+          rg.classList.add('active');
+          const rightBtns = $$('.button-group--right-sleeve--custom', rg);
+          if (!rightBtns.some(b => b.classList.contains('active')) && rightBtns.length) {
+            rightBtns[0].classList.add('active');
+            state.rightSleeveSwatchIndex = 0;
+          }
+        } else {
+          rg.style.display = 'none';
+          rg.classList.remove('active');
+          $$('.button-group--right-sleeve--custom', rg).forEach(b => b.classList.remove('active'));
+        }
+      });
+
+      updateMainImages(false);
+      return;
+    }
+
+    const back = ev.target.closest('.back-swatch');
+    if (back) {
+      const group = ev.target.closest('.back-swatches-group');
+      if (group) {
+        $$('.back-swatch', group).forEach(b => b.classList.remove('active'));
+        back.classList.add('active');
+        r.backGroups.forEach(bg => bg.classList.remove('active'));
+        group.classList.add('active');
+
+        state.backSwatchIndex = $$('.back-swatch', group).findIndex(b => b === back);
+        updateMainImages(true);
+      }
+      return;
+    }
+
+    const leftBtn = ev.target.closest('.button-group--left-sleeve--custom');
+    if (leftBtn) {
+      const group = ev.target.closest('.left-sleeve-button-group-wrapper');
+      if (group) {
+        $$('.button-group--left-sleeve--custom', group).forEach(b => b.classList.remove('active'));
+        leftBtn.classList.add('active');
+        state.leftSleeveSwatchIndex = $$('.button-group--left-sleeve--custom', group).findIndex(b => b === leftBtn);
+        updateMainImages(false);
+      }
+      return;
+    }
+
+    const rightBtn = ev.target.closest('.button-group--right-sleeve--custom');
+    if (rightBtn) {
+      const group = ev.target.closest('.right-sleeve-button-group-wrapper');
+      if (group) {
+        $$('.button-group--right-sleeve--custom', group).forEach(b => b.classList.remove('active'));
+        rightBtn.classList.add('active');
+        state.rightSleeveSwatchIndex = $$('.button-group--right-sleeve--custom', group).findIndex(b => b === rightBtn);
+        updateMainImages(false);
+      }
+      return;
+    }
+  });
+
+  // ------------------------------
+  // Variant change hook
+  // ------------------------------
+  document.addEventListener('variant:change', () => {
+    const r = refs();
+    state = { ...defaultState };
+
+    if (r.frontSwatches.length) {
+      r.frontSwatches.forEach(f => f.classList.remove('active'));
+      const front = r.frontSwatches[0];
+      if (front) {
+        front.classList.add('active');
+        state.frontSwatchIndex = 0;
+        state.frontDesign = front.dataset.frontImage ? front.dataset.frontImage.split('files/').pop()?.split('.').shift() || '' : '';
+        state.frontPlacement = front.dataset.frontLogoPlacement || 'chest';
+
+        const groupIndex = front.dataset.groupIndex;
+        applyGroupVisibility(groupIndex);
+
+        const matchingBackGroup = r.backGroups.find(bg => bg.dataset.groupIndex === groupIndex);
+        if (matchingBackGroup) {
+          matchingBackGroup.classList.add('active');
+          const backButtons = $$('.back-swatch', matchingBackGroup);
+          backButtons.forEach(b => b.classList.remove('active'));
+          if (backButtons[0]) {
+            backButtons[0].classList.add('active');
+            state.backDesign = backButtons[0].dataset.backImage ? backButtons[0].dataset.backImage.split('files/').pop()?.split('.').shift() || '' : '';
+            state.backPlacement = backButtons[0].dataset.backLogoPlacement || '';
+            state.backSwatchIndex = 0;
+          }
+        }
+
+        r.leftSleeveGroups.forEach(lg => {
+          const buttons = $$('.button-group--left-sleeve--custom', lg);
+          buttons.forEach(b => b.classList.remove('active'));
+          if (lg.dataset.groupId === groupIndex && buttons.length) {
+            lg.style.display = 'flex';
+            lg.classList.add('active');
+            buttons[0].classList.add('active');
+            state.leftSleeveDesign = buttons[0].dataset.imageName || '';
+            state.leftSleeveSwatchIndex = 0;
+          } else {
+            lg.style.display = 'none';
+            lg.classList.remove('active');
+          }
+        });
+
+        r.rightSleeveGroups.forEach(rg => {
+          const buttons = $$('.button-group--right-sleeve--custom', rg);
+          buttons.forEach(b => b.classList.remove('active'));
+          if (rg.dataset.groupId === groupIndex && buttons.length) {
+            rg.style.display = 'flex';
+            rg.classList.add('active');
+            buttons[0].classList.add('active');
+            state.rightSleeveDesign = buttons[0].dataset.imageName || '';
+            state.rightSleeveSwatchIndex = 0;
+          } else {
+            rg.style.display = 'none';
+            rg.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    updateMainImages(false);
+    updateInputsFromUI();
+    saveState();
+
+    // Refresh Swiper on new gallery
+    const thumb = document.querySelector('.p-info-thumb');
+    if (thumb && typeof Swiper !== 'undefined') {
+      try {
+        if (thumb.swiper) {
+          thumb.swiper.update();
+          thumb.swiper.slideTo(0, 0);
+        } else {
+          new Swiper(thumb, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            navigation: {
+              nextEl: '.p-info-thumb .swiper-button-next',
+              prevEl: '.p-info-thumb .swiper-button-prev'
+            },
+            pagination: {
+              el: '.p-info-thumb .swiper-pagination',
+              type: 'fraction'
+            }
+          });
+        }
+      } catch (e) { console.warn('Swiper refresh failed:', e); }
+    }
+  });
+
+  // ------------------------------
+  // Initial Swiper init (NEW gallery)
+  // ------------------------------
+  (function initSwiper() {
+    const mainThumbEl = document.querySelector('.p-info-thumb');
+    if (mainThumbEl && typeof Swiper !== 'undefined') {
+      try {
+        if (!mainThumbEl.swiper) {
+          new Swiper(mainThumbEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            navigation: {
+              nextEl: '.p-info-thumb .swiper-button-next',
+              prevEl: '.p-info-thumb .swiper-button-prev'
+            },
+            pagination: {
+              el: '.p-info-thumb .swiper-pagination',
+              type: 'fraction'
+            }
+          });
+        }
+      } catch (e) { console.warn('Failed to initialize .p-info-thumb Swiper:', e); }
+    }
+  })();
+
+  // ------------------------------
+  // First-time boot
+  // ------------------------------
+  (function init() {
+    const r = refs();
+    if (!r.frontSwatches.length) {
+      console.error('No front swatches found');
+      return;
+    }
+
+    if (!r.frontSwatches.some(s => s.classList.contains('active'))) {
+      const front = r.frontSwatches[0];
+      front.classList.add('active');
+      state.frontSwatchIndex = 0;
+      state.frontDesign = front.dataset.frontImage ? front.dataset.frontImage.split('files/').pop()?.split('.').shift() || '' : '';
+      state.frontPlacement = front.dataset.frontLogoPlacement || 'chest';
+
+      const groupIndex = front.dataset.groupIndex || '0';
+      applyGroupVisibility(groupIndex);
+
+      const matchingBackGroup = r.backGroups.find(bg => bg.dataset.groupIndex === groupIndex);
+      if (matchingBackGroup) {
+        matchingBackGroup.classList.add('active');
+        const backBtn = $$('.back-swatch', matchingBackGroup);
+        if (backBtn.length) {
+          backBtn[0].classList.add('active');
+          state.backSwatchIndex = 0;
+          state.backDesign = backBtn[0].dataset.backImage ? backBtn[0].dataset.backImage.split('files/').pop()?.split('.').shift() || '' : '';
+          state.backPlacement = backBtn[0].dataset.backLogoPlacement || '';
+        }
+      }
+
+      r.leftSleeveGroups.forEach(lg => {
+        if (lg.dataset.groupId === groupIndex) {
+          lg.style.display = 'flex';
+          lg.classList.add('active');
+          const leftBtns = $$('.button-group--left-sleeve--custom', lg);
+          if (leftBtns.length) {
+            leftBtns[0].classList.add('active');
+            state.leftSleeveSwatchIndex = 0;
+            state.leftSleeveDesign = leftBtns[0].dataset.imageName || '';
+          }
+        } else {
+          lg.style.display = 'none';
+        }
+      });
+
+      r.rightSleeveGroups.forEach(rg => {
+        if (rg.dataset.groupId === groupIndex) {
+          rg.style.display = 'flex';
+          rg.classList.add('active');
+          const rightBtns = $$('.button-group--right-sleeve--custom', rg);
+          if (rightBtns.length) {
+            rightBtns[0].classList.add('active');
+            state.rightSleeveSwatchIndex = 0;
+            state.rightSleeveDesign = rightBtns[0].dataset.imageName || '';
+          }
+        } else {
+          rg.style.display = 'none';
+        }
+      });
+    }
+
+    updateMainImages(false);
+    updateInputsFromUI();
+    saveState();
+  })();
+});
+</script>

@@ -1,0 +1,349 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{ id }} {
+    box-sizing: border-box;
+    margin-top: {{ section.settings.margin_top | append: 'px' }};
+    margin-bottom: {{ section.settings.margin_bottom | append: 'px' }};
+    padding-top: {{ section.settings.padding_top | append: 'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ id }} {
+      margin-top: {{ section.settings.margin_top_m | append: 'px' }};
+      margin-bottom: {{ section.settings.margin_bottom_m | append: 'px' }};
+      padding-top: {{ section.settings.padding_top_m | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom_m | append: 'px' }};
+    }
+  }
+
+  .sec-{{ id }} .hero-wrap {
+    display: grid;
+    gap: 10px;
+    text-align: center;
+  }
+  .sec-{{ id }} .hero-title {
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--Content-Base-main);
+    margin: 0;
+    letter-spacing: .2px;
+  }
+  .sec-{{ id }} .hero-subtitle {
+    font-size: 18px;
+    opacity: .8;
+    color: var(--Content-Base-main);
+    margin: 10px 0 0;
+  }
+
+  .sec-{{ id }} .search-form {
+    position: relative;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .sec-{{ id }} .field-wrap {
+    position: relative;
+  }
+
+  .sec-{{ id }} .search-input {
+    width: 100%;
+    padding: 14px 48px 14px 44px;
+    border: 1px solid rgb(0 0 0 / .12);
+    border-radius: 999px;
+    opacity: 0.6;
+    color: var(--Content-Base-main);
+    font-size: 16px;
+    outline: none;
+    transition: box-shadow .2s, border-color .2s;
+    background: #fff;
+  }
+    .sec-{{ id }} input[type="search"]::-webkit-search-decoration,
+    .sec-{{ id }} input[type="search"]::-webkit-search-cancel-button,
+    .sec-{{ id }} input[type="search"]::-webkit-search-results-button,
+    .sec-{{ id }} input[type="search"]::-webkit-search-results-decoration {
+        display: none;
+    }
+  .sec-{{ id }} .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+
+  .sec-{{ id }} .clear-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+  }
+  .sec-{{ id }} .clear-btn svg { width: 16px; height: 16px; opacity: .6; }
+  .sec-{{ id }} .search-input:not(:placeholder-shown) ~ .clear-btn { display: inline-grid; place-items: center; }
+
+  .sec-{{ id }} .search-btn {
+    padding: 0;
+    border-radius: 999px;
+    color: var(--Content-Base-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s, transform .02s;
+  }
+  .sec-{{ id }} .search-btn:active { transform: translateY(1px); }
+  .sec-{{ id }} .search-help {
+    font-size: 13px;
+    opacity: .7;
+    margin-top: 6px;
+  }
+
+  .sec-{{ id }} .searches-content{
+    margin: 60px 0 0;
+  }
+  .sec-{{ id }} .searches-content h4{
+    margin: 0 0 36px;
+  }
+
+  @media screen and (max-width: 989px){
+    .sec-{{ id }} .hero-title {
+      font-size: 20px;
+    }
+    .sec-{{ id }} .hero-subtitle {
+      font-size: 16px;
+    }
+
+
+    .sec-{{ id }} .search-input {
+      font-size: 14px;
+    }
+
+    .sec-{{ id }} .search-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .sec-{{ id }} .clear-btn {
+      width: 24px;
+      height: 24px;
+    }
+  
+    .sec-{{ id }} .searches-content{
+      margin: 36px 0 0;
+    }
+    .sec-{{ id }} .searches-content h4{
+      margin: 0 0 24px;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+
+      <div class="hero-wrap">
+          <h1 class="hero-title">SEARCH</h1>
+          {% if search.terms != blank %}
+            <p class="hero-subtitle">
+                {% if search.performed and search.results_count == 0 %}
+                    No results found for the "{{ search.terms | escape }}"
+                {% else %}
+                    Results for "{{ search.terms | escape }}"
+                {% endif %}
+            </p>
+          {% endif %}
+
+        <form class="search-form" action="{{ routes.search_url }}" method="get" role="search" aria-label="Site search">
+          <div class="field-wrap">
+ 
+            <input
+              class="search-input"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              aria-label="Search"
+            >
+            <button type="button" class="clear-btn" aria-label="Clear" onclick="this.previousElementSibling.value=''; this.previousElementSibling.focus();">
+              <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <button class="search-btn search-icon" type="submit">           
+            <svg class="" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M17.5 17.5L13.875 13.875M15.8333 9.16667C15.8333 12.8486 12.8486 15.8333 9.16667 15.8333C5.48477 15.8333 2.5 12.8486 2.5 9.16667C2.5 5.48477 5.48477 2.5 9.16667 2.5C12.8486 2.5 15.8333 5.48477 15.8333 9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      {% if search.terms == blank or search.performed and search.results_count == 0 %}
+        {% if settings.collection_list != blank %}
+          <div class="searches-content">
+            {% if settings.title != blank %}
+              <h4>{{ settings.title }}</h4>
+            {% endif %}
+            <div class="popular-collections">
+              {% for collection in settings.collection_list %}
+                <div class="popular-item">
+                  <div class="popular__item-image">
+                    {% if collection.image %}
+                      {{ collection.image | image_url: width: collection.image.width | image_tag }}
+                    {% elsif collection.featured_image %}
+                      {{ collection.featured_image | image_url: width: collection.featured_image.width | image_tag }}
+                    {% endif %}
+                  </div>
+                  <p>{{ collection.title }}</p>
+                  <a href="{{ collection.url }}"></a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Search Banner",
+  "templates": ["search"],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "presets": [{ "name": "Main Search Banner" }]
+}
+{% endschema %}

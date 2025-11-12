@@ -1,0 +1,643 @@
+{% liquid
+  assign id = section.id
+%}
+{% assign gift_banner_collection_list = collection.metafields.custom.gift_banner_collections.value %}
+
+<div class="hidden">
+  {% assign collection_title_list = gift_banner_collection_list.collection_titles.value %}
+  {% assign collection_list = gift_banner_collection_list.collections.value %}
+  {% assign collection_image_list = gift_banner_collection_list.collection_images.value %}
+
+  {% assign title_list_size = collection_title_list.size %}
+  {% assign image_list_size = 0 %}
+  {% assign collection_list_size = 0 %}
+
+  {% for image in collection_image_list %}
+    {% if forloop.last %}
+      {% assign image_list_size = forloop.index %}
+    {% endif %}
+  {% endfor %}
+
+  {% for card_collection in collection_list %}
+    {% if forloop.last %}
+      {% assign collection_list_size = forloop.index %}
+    {% endif %}
+  {% endfor %}
+
+  {% assign show_metafield_data = false %}
+
+  {% if title_list_size == image_list_size and title_list_size == collection_list_size %}
+    {% assign show_metafield_data = true %}
+  {% endif %}
+</div>
+<style>
+  #shopify-section-{{ id }} {
+    box-sizing: border-box;
+    margin-top: {{ section.settings.margin_top | append: 'px' }};
+    margin-bottom: {{ section.settings.margin_bottom | append: 'px' }};
+    padding-top: {{ section.settings.padding_top | append: 'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+
+  @media screen and (max-width: 989px) {
+    #shopify-section-{{ id }} {
+      margin-top: {{ section.settings.margin_top_m | append: 'px' }};
+      margin-bottom: {{ section.settings.margin_bottom_m | append: 'px' }};
+      padding-top: {{ section.settings.padding_top_m | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom_m | append: 'px' }};
+    }
+  }
+
+  .wrapper-{{ id }} {
+    {% if section.settings.bg_image %}
+      background-image: url('{{ section.settings.bg_image | image_url }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 500px;
+      
+      @media(min-width: 1200px){
+       min-height: 800px;
+      }
+      @media(min-width: 2000px){
+       min-height: 1000px;
+      }
+    {% endif %}
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+  }
+   .wrapper-{{ id }}:after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #0000006b;
+    z-index: 0;
+  } 
+
+  .texts-{{ id }} {
+    padding: 32px;
+    background: #00000073;
+    margin-inline: var(--Spacing-Container-md);
+    display: flex;
+    flex-direction: column;
+    {% comment %} align-items: center; {% endcomment %}
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .medias-{{ id }} {
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  .texts-{{ id }} h2 {
+    {% comment %} font-family: "Monotype-Corsiva-Regular"; {% endcomment %}
+    font-size: 42px;
+    line-height: 56px;
+    color: {{ section.settings.font_color }};
+    text-transform: uppercase;
+    margin: 0 0 24px;
+    max-width: 285px;
+  }
+  .texts-{{ id }} h2 span{
+    font-family: "KaushanScript-Regular";
+    font-weight: 700;
+  }
+
+  .texts-{{ id }} p {
+    font-size: 18px;
+    line-height: 26px;
+    color: {{ section.settings.font_color }};
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .medias-wrapper-{{ id }} .swiper {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .medias-wrapper-{{ id }} .swiper:not(.swiper-initialized) {
+   max-height: 500px;
+   @media screen and (max-width: 989px) {
+      max-height: 250px;
+    }
+  }
+  .medias-wrapper-{{ id }} .swiper.swiper-initialized {
+    opacity: 1;
+  }
+
+  .media-item-{{ id }} {
+    position: relative;
+  }
+
+  .media-item-image-{{ id }} img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 158.86 / 198.57;
+  }
+  .media-item-image-{{ id }} svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 158.86 / 198.57;
+  }
+
+  .media-item-{{ id }} h4 {
+    font-size: 12px;
+    line-height: 16px;
+    color: {{ section.settings.font_color }};
+    text-transform: uppercase;
+    {% comment %} text-decoration: underline; {% endcomment %}
+    margin: 12px 0 0;
+    background:  {{ section.settings.badge_background_color }};
+    max-width: max-content;
+    padding: 5px 10px;
+  }
+
+  .media-item-{{ id }} a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  {% comment %} .medias-wrapper-{{ id }} .--nav-icon {
+    display: flex;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--Border-Base-dense, #4B5563);
+    background: #fff;
+    position: absolute;
+    top: 40%;
+    z-index: 1;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  .medias-wrapper-{{ id }} .--nav-icon svg path {
+    transition: all 0.5s ease;
+  } {% endcomment %}
+  .medias-wrapper-{{ id }} .--nav-icon {
+    position: absolute;
+    top: 40%;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 989px) {
+    .medias-wrapper-{{ id }} .--nav-icon {
+      position: static;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    {% comment %} .medias-wrapper-{{ id }} .--nav-icon:hover {
+      background: #1F2937;
+    }
+
+    .medias-wrapper-{{ id }} .--nav-icon:hover svg path {
+      fill: #fff;
+    } {% endcomment %}
+
+    .--nav-button-wrapper {
+      display: none;
+    }
+  }
+
+  #prev-{{ id }} {
+    left: 30px;
+  }
+
+  #prev-{{ id }}.swiper-button-disabled {
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    #prev-{{ id }} {
+      display: none;
+    }
+  }
+
+  #next-{{ id }} {
+    right: 30px;
+  }
+
+  #next-{{ id }}.swiper-button-disabled {
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    #next-{{ id }} {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .wrapper-{{ id }} {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .texts-{{ id }} {
+      padding: 16px;
+      margin-top: 100px;
+    }
+    .texts-{{ id }} h2 {
+      font-size: 28px;
+      line-height: 34px;
+      margin: 0 0 8px;
+    }
+
+    .texts-{{ id }} p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .medias-{{ id }} {
+      padding: 16px;
+    }
+
+    .media-item-{{ id }} h4 {
+    }
+
+    .--nav-button-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0 0;
+    }
+
+    .swiper-scrollbar-{{ id }} {
+      display: block !important;
+      position: relative !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      margin: 0;
+      height: 1px !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      cursor: pointer;
+      padding-block: 8px;
+      background: transparent;
+    }
+
+    .swiper-scrollbar-{{ id }} .swiper-scrollbar-drag {
+      background: {{ section.settings.font_color }};
+      display: block !important;
+      height: 1px;
+    }
+
+    .swiper-scrollbar-{{ id }}::before {
+      position: absolute;
+      content: '';
+      background: rgba(
+        {{ section.settings.font_color | color_extract: 'red' }},
+        {{ section.settings.font_color | color_extract: 'green' }},
+        {{ section.settings.font_color | color_extract: 'blue' }},
+        0.1
+      );
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="texts-{{ id }}">
+        {% if section.settings.title != blank %}
+          <h2>{{ section.settings.title }}</h2>
+        {% else %}
+          <h2>{{ collection.title }}</h2>
+        {% endif %}
+        {% if collection.description != blank %}
+          <p>{{ collection.description }}</p>
+        {% elsif section.settings.text != blank %}
+          <p>{{ section.settings.text }}</p>
+        {% endif %}
+      </div>
+      <div class="medias-{{ id }}">
+        <div class="medias-wrapper-{{ id }}">
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              {% if show_metafield_data == true %}
+                {% for title in collection_title_list %}
+                  {% assign title_index = forloop.index %}
+                  {% for image in collection_image_list %}
+                    {% if title_index == forloop.index %}
+                      {% assign current_image = image %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                  {% for card_collection in collection_list %}
+                    {% if title_index == forloop.index %}
+                      {% assign current_collection = card_collection %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                  <div
+                    class="swiper-slide "
+                  >
+                    <div class="media-item-{{ id }}">
+                      <div class="media-item-image-{{ id }}">
+                        {{ current_image | image_url: width: current_image.width | image_tag }}
+                      </div>
+                      <h4>{{- title -}}</h4>
+                      <a href="{{ current_collection.url | append: '?view=' | append: template.suffix }}"></a>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% for block in section.blocks %}
+                  <div class="swiper-slide">
+                    <div class="media-item-{{ id }}">
+                      <div class="media-item-image-{{ id }}">
+                        {% if block.settings.image %}
+                          {{ block.settings.image | image_url: width: block.settings.image.width | image_tag }}
+                        {% else %}
+                          {{ 'image' | placeholder_svg_tag }}
+                        {% endif %}
+                      </div>
+                      <h4>
+                        {% if block.settings.title != blank %}
+                          {{ block.settings.title }}
+                        {% elsif block.settings.collection.title != blank %}
+                          {{ block.settings.collection.title }}
+                        {% endif %}
+                      </h4>
+                      <a href="{{ block.settings.collection.url | append: '?view=' | append: template.suffix }}"></a>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div id="next-{{ id }}" class="swiper-button-next-- --nav-icon">
+              {% render 'all-icons', name: 'right_arrow' %}
+            </div>
+            <div id="prev-{{ id }}" class="swiper-button-prev-- --nav-icon">
+              {% render 'all-icons', name: 'left_arrow' %}
+            </div>
+          </div>
+          <div class="--nav-button-wrapper">
+            <div class="swiper-prev-{{ section.id }} --nav-icon --mobile-nav">
+              {% render 'all-icons', name: 'left_arrow' %}
+            </div>
+            <div class="swiper-next-{{ section.id }} --nav-icon --mobile-nav">
+              {% render 'all-icons', name: 'right_arrow' %}
+            </div>
+            <div class="swiper-scrollbar-{{ section.id }} swiper-scrollbar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const isDesktop = window.innerWidth > 989;
+    const navigationConfig = {
+      nextEl: isDesktop ? '#next-{{ id }}' : '.swiper-next-{{ id }}.--mobile-nav',
+      prevEl: isDesktop ? '#prev-{{ id }}' : '.swiper-prev-{{ id }}.--mobile-nav',
+    };
+
+    const swiper = new Swiper('.medias-wrapper-{{ id }} .swiper', {
+      slidesPerView: 2.2,
+      spaceBetween: 10,
+      a11y: true,
+      breakpoints: {
+        768: {
+          slidesPerView: 2.5,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 2.8,
+          spaceBetween: 20,
+        },
+        1300: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        1300: {
+          slidesPerView: 3.2,
+          spaceBetween: 20,
+        },
+        1500: {
+          slidesPerView: 3.5,
+          spaceBetween: 20,
+        },
+        1800: {
+          slidesPerView: 4.2,
+          spaceBetween: 20,
+        },
+      },
+      scrollbar: {
+        el: '.swiper-scrollbar-{{ id }}',
+        draggable: true,
+        hide: false,
+      },
+      navigation: navigationConfig,
+    });
+    
+    const updateMinHeight = () => {
+      if (isDesktop) {
+        const mediasElement = document.querySelector('.medias-{{ id }}');
+        const textsElement = document.querySelector('.texts-{{ id }}');
+
+        if (mediasElement && textsElement) {
+          const mediasHeight = mediasElement.offsetHeight;
+          textsElement.style.minHeight = `${mediasHeight}px`;
+        }
+      } else {
+        const textsElement = document.querySelector('.texts-{{ id }}');
+        if (textsElement) {
+          textsElement.style.minHeight = 'auto';
+        }
+      }
+    };
+    updateMinHeight();
+
+  });
+  {% comment %} window.addEventListener('resize', updateMinHeight); {% endcomment %}
+</script>
+
+{% schema %}
+{
+  "name": "Collections Lists 1",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "font_color",
+      "label": "Font Color",
+      "default": "#1F2937"
+    },
+    {
+      "type": "color",
+      "id": "badge_background_color",
+      "label": "Badge Background Color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Collection Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Lists 1",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}

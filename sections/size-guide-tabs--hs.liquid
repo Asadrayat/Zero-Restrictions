@@ -1,0 +1,566 @@
+{% liquid
+  assign id = section.id
+%}
+{{ 'size-guide-new.css' | asset_url | stylesheet_tag }}
+{% style %}
+  .section-container--{{ section.id }} {
+    margin-top: {{ section.settings.margin_top | append:'px' }};
+    margin-bottom: {{ section.settings.margin_bottom | append:'px' }};
+    padding-top: {{ section.settings.padding_top | append:'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append:'px' }};
+    background-color: {{ section.settings.bg-color }};
+    overflow: hidden;
+  }
+  @media screen and (max-width: 768px) {
+    .section-container--{{ section.id }} {
+      margin-top: {{ section.settings.margin_top_mobile | append:'px' }};
+      margin-bottom: {{ section.settings.margin_bottom_mobile | append:'px' }};
+      padding-top: {{ section.settings.padding_top_mobile | append:'px' }};
+      padding-bottom: {{ section.settings.padding_bottom_mobile | append:'px' }};
+    }
+  }
+  .section-container--{{ section.id }} .tabs {
+    max-width: 100%;
+  }
+  .section-container--{{ section.id }} ul {
+    list-style: none;
+    display: flex;
+    /* border-bottom: 1px solid #ccc;  */
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .section-container--{{ section.id }} ul li {
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .section-container--{{ section.id }} ul li:hover {
+    background: #f0f0f0;
+  }
+  .section-container--{{ section.id }} ul li.active {
+    background: #ddd;
+    border-bottom: 2px solid #007bff;
+  }
+  .section-container--{{ section.id }} .tab-content {
+    display: none;
+  }
+  .section-container--{{ section.id }} .tab-content.active {
+    display: block;
+  }
+  .section-container--{{ section.id }} .sub-content {
+    display: none;
+    /* padding: 20px;
+    border: 1px solid #ccc;
+    background: #f9f9f9; */
+  }
+  .section-container--{{ section.id }} .sub-content.active {
+    display: block;
+  }
+  .section-container--{{ section.id }} ul.second-level:empty {
+    display: none;
+  }
+{% endstyle %}
+
+<style>
+   .sec-{{ id }} {
+    .heading-{{ id }}{
+      margin: 0 0 16px;
+      h2{
+        font-size: 40px;
+        line-height: 1;
+        color: #000000;
+        margin: 0;
+        @media screen and (max-width: 600px){
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+
+  .size-guide-tab-headers{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .size-guide-tab-header-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+    color: #1F2937;
+    background: #FFF;
+    border-radius: 50px;
+    min-width: max-content;
+    transition: all 0.3s ease;
+  }
+  .size-guide-tab-header-item.active {
+    background: #00000033;
+    color: #292D37;
+  }
+  .size-guide-tab-header-item:hover {
+    background: #00000033;
+    color: #292D37;
+  }
+
+  .size-guide-tab-content--custom {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 600px){
+    .size-guide-tab-headers{
+      overflow-x: auto;
+    }
+  }
+
+.--custom-size-chart-container{
+  .button {
+    border: 1px solid rgba(209, 213, 219, 0.50);
+    background: rgba(0, 0, 0, 0.20);
+    color: #292D37;
+  }
+  .button:hover {
+    border: 1px solid var(--Border-Base-subtle, #E5E7EB);
+    background: var(--Background-base, #FFF);
+    color: var(--Content-Base-main, #1F2937);
+  }
+  .button.active {
+    border: 1px solid var(--Border-Base-subtle, #E5E7EB);
+    background: var(--Background-base, #FFF);
+    color: var(--Content-Base-main, #1F2937);
+  }
+  .--sub-tab--title{
+    color: #000;
+    margin: 0 0 var(--Spacing-Container-sm, 16px);
+    font-family: var(--font-family-Title, Archivo);
+    font-size: var(--Font-Size-Heading-H2, 40px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: var(--Line-Height-Heading-H2, 40px); /* 100% */
+    letter-spacing: -0.4px;
+    text-transform: capitalize;
+  }
+}
+</style>
+
+<section class="section-container--{{ section.id }} sec-{{ id }} --custom-size-chart-container" data-section-id="{{ section.id }}">
+  <div class="section-wrapper--{{ section.id }} page-width">
+    {% if section.settings.title != blank %}
+      <h2>{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.settings.subtitle != blank %}
+      <div>{{ section.settings.subtitle }}</div>
+    {% endif %}
+    <div class="tabs">
+      <!-- First-level tabs -->
+      {% comment %} <ul class="first-level">
+        {% for block in section.blocks %}
+          {% if block.type == 'tab' %}
+            {% assign first_level_id = block.settings.title | handleize %}
+            <li data-tab="{{ first_level_id }}" {% if forloop.first %}class="active"{% endif %}>{{ block.settings.title }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul> {% endcomment %}
+
+      <!-- Tab contents -->
+      {% for block in section.blocks %}
+        {% if block.type == 'tab' %}
+          {% assign first_level_id = block.settings.title | handleize %}
+          <div class="tab-content {% if forloop.first %}active{% endif %}" id="content-{{ first_level_id }}">
+            <!-- Second-level tabs -->
+            <ul class="second-level btn__wrapper">
+              {% for sub_block in section.blocks %}
+                {% if sub_block.type == 'sub_tab' and sub_block.settings.parent_tab == block.settings.title %}
+                  {% assign sub_tab_id = sub_block.settings.title | handleize %}
+                  <li data-subtab="{{ sub_tab_id }}" class="button {% if forloop.first %}active{% endif %}">{{ sub_block.settings.title }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <!-- Sub-tab contents or direct content -->
+            {% assign has_sub_tabs = false %}
+            {% for sub_block in section.blocks %}
+              {% if sub_block.type == 'sub_tab' and sub_block.settings.parent_tab == block.settings.title %}
+                {% assign has_sub_tabs = true %}
+                {% assign sub_tab_id = sub_block.settings.title | handleize %}
+                <div class="sub-content {% if forloop.first %}active{% endif %}" id="content-{{ sub_tab_id }}">
+                  <p class="--sub-tab--title">{{ sub_block.settings.title }} Body Measurement</p>
+                  {% comment %} {{ sub_block.settings.content }}
+                  {{ sub_tab_id  }} {% endcomment %}
+                  {% if sub_tab_id == 'men-s-tops' %}
+                    {% render 'size-chart-men-top' %}
+                  {% elsif sub_tab_id == 'men-s-bottoms' %}
+                    {% render 'size-chart-men-bottom' %}
+                  {% elsif sub_tab_id == 'women-s-tops' %}
+                    {% render 'size-chart-women-top' %}
+                  {% elsif sub_tab_id == 'women-s-bottoms' %}
+                    {% render 'size-chart-women-bottom' %}
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% unless has_sub_tabs %}
+              <div class="sub-content active" id="content-{{ first_level_id }}-direct">
+                {{ block.settings.content }}
+              </div>
+            {% endunless %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+  //   const containers = document.querySelectorAll('.--custom-size-chart-container');
+    // containers.forEach(container => {
+      const firstLevelTabs = document.querySelectorAll('.first-level li');
+      const secondLevelTabs = document.querySelectorAll('.second-level li');
+
+      function switchFirstTab(targetId) {
+        // Remove active class from all first-level tabs and contents
+        firstLevelTabs.forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        // Add active class to selected tab and content
+        const selectedTab = document.querySelector(`.first-level li[data-tab="${targetId}"]`);
+        const selectedContent = document.querySelector(`#content-${targetId}`);
+        
+        if (selectedTab && selectedContent) {
+          selectedTab.classList.add('active');
+          selectedContent.classList.add('active');
+
+          // Handle second-level tabs or direct content
+          const secondLevel = selectedContent.querySelector('.second-level');
+          if (secondLevel && secondLevel.children.length > 0) {
+            // Reset all sub-tabs and sub-contents
+            secondLevel.querySelectorAll('li').forEach(sub => sub.classList.remove('active'));
+            selectedContent.querySelectorAll('.sub-content').forEach(content => content.classList.remove('active'));
+
+            // Activate the first sub-tab and its content
+            const firstSubTab = secondLevel.querySelector('li:first-child');
+            if (firstSubTab) {
+              firstSubTab.classList.add('active');
+              const firstSubTabId = firstSubTab.dataset.subtab;
+              const firstSubContent = selectedContent.querySelector(`#content-${firstSubTabId}`);
+              if (firstSubContent) {
+                firstSubContent.classList.add('active');
+              }
+            }
+          } else {
+            // No sub-tabs, activate direct content
+            const directContent = selectedContent.querySelector('.sub-content');
+            if (directContent) {
+              directContent.classList.add('active');
+            }
+          }
+        }
+      }
+
+      function switchSubTab(subId, parentId) {
+        const parentContent = document.querySelector(`#content-${parentId}`);
+        if (parentContent) {
+          // Remove active class from all sub-tabs and sub-contents
+          parentContent.querySelectorAll('.second-level li').forEach(sub => sub.classList.remove('active'));
+          parentContent.querySelectorAll('.sub-content').forEach(content => content.classList.remove('active'));
+
+          // Add active class to selected sub-tab and sub-content
+          const selectedSub = parentContent.querySelector(`.second-level li[data-subtab="${subId}"]`);
+          const selectedSubContent = parentContent.querySelector(`#content-${subId}`);
+          
+          if (selectedSub && selectedSubContent) {
+            selectedSub.classList.add('active');
+            selectedSubContent.classList.add('active');
+          }
+        }
+      }
+
+      // Attach event listeners to first-level tabs
+      firstLevelTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          switchFirstTab(this.dataset.tab);
+        });
+      });
+
+      // Attach event listeners to second-level tabs
+      secondLevelTabs.forEach(sub => {
+        sub.addEventListener('click', function() {
+          const parentId = this.closest('.tab-content').id.replace('content-', '');
+          switchSubTab(this.dataset.subtab, parentId);
+        });
+      });
+
+      // Initialize the first tab
+      const firstTab = document.querySelector('.first-level li:first-child');
+      if (firstTab) {
+        switchFirstTab(firstTab.dataset.tab);
+      }
+    // });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Two Layer Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Section Subtitle"
+    },
+    {
+      "type": "color",
+      "id": "bg-color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Tab",
+      "type": "tab",
+      "settings": [
+        {
+          "type": "select",
+          "id": "title",
+          "label": "Tab Title",
+          "options": [
+            {
+            "value": "Men",
+            "label": "Men"
+            },
+            {
+            "value": "Women",
+            "label": "Women"
+            }
+          ],
+          "default": "Men"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab Content (if no sub-tabs)",
+          "default": "<p>Content for this tab.</p>"
+        }
+      ]
+    },
+    {
+      "name": "Sub-Tab",
+      "type": "sub_tab",
+      "settings": [
+        {
+          "type": "select",
+          "id": "title",
+          "label": "Sub-Tab Title",
+          "options": [
+            {
+              "value": "Men’s Tops",
+              "label": "Men’s Tops"
+            },
+            {
+              "value": "Men’s Bottoms",
+              "label": "Men’s Bottoms"
+            },
+            {
+              "value": "Women’s Tops",
+              "label": "Women’s Tops"
+            },
+            {
+              "value": "Women’s Bottoms",
+              "label": "Women’s Bottoms"
+            }
+          ],
+          "default": "Men’s Tops"
+        },
+        {
+          "type": "select",
+          "id": "parent_tab",
+          "label": "Select Parent Tab",
+          "options": [
+            {
+            "value": "Men",
+            "label": "Men"
+            },
+            {
+            "value": "Women",
+            "label": "Women"
+            }
+          ],
+          "default": "Men",
+          "info": "Select the exact title of the parent tab this sub-tab belongs to."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Sub-Tab Content",
+          "default": "<p>Content for this sub-tab.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Layer Tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "title": "X",
+            "content": "<p>Content for X (no sub-tabs).</p>"
+          }
+        },
+        {
+          "type": "sub_tab",
+          "settings": {
+            "title": "A",
+            "parent_tab": "X",
+            "content": "<p>Content for A under X.</p>"
+          }
+        },
+        {
+          "type": "sub_tab",
+          "settings": {
+            "title": "B",
+            "parent_tab": "X",
+            "content": "<p>Content for B under X.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Y",
+            "content": "<p>Content for Y (no sub-tabs).</p>"
+          }
+        },
+        {
+          "type": "sub_tab",
+          "settings": {
+            "title": "P",
+            "parent_tab": "Y",
+            "content": "<p>Content for P under Y.</p>"
+          }
+        },
+        {
+          "type": "sub_tab",
+          "settings": {
+            "title": "Q",
+            "parent_tab": "Y",
+            "content": "<p>Content for Q under Y.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Z",
+            "content": "<p>Content for Z (no sub-tabs).</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

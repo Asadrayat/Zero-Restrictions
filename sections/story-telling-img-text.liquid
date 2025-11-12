@@ -1,0 +1,222 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  #shopify-section-{{id}} {
+    .wrapper-{{ id }} {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1.5fr);
+      gap: var(--Spacing-Container-lg, 40px);
+      @media(max-width: 768px){
+        grid-template-columns: minmax(0,1fr);
+      }
+    } 
+    .text-wrapper{
+      display: flex;
+      flex-direction: column;
+      gap: var(--Spacing-Container-sm, 16px);
+    }
+    .title{
+      max-width: 300px;
+      color: var(--Content-Base-main, #1F2937);
+      margin: 0;
+      /* font-family: var(--font-family-Title, Archivo); */
+      font-size: var(--Font-Size-Heading-H3, 24px);
+      font-style: normal;
+      font-weight: 500;
+      line-height: var(--Line-Height-Heading-H3, 28px); /* 116.667% */      
+    }
+    .description{
+      color: var(--Content-Base-main, #1F2937);
+      margin: 0;
+      /* font-family: var(--font-family-Body, Archivo); */
+      font-size: var(--Font-Size-Paragraph-Regular, 16px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--Line-Height-Paragraph-Regular, 24px); /* 150% */
+    }
+    .story-btn{
+      max-width: fit-content;
+    }
+    .media-wrapper img{
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: var(--rounded-lg, 8px);
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="text-wrapper">
+        <h3 class="title">{{ section.settings.title }}</h3>
+        <p class="description">{{ section.settings.des }}</p>
+        {% unless section.settings.btn == blank %}
+          <a href="{{ section.settings.url }}" class="story-btn button">{{ section.settings.btn }}</a>          
+        {% endunless %}
+      </div>
+      <div class="media-wrapper">
+        {% if section.settings.img != null %}
+          {{
+            section.settings.img
+            | image_url: width: section.settings.img.width
+            | image_tag: class: 'section-img'
+          }}
+        {% else %}
+          {{ 'image' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Story Telling Image Text",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "img",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "des",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "btn",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Button Url"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Story Telling Image Text"
+    }
+  ]
+}
+{% endschema %}

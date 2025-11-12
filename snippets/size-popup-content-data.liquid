@@ -1,0 +1,114 @@
+{% liquid
+  assign id = 'size--popup-content'
+%}
+
+<style>
+
+.content-wrapper-{{ id }}{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-block: 16px;
+    align-items: center;
+    @media screen and (max-width: 768px){
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        align-items: unset;
+    }
+}
+  .heading-{{ id }}{
+    margin: 16px 0;
+  }
+  .heading-{{ id }} h2{
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin: 0;
+  }
+  .image-{{ id }}{
+    margin: 0 0 24px;
+  }
+  .image-{{ id }} img{
+    display: block;
+    width: 100%;
+    {% comment %} max-width: 500px; {% endcomment %}
+    height: auto;
+  }
+  .texts-{{ id }} .text-item-{{ id }}{
+    font-size: 14px;
+    line-height: 20px;
+    color: #4B5563;
+  }
+  .texts-{{ id }} .text-item-{{ id }}:not(:last-child){
+    margin: 0 0 24px;
+  }
+  .texts-{{ id }} .text-item-{{ id }} span{
+    font-size: 16px;
+    line-height: 24px;
+    color: #1F2937;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 768px){
+    .heading-{{ id }} h2{
+      font-size: 20px;
+      line-height: 24px;
+      color: #000000;
+      margin: 0;
+    }
+    .texts-{{ id }} .text-item-{{ id }}{
+      font-size: 13px;
+      line-height: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .texts-{{ id }} .text-item-{{ id }}:not(:last-child){
+      margin: 0 0 16px;
+    }
+    .texts-{{ id }} .text-item-{{ id }} span{
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+  }
+</style>
+
+{% comment %} {% assign size_charts_type = product.metafields.custom.shop_for.value %}
+
+{% for size_chart_type in size_charts_type %}
+  {% assign type = size_chart_type | downcase %}
+  {{ type }}
+{% endfor %} {% endcomment %}
+
+<div class="sec-{{ id }}">
+    <div class="wrapper-{{ id }}">
+        {% comment %} <div class="heading-{{ id }}">
+          <h2>How to measure</h2>
+        </div> {% endcomment %}
+        <div class="content-wrapper-{{ id }}">
+            <div class="image-{{ id }}">
+              {% if type == 'women' %}
+                <img src="https://cdn.shopify.com/s/files/1/0028/2922/1954/files/Frame_1484580831_1_f8f091ba-9c90-4ef2-8c81-06fe5d464a3a.png?v=1760537589" loading="lazy">
+              {% else %}
+                <img src="https://cdn.shopify.com/s/files/1/0028/2922/1954/files/Frame_1484580831_1.png?v=1753013530" loading="lazy">
+              {% endif %}
+            </div>
+            <div class="texts-{{ id }}">
+
+                <div class="text-item-{{ id }}">
+                    <span>1. Waist: </span> Measure around the natural waistline, which is the narrowest part.
+                </div>
+                <div class="text-item-{{ id }}">
+                    <span>2. Hip:</span> Measure around the fullest part of the hip.
+                </div>
+                <div class="text-item-{{ id }}">
+                    <span>3. Thigh:</span> Stand with feet shoulder-width apart. Measure around the fullest part of the thigh.
+                </div>
+                <div class="text-item-{{ id }}">
+                    <span>4. Inseam:</span> Stand with feet slightly apart, legs straight. Measure from the top of your inside leg down to your ankle.
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

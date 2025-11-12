@@ -1,0 +1,75 @@
+{% comment %}
+  Size selector snippet:
+  - Displays buttons for 'Size' option values
+  - Disables buttons for unavailable variants
+  - Includes data-variant-id and data-size-value for JavaScript updates
+  - Fixed unterminated if condition
+  - Uses original loop-based variant lookup to ensure sizes are shown
+  - Added debug output for option names
+{% endcomment %}
+
+{%- assign size_option = product.options_with_values | where: 'name', 'Size' | first -%}
+<div class="--size-element-wrapper">
+  Size: <span class="selected_value-display"></span>
+
+  <div class="--selected_size --open-size-selector">
+    <span class="selected_value-display"></span>
+
+    <svg
+      fill="#121212bf"
+      xmlns="http://www.w3.org/2000/svg"
+      width="20px"
+      height="20px"
+      viewBox="0 0 52 52"
+      enable-background="new 0 0 52 52"
+      xml:space="preserve"
+    >
+      <path d="M47.6,17.8L27.1,38.5c-0.6,0.6-1.6,0.6-2.2,0L4.4,17.8c-0.6-0.6-0.6-1.6,0-2.2l2.2-2.2
+      	c0.6-0.6,1.6-0.6,2.2,0l16.1,16.3c0.6,0.6,1.6,0.6,2.2,0l16.1-16.2c0.6-0.6,1.6-0.6,2.2,0l2.2,2.2C48.1,16.3,48.1,17.2,47.6,17.8z"
+      	/>
+    </svg>
+  </div>
+  {%- if size_option and size_option.values.size > 0 -%}
+    <div class="--size-selector" data-product-id="{{ product.id }}">
+      {%- for size in size_option.values -%}
+        {%- assign size_variant = null -%}
+        {%- for variant in product.variants -%}
+          {%- if variant.options contains size -%}
+            {%- assign size_variant = variant -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <input
+          type="radio"
+          name="bundle-product-size"
+          class="size-radio"
+          value="{{ size_variant.id | default: '' }}"
+          data-size-value="{{ size | escape }}"
+          data-variant-id="{{ size_variant.id | default: '' }}"
+          id="size-{{ size_variant.id | default: '' }}"
+          {% if size_variant.available %}
+            data-variant-url="{{ size_variant.url }}"
+          {% else %}
+            --disabled
+          {% endif %}
+        >
+        <label
+          for="size-{{ size_variant.id | default: '' }}"
+          class="size-radio-label {% unless size_variant.available %}size-radio--disabled{% endunless %}"
+        >
+          <span>{{ size }}</span>
+        </label>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    {% comment %} Debug output to identify option names {% endcomment %}
+    <div class="size-selector-debug" style="display: none;">
+      Available option names:
+      {%- for option in product.options_with_values -%}
+        {{ option.name | escape -}}
+        {%- unless forloop.last %}, {% endunless %}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

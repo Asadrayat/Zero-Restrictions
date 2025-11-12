@@ -1,0 +1,23 @@
+{% unless product.metafields.custom.gender_product_male == blank
+    or product.metafields.custom.gender_product_female == blank
+%}
+  <div class="p-info-gender {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+    
+    {% unless product.metafields.custom.gender_product_male == blank %}
+      {% assign male_url = product.metafields.custom.gender_product_male.value.url %}
+      <a href="{{ male_url }}"
+         class="{% if request.path == male_url %}active{% endif %}">
+        {{- product.metafields.custom.gender_label_male -}}
+      </a>
+    {% endunless %}
+    
+    {% unless product.metafields.custom.gender_product_female == blank %}
+      {% assign female_url = product.metafields.custom.gender_product_female.value.url %}
+      <a href="{{ female_url }}"
+         class="{% if request.path == female_url %}active{% endif %}">
+        {{- product.metafields.custom.gender_label_female -}}
+      </a>
+    {% endunless %}
+    
+  </div>
+{% endunless %}

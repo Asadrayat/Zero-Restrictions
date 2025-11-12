@@ -1,0 +1,346 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+    #shopify-section-{{id}} {
+      box-sizing: border-box;
+      margin-top: {{section.settings.margin_top | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+      padding-top: {{section.settings.padding_top | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+      background: #e3e3e36b;
+      backdrop-filter: saturate(180%) blur(10px);      
+    }
+
+    @media(max-width: 600px) {
+      #shopify-section-{{id}} {
+        margin-top: {{section.settings.margin_top_m | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+        padding-top: {{section.settings.padding_top_m | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+      }
+    }
+  .sec-{{ id }} {
+    h2.--section-title {
+      margin-top: 0;
+      font-size: 20px;
+      text-transform: uppercase;
+      font-family: var(--font-family-body);
+      font-weight: 400;
+      letter-spacing: 1px; 
+    }
+    .--content-wrapper{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--Spacing-Container-md);
+      max-width: 1200px;
+      align-items: center;
+      margin: auto;
+      @media(max-width: 600px) {
+      grid-template-columns: 1fr;
+
+      }
+    }
+    a.--card-title {
+      color: var(--Content-Base-subtle, #9CA3AF);
+      font-family: var(--font-family-Body, "Neue Plak");
+      margin-block: var(--Spacing-Container-sm);
+      cursor: pointer;
+      font-size: 56px;
+      font-weight: 400;
+      line-height: 95%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      min-width: 100%;
+      gap: 12px;
+      transition: 0.5s ease;
+      @media(max-width: 600px) {
+          color: #000;
+        font-size: 24px;
+        justify-content: space-between;
+        line-height: 32px;      
+      }
+    }
+    a.--card-title span {
+      opacity: 1;
+      transform: translateX(-20px);
+      transition: transform 0.2s ease-in-out, opacity 0.15s ease-in-out;
+      @media(min-width: 768px) {
+        opacity: 0;
+      }
+      svg path {
+        stroke-width: 3px;
+      }
+    }
+    a.--card-title.--active-card {
+        color: #000;
+    }
+    .--images-container{
+      position: relative;
+      aspect-ratio: 4/5;
+      max-width: 552px;
+       @media(max-width: 600px) {
+       display: none;
+
+      }
+    }
+    .--images-container:before, .--images-container:after {
+      content: "";
+      width: 100px;
+      height: 100px;
+      background: transparent;
+      z-index: -1;      
+      position: absolute;
+    }
+    .--images-container:before{
+        border-right: 5px solid #000;
+        border-top: 5px solid #000;
+        top: 0;
+        right: 0;
+    }
+    .--images-container:after {
+        border-left: 5px solid #000;
+        border-bottom: 5px solid #000; 
+        bottom: 0;
+        left: 0;        
+    }
+    svg.--placeholder-image, .--card-image {
+
+      display: block;
+      aspect-ratio: 4/5;
+      width: 552px;
+      max-width: 100%;
+      padding: 40px;      
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit:cover;
+      border-radius: 0;
+    }
+    img.--card-image.--active-card {
+        z-index: 1;
+    }
+    a.--card-title.--active-card span{
+        opacity: 1;
+        transform: translatex(0);
+    }
+    .--images-container img.--card-image:last-child {
+      transform: rotate(-1deg);
+    }
+
+
+
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="--content-wrapper">
+        <div class="--list-item-container">
+          <h2 class="--section-title">{{ section.settings.title }}</h2>
+          {% for block in section.blocks %}
+            <a class="--card-title" data-title="{{ block.settings.title | handle }}" href="{{ block.settings.url }}">
+              
+              {{ block.settings.title }}
+              <span class="">{% render 'all-icons', name: 'right_arrow' %}</span>
+            </a>
+          {% endfor %}
+        </div>
+        <div class="--images-container">
+          {% for block in section.blocks %}
+            {% if block.settings.image != blank %}
+              <img
+                data-title="{{ block.settings.title | handle }}"
+                class="--card-image"
+                src="{{ block.settings.image | image_url: width: 800  }}"
+
+              ></img>
+
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: '--placeholder-image' }}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let cardImages = document.querySelectorAll('.sec-{{ id }} .--card-image');
+    let cardTitle = document.querySelectorAll('.sec-{{ id }} .--card-title');
+
+    cardTitle.forEach((title) => {
+        title.addEventListener('mouseenter', () => {
+            // Remove active class from all titles and images
+            cardTitle.forEach((x) => x.classList.remove('--active-card'));
+            cardImages.forEach((x) => x.classList.remove('--active-card'));
+
+            // Add active class to the hovered title and matching image
+            cardImages.forEach((x) => {
+                if (x.dataset.title && title.dataset.title && x.dataset.title.trim() === title.dataset.title.trim()) {
+                    x.classList.add('--active-card');
+                }
+            });
+            title.classList.add('--active-card');
+        });
+
+        // Optional: Remove active classes when mouse leaves
+        {% comment %} title.addEventListener('mouseleave', () => {
+            cardTitle.forEach((x) => x.classList.remove('--active-card'));
+            cardImages.forEach((x) => x.classList.remove('--active-card'));
+        }); {% endcomment %}
+    });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Card List 3",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Section Title"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Card Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Upload Image of 4/5 ratio"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Card List 3",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
