@@ -1,0 +1,18 @@
+<div class="cb2__card">
+  <div class="cb2__card-wrapper">
+    <div class="cb2__media">
+      {% unless section.settings.image == blank %}
+        {{ section.settings.image | image_url: width: section.settings.image.width | image_tag }}
+      {% endunless %}
+      {% comment %}
+        {{  image | image_url: width: image.width | image_tag }}
+      {% endcomment %}
+    </div>
+    <div class="cb2__texts">
+      <div class="cb2__texts-wrap">
+        <h3>{{ title }}</h3>
+        <p>{{ des }}</p>
+      </div>
+    </div>
+  </div>
+</div>

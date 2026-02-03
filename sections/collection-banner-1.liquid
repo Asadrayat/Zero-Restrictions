@@ -1,0 +1,390 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+     #shopify-section-{{id}} {
+       box-sizing: border-box;
+       margin-top: {{section.settings.margin_top | append: 'px'}};
+       margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+       padding-top: {{section.settings.padding_top | append: 'px'}};
+       padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+       position: relative;
+     }
+     {% comment %}
+     #shopify-section-{{id}}:after{
+       content: '';
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background-color: rgba(0,0,0,0.4);
+     }
+     {% endcomment %}
+     @media(max-width: 768px) {
+       #shopify-section-{{id}} {
+         margin-top: {{section.settings.margin_top_m | append: 'px'}};
+         margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+         padding-top: {{section.settings.padding_top_m | append: 'px'}};
+         padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+       }
+     }
+     #shopify-section-{{id}} .page-width{
+
+       /* max-width: 100%;
+       @media(max-width: 1700px){
+         padding-inline: 20px;
+       } */
+     }
+     .wrapper-{{ id }}{
+       position: relative;
+     }
+     .wrapper-{{ id }} *{
+       text-transform: uppercase;
+     }
+     {% comment %}
+     .img-wrapper-{{ id }} img{
+       display: block;
+       width: 100%;
+       height: 100%;
+       height: 450px;
+       object-fit: cover;
+     }
+     .contents-{{ id }}{
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%,-50%);
+       text-align: center;
+       z-index: 1;
+       @media(max-width: 768px) {
+         width: 100%;
+       }
+     }
+
+     .contents-{{ id }} *{
+       color: {{ section.settings.color }};
+     }
+     {% endcomment %}
+     .contents-{{ id }}  {
+       @media(min-width: 768px){
+         max-width: 60%;
+       }
+
+     }
+     .contents-{{ id }} h1{
+       {% comment %} font-family: var(--font-family-Body); {% endcomment %}
+       {% comment %} font-size: 24px;
+       line-height: 1.2; {% endcomment %}
+       font-size: var(--Font-Size-Heading-H3);
+    line-height: var(--Line-Height-Heading-H3);
+    font-weight: 600;
+       margin: 0 0 8px;
+     }
+     .contents-{{ id }} p{
+       font-family: var(--font-family-Body);
+        
+    font-size: var(--Font-Size-Paragraph-Small);
+    line-height: var(--Line-Height-Paragraph-Small);
+   
+       {% comment %} font-size: 16px;
+       line-height: 24px; {% endcomment %}
+       margin: 0;
+     }
+
+
+    .collections__list{
+       display: flex;
+       align-items: center;
+       /* justify-content: center; */
+       gap: 12px;
+       overflow-x: auto;
+       scrollbar-width: thin;
+       padding: 0;
+       margin-block: 16px;
+       @media(max-width: 1050px) {
+         /* justify-content: start; */
+         scrollbar-width: none; /* Firefox */
+       -ms-overflow-style: none;  /* Internet Explorer 10+ */
+         padding-block: 10px;
+       }
+     }
+     .collections__list span{
+         display: inline-block;
+         padding: 0px 16px;
+         min-width: max-content;
+         border-radius: var(--rounded-full, 999999px);
+         border: 1px solid var(--Border-Base-main, #D1D5DB);
+     }
+     .collections__list span.active{
+         border: 1px solid #000;
+
+     }
+
+     .collections__list  a{
+       /* flex: 1; */
+       display: inline-block;
+       min-width: max-content;
+
+       font-family: var(--font-family-Body);
+       font-size: var(--Font-Size-Paragraph-Tiny);
+       {% comment %} line-height: var(--Line-Height-Paragraph-Tiny);  {% endcomment %}
+       line-height: 2.5; 
+       text-align: center;
+       /* padding: 12px 24px; */
+       /* padding: 0px 16px; */
+       /* border-radius: var(--rounded-full, 999999px); */
+       /* border-radius: 50px; */
+       /* border: 1px solid var(--Border-Base-main, #D1D5DB); */
+       /* border-bottom: 2px solid transparent; */
+       {% comment %} background: rgba(255, 255, 255, 0.40); {% endcomment %}
+       /* transition: 0.5s ease; */
+       color: rgba(121,121,121,var(--tw-text-opacity,1));
+     }
+     /* .collections__list span:first-child a{
+           border-bottom: 2px solid transparent;
+
+     } */
+     .collections__list  a:hover{
+       color: #000;
+     }
+
+     .collections__list span.active a.active{
+       color: #000;
+     }
+     @media screen and (max-width: 744px){
+       .collections__list{
+         gap: 8px;
+       }
+     }
+     @media screen and (max-width: 768px){
+       #shopify-section-{{id}} .page-width{
+         padding-inline: 15px;
+       }
+       .contents-{{ id }} h1{
+       }
+     }
+  .img-wrapper-{{ id }} {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .img-wrapper-{{ id }} img {
+      width: 100%;
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      {% comment %}{% endcomment %}
+       {% if section.settings.enable_image_banner == true %}
+      {% if section.settings.image != blank %}
+        <div class="img-wrapper-{{ id }}">
+          {% comment %} {{ section.settings.image | image_url: width: section.settings.image.width | image_tag }} {% endcomment %}
+          <picture>
+            <source
+              media="(max-width: 400px)"
+              srcset="{{ section.settings.image_mobile | image_url: width: 400 }}"
+            >
+            <source
+              media="(max-width: 600px)"
+              srcset="{{ section.settings.image_mobile | image_url: width: 600 }}"
+            >
+            <source
+              media="(max-width: 600px)"
+              srcset="{{ section.settings.image | image_url: width: 600 }}"
+            >
+            <source
+              media="(max-width: 1600px)"
+              srcset="{{ section.settings.image | image_url: width: 1600 }}"
+            >
+            <source
+              media="(max-width: 2000px)"
+              srcset="{{ section.settings.image | image_url: width: 2000 }}"
+            >
+           
+            {{ section.settings.image | image_url: width: section.settings.image.width | image_tag: loading: 'lazy', decoding: 'async' }}
+          </picture>
+        </div>
+      {% endif %}
+{% endif %}
+      <div class="contents-{{ id }}">
+        <h1>{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          {{ collection.description }}
+        {% endif %}
+      </div>
+
+      {% if collection.metafields.custom.related_collection.value != blank %}
+        <div class="collections__list">
+          {% for xcollection in collection.metafields.custom.related_collection.value %}
+            <span class="{% if xcollection.url == collection.url %}active{% endif %}">
+              <a href="{{ xcollection.url }}" class="{% if xcollection.url == collection.url %}active{% endif %}">
+                {{ xcollection.title }}
+              </a>
+            </span>
+          {% endfor %}
+        </div>
+
+      {% elsif collection.metafields.custom.fallback_collection != blank %}
+        <div class="collections__list">
+          {% for xcollection in collection.metafields.custom.fallback_collection.value.metafields.custom.related_collection.value %}
+            <span class="{% if xcollection.url == collection.url %}active{% endif %}">
+              <a href="{{ xcollection.url }}" class="{% if xcollection.url == collection.url %}active{% endif %}">
+                {{ xcollection.title }}
+              </a>
+            </span>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        {% comment %}
+          <div class="collections__list">
+            {% for block in section.blocks %}
+              {% if block.settings.collection %}
+                {% assign collection_url = block.settings.collection.url %}
+                {% assign current_url = request.path %}
+                <span class="{% if current_url == collection_url %}active{% endif %}">
+                  <a href="{{ collection_url }}" class="{% if current_url == collection_url %}active{% endif %}">
+                    {{ block.settings.collection.title }}
+                  </a>
+                </span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endcomment %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Banner 1",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_banner",
+      "label": "Enable Image Banner",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Texts Color",
+      "default": "#FFF"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Collection Banner 1"
+    }
+  ]
+}
+{% endschema %}

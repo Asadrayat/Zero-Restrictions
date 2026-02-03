@@ -1,0 +1,200 @@
+<style>
+  pqa-new{
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #e3e3e385;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 99;
+  }
+  pqa-new.sticky-visible{
+    display: block;
+  }
+  pqa-new .page-width{
+    max-width: 100%;
+    padding: 0;
+  }
+  .pqa-new-wrapper{
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,2fr) auto;
+    align-items: center;
+    gap: 24px;
+    @media screen and (max-width: 744px){
+      grid-template-columns: minmax(0,1fr);
+    }
+  }
+
+  .pqa-new-title{
+    box-sizing: border-box;
+    padding-inline-start: 12px;
+  }
+  .pqa-new-title p{
+    color: #000;
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Regular);
+    line-height: var(--Line-Height-Paragraph-Regular); /* 150% */
+    margin: 0;
+  }
+  .pqa-new-variants{
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    align-items: center;
+    gap: 24px;
+  }
+  .pqa-new-option select{
+    width: 100%;
+    color: #000;
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Small);
+    line-height: var(--Line-Height-Paragraph-Small); /* 142.857% */
+    cursor: pointer;
+    -webkit-appearance: none; /* Fix for Safari */
+    -moz-appearance: none; /* Fix for Firefox */
+    appearance: none; /* Fix for other browsers */
+
+    background: url('data:image/svg+xml;utf8,<svg fill="%23000000" width="20px" height="20px" viewBox="-5 -8 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin"><path d="M7.071 5.314l4.95-4.95a1 1 0 1 1 1.414 1.414L7.778 7.435a1 1 0 0 1-1.414 0L.707 1.778A1 1 0 1 1 2.121.364l4.95 4.95z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 16px;
+  }
+  .pqa-new-option select:focus{
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  .pqa-new-form button{
+    display: block;
+    width: 100%;
+    background: #000;
+    color: #FFF;
+    font-family: var(--font-family-Body);
+    font-size: var(--Font-Size-Paragraph-Regular);
+    line-height: var(--Line-Height-Paragraph-Regular); /* 150% */
+    text-transform: uppercase;
+    padding: 10px 30px;
+  }
+
+
+  @media screen and (max-width: 744px){
+    .pqa-new-wrapper{
+      grid-gap: 0;
+    }
+    .pqa-new-form button{
+      padding: 14px 12px;
+    }
+    .pqa-new-title, .pqa-new-variants{
+      padding: 8px;
+    }
+    .pqa-new-option select{
+      font-size: 11px;
+    }
+    .pqa-new-variants{
+      /* display: grid;
+      grid-template-columns: minmax(0,1fr);
+      align-items: center;
+      gap: 5px; */
+    }
+  }
+</style>
+
+<div class="pqa-container">
+  <pqa-new>
+    <div class="page-width">
+      <div class="pqa-new-wrapper">
+        <div class="pqa-new-title">
+          <p>{{ product.title }}</p>
+        </div>
+        <div class="pqa-new-variants">
+          {% for option in product.options_with_values %}
+            <div class="pqa-new-option">
+              <select>
+                {% for value in option.values %}
+                  {% unless value.variant.id == blank %}
+                    <option
+                      {% if value.selected %}
+                        selected
+                      {% endif %}
+                      value="{{ value.variant.url }}"
+                    >
+                      {% if value.available %}
+                        {{ value.name }}
+                      {% else %}
+                        <s>{{ value.name }}</s>
+                      {% endif %}
+                    </option>
+                  {% endunless %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="pqa-new-form">
+          {% form 'product', product %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button
+              type="submit"
+              {% unless product.selected_or_first_available_variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {% if product.selected_or_first_available_variant.available %}
+                Add To Bag {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </pqa-new>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const mainProductInfo = document.querySelector('#main-product-information');
+      const pqaNewElement = document.querySelector('pqa-new');
+      const footer = document.querySelector(".footer__section");
+      if(pqaNewElement){
+        if(screen.width < 989){
+          footer.parentElement.style.paddingBottom = '150px';
+        }
+      }
+      if (!mainProductInfo || !pqaNewElement) return;
+
+      const handleIntersection = (entries) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  pqaNewElement.classList.remove('sticky-visible');
+              } else {
+                  pqaNewElement.classList.add('sticky-visible');
+              }
+          });
+      };
+
+      const observer = new IntersectionObserver(handleIntersection, {
+          root: null,
+          threshold: 0.1
+      });
+
+      observer.observe(mainProductInfo);
+  });
+</script>
+{% schema %}
+{
+  "name": "Product Quick Add Backup",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [
+    {
+      "name": "Product Quick Add Backup"
+    }
+  ],
+  "settings": []
+}
+{% endschema %}

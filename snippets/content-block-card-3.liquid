@@ -1,0 +1,11 @@
+<div class="cb3__card">
+    <div class="cb3__card-wrapper">
+        <div class="cb3__media">
+            {{ image | image_url: width: matching_image.width | image_tag: loading: 'lazy' }}
+        </div>
+        <div class="cb3__info">
+            <h4>{{ title }}</h4>
+            <p>{{ des }}</p>
+        </div>
+    </div>
+</div>

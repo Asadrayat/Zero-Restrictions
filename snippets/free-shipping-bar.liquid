@@ -1,0 +1,70 @@
+<style>
+  .is-empty .free-shipping-bar{
+    display: none;
+  }
+    .free-shipping-bar {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #D0D0D0;
+    border-radius: 5px;
+    position: relative;
+  }
+
+  .progress {
+    height: 100%;
+    background-color: #322F74;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+  }
+
+  .delivery-icon {
+    position: absolute;
+    top: -15px;
+    transform: translateX(-50%);
+    font-size: 20px;
+    transition: left 0.3s ease;
+    z-index: 200;
+    background: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    border: 1px solid;
+  }
+
+  .free-shipping-message {
+    margin-top: 24px;
+    font-size: 14px;
+    color: #333;
+  }
+</style>
+<div id="free-shipping-bar" class="free-shipping-bar">
+  <div class="progress-bar">
+    <!-- Progress Bar -->
+    <div
+      class="progress"
+      style="width: {{ cart.total_price | times: 100 | divided_by: settings.free_shipping_threshold | divided_by: 100 | at_most: 100 }}%;"
+    ></div>
+    <!-- Delivery Icon -->
+    <div
+      class="delivery-icon"
+      style="left: {{ cart.total_price | times: 100 | divided_by: settings.free_shipping_threshold | divided_by: 100 | at_most: 100 }}%;"
+    >
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.3333 8.16669H19.0601C19.3454 8.16669 19.4881 8.16669 19.6224 8.19892C19.7414 8.2275 19.8552 8.27464 19.9596 8.33861C20.0773 8.41076 20.1782 8.51164 20.38 8.71342L25.1199 13.4533C25.3216 13.6551 25.4225 13.756 25.4947 13.8737C25.5586 13.9781 25.6058 14.0919 25.6343 14.2109C25.6666 14.3452 25.6666 14.4879 25.6666 14.7732V18.0834C25.6666 18.627 25.6666 18.8988 25.5778 19.1132C25.4594 19.399 25.2322 19.6261 24.9464 19.7445C24.732 19.8334 24.4602 19.8334 23.9166 19.8334M18.0833 19.8334H16.3333M16.3333 19.8334V8.40002C16.3333 7.09323 16.3333 6.43984 16.0789 5.94071C15.8552 5.50166 15.4983 5.14471 15.0592 4.92101C14.5601 4.66669 13.9067 4.66669 12.5999 4.66669H6.06659C4.7598 4.66669 4.1064 4.66669 3.60727 4.92101C3.16823 5.14471 2.81127 5.50166 2.58757 5.94071C2.33325 6.43984 2.33325 7.09323 2.33325 8.40002V17.5C2.33325 18.7887 3.37792 19.8334 4.66659 19.8334M16.3333 19.8334H11.6666M11.6666 19.8334C11.6666 21.7664 10.0996 23.3334 8.16659 23.3334C6.23359 23.3334 4.66659 21.7664 4.66659 19.8334M11.6666 19.8334C11.6666 17.9004 10.0996 16.3334 8.16659 16.3334C6.23359 16.3334 4.66659 17.9004 4.66659 19.8334M23.9166 20.4167C23.9166 22.0275 22.6107 23.3334 20.9999 23.3334C19.3891 23.3334 18.0833 22.0275 18.0833 20.4167C18.0833 18.8059 19.3891 17.5 20.9999 17.5C22.6107 17.5 23.9166 18.8059 23.9166 20.4167Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+  <!-- Free Shipping Message -->
+  <p class="free-shipping-message">
+    {% assign threshold_in_cents = settings.free_shipping_threshold | times: 100 %}
+    {% if cart.total_price >= threshold_in_cents %}
+      Congratulations! You've got free shipping.
+    {% else %}
+      Spend {{ threshold_in_cents | minus: cart.total_price | money }} more to reach Free Shipping!
+    {% endif %}
+  </p>
+</div>

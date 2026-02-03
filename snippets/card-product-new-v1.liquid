@@ -1,0 +1,174 @@
+{% liquid
+  if block == blank
+    assign block_id = '1'
+  else
+    assign block_id = block.id
+  endif
+  assign metafield = product.metafields.variants.color.value
+  assign parent_index = forloop.index
+  assign colorCount = 0
+  for p in metafield.products.value
+    assign colorCount = colorCount | plus: 1
+  endfor
+%}
+<product-card class="swiper-slide {{ class }}" data-id="{{ product.id }}">
+  <card-media data-title="{{ product.title }}">
+    <a href="{{ product.url }}" class="swiper swiper-{{ product.id }} pc-media-swiper">
+      <div class="swiper-wrapper">
+        {% for media in product.media %}
+          <div class="swiper-slide">
+            {{ media | image_url: width: 700 | image_tag: loading: 'lazy', alt: media.alt, class: 'card_media' }}
+          </div>
+        {% endfor %}
+      </div>
+    </a>
+    <div class="best-seller-badge">Best Seller</div>
+    <pc-size-variant>
+      <div class="pc-size-variant-wrapper">
+        <div class="pc-quick-add-wrapper">
+          <h5>QUICK ADD</h5>
+          <button
+            class="pc-quick-add-btn"
+            data-product-handle="{{ product.handle }}"
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="pc-size-variants">
+          {% for option in product.options_with_values %}
+            {% if option.name == 'Size' or option.name == 'size' %}
+              {% for value in option.values %}
+                <button
+                  {% unless value.available %}
+                    disabled
+                  {% endunless %}
+                  data-variant-id="{{ value.variant.id }}"
+                >
+                  {% if value.available %}
+                    {{ value.name }}
+                  {% else %}
+                    <s>{{ value.name }}</s>
+                  {% endif %}
+                </button>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </pc-size-variant>
+  </card-media>
+  <card-info>
+    <div class="card-info-wrapper">
+      <p class="pc-title">{{ product.title }}</p>
+      <p class="pc-colors-count">
+        {% if colorCount == 0 %}1 Color{% else %}{{ colorCount }} Colors{% endif %}
+      </p>
+
+      <div class="pc-price-wrapper">
+        <div class="pc-price-inner">
+          {% if product.selected_or_first_available_variant.price
+              < product.selected_or_first_available_variant.compare_at_price
+          %}
+            <p class="pc-regular-price">
+              {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}
+            </p>
+            <p class="pc-compare-price">
+              <s>{{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</s>
+            </p>
+          {% else %}
+            <p class="pc-regular-price">
+              {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}
+            </p>
+          {% endif %}
+        </div>
+        <div
+          class="ruk_rating_snippet"
+          data-sku="{{ product.handle }};{{ product.variants | map: 'sku' | join: ';' }};{{ product.variants | map: 'id' | join: ';' }}"
+        ></div>
+      </div>
+    </div>
+    <pc-color-variant class="pc-color-variants-wrapper" data-id="{{ product.id }}-{{ section.id }}">
+      <div class="swiper pc-cv-swiper swiper-{{ product.id }}-{{ section.id }}">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide pc-color-variant">
+            <input
+              id="pc-{{ product.id }}-{{ parent_index }}-{{ section.id }}-{{ block_id }}"
+              checked
+              type="radio"
+              name="pc-color-{{ section.id }}-{{ parent_index }}-{{ block_id }}"
+              class="hidden-"
+              data-product-id="{{ product.id }}"
+            >
+            <label for="pc-{{ product.id }}-{{ parent_index }}-{{ section.id }}-{{ block_id }}">
+              {{
+                product.selected_or_first_available_variant.featured_image
+                | image_url: width: 150
+                | image_tag: loading: 'lazy', alt: product.selected_or_first_available_variant.featured_image.alt
+              }}
+            </label>
+          </div>
+          <script type="application/ld+json-{{ product.id }}">
+            {{ product | json }}
+          </script>
+          {% for product_ in metafield.products.value %}
+            {% unless product.id == product_.id %}
+              <div class="swiper-slide pc-color-variant">
+                <input
+                  id="pc-{{ section.id }}-{{ forloop.index }}-{{ parent_index }}"
+                  type="radio"
+                  name="pc-color-{{ section.id }}-{{ parent_index }}-{{ block_id }}"
+                  class="hidden-"
+                  data-product-id="{{ product_.id }}"
+                >
+                <label for="pc-{{ section.id }}-{{ forloop.index }}-{{ parent_index }}">
+                  {{
+                    product_.selected_or_first_available_variant.featured_image
+                    | image_url: width: 150
+                    | image_tag: loading: 'lazy', alt: product_.selected_or_first_available_variant.featured_image.alt
+                  }}
+                </label>
+              </div>
+              <script type="application/ld+json-{{ product_.id }}">
+                {{ product_ | json }}
+              </script>
+            {% endunless %}
+          {% endfor %}
+        </div>
+        {% comment %}
+          <div class="swiper-button-prev- --nav-icon--card-img">{% render 'all-icons', name: 'left_arrow' %}</div>
+          <div class="swiper-button-next- --nav-icon--card-img">{% render 'all-icons', name: 'right_arrow' %}</div>
+        {% endcomment %}
+      </div>
+    </pc-color-variant>
+  </card-info>
+  <a class="card__product-link" href="{{ product.url }}"></a>
+  <script type="application/ld+json-pc-options">
+    {
+      "products": [
+        {% for p in metafield.products.value %}
+          {
+            "productId": "{{ p.id }}",
+            {% for option in p.options_with_values %}
+              {% if option.name == 'Size' or option.name == 'size' %}
+                "name": "{{ option.name }}",
+                "position": "{{ option.position }}",
+                "values": [
+                  {% for value in option.values %}
+                      {
+                        "name": "{{ value.name }}",
+                        "variantId": "{{ value.variant.id }}",
+                        "available": "{{ value.available }}"
+                      } {% unless forloop.last %},{% endunless %}
+                  {% endfor %}
+                ]
+              {% endif %}
+            {% endfor %}
+          } {% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    }
+  </script>
+</product-card>

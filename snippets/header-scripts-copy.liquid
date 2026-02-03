@@ -1,0 +1,201 @@
+{% comment %}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".mega__menu").forEach(initMegaMenu);
+    });
+
+    const initMegaMenu = (menu) => {
+        const childItems = [...menu.querySelectorAll("[mega__child-li]")];
+        const grandWrappers = [...menu.querySelectorAll(".mega__grand-wrapper")];
+
+        const firstMatch = findFirstMatch(childItems, grandWrappers);
+        if (firstMatch) setActive(firstMatch.child, firstMatch.wrapper);
+
+        childItems.forEach(child => child.addEventListener("mouseenter", handleMouseEnter(child, childItems, grandWrappers)));
+    };
+
+    const findFirstMatch = (childItems, grandWrappers) => {
+        for (let child of childItems) {
+            const dataChild = child.getAttribute("data-child");
+            const matchedWrapper = grandWrappers.find(wrapper => wrapper.getAttribute("data-child") === dataChild);
+            if (matchedWrapper) return { child, wrapper: matchedWrapper };
+        }
+        return null;
+    };
+
+    const setActive = (child, wrapper) => {
+        child?.classList.add("active");
+        wrapper?.classList.add("active");
+    };
+
+    const removeActive = (childItems, grandWrappers) => {
+        childItems.forEach(item => item.classList.remove("active"));
+        grandWrappers.forEach(wrapper => wrapper.classList.remove("active"));
+    };
+
+    const handleMouseEnter = (child, childItems, grandWrappers) => () => {
+        removeActive(childItems, grandWrappers);
+
+        const dataChild = child.getAttribute("data-child");
+        const matchedWrapper = grandWrappers.find(wrapper => wrapper.getAttribute("data-child") === dataChild);
+
+        if (matchedWrapper) setActive(child, matchedWrapper);
+    };
+  </script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      const headerDrawer = document.querySelector(".header__drawer");
+      // const overLay = document.querySelector(".overlay");
+      const toggleButton = document.querySelector("[header-drawer-opener]");
+      const closeButton = document.querySelector("[header-drawer-close]");
+      const body = document.body;
+
+      function toggleDrawer(event) {
+        event.preventDefault();
+        headerDrawer.classList.toggle("active");
+        body.classList.toggle(
+          "overflow-hidden",
+          headerDrawer.classList.contains("active")
+        );
+        // overLay.classList.toggle("active");
+      }
+
+      function closeDrawer() {
+        headerDrawer.classList.remove("active");
+        body.classList.remove("overflow-hidden");
+        // overLay.classList.remove("active");
+      }
+
+      toggleButton.addEventListener("click", toggleDrawer);
+      closeButton.addEventListener("click", closeDrawer);
+
+      document.addEventListener("click", function (e) {
+        if (
+          headerDrawer.classList.contains("active") &&
+          !headerDrawer.contains(e.target) &&
+          !toggleButton.contains(e.target)
+        ) {
+          closeDrawer();
+        }
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const openButtons = document.querySelectorAll(".open-submenu");
+      const backButtons = document.querySelectorAll(".back-button");
+      const grandchildToggles = document.querySelectorAll(".toggle-grandchild");
+
+      let openGrandchildMenu = null; // Track currently open menu
+
+      // Slide first-level submenu in
+      openButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const submenu = this.closest("li").querySelector(".submenu");
+          if (submenu) {
+            submenu.classList.add("active");
+          }
+        });
+      });
+
+      // Slide first-level submenu out (back button)
+      backButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const submenu = this.closest(".submenu");
+          if (submenu) {
+            submenu.classList.remove("active");
+          }
+        });
+      });
+
+      // Toggle second-level submenu (expand/collapse with smooth transition)
+      grandchildToggles.forEach((toggle) => {
+        toggle.addEventListener("click", function () {
+          const grandchildMenu = this.closest(".submenu-item").querySelector(".grandchild-menu");
+
+          if (grandchildMenu) {
+            // Close any previously open grandchild menu
+            if (openGrandchildMenu && openGrandchildMenu !== grandchildMenu) {
+              openGrandchildMenu.style.height = "0px";
+              openGrandchildMenu.classList.remove("open");
+            }
+
+            // Toggle the clicked grandchild menu
+            if (grandchildMenu.classList.contains("open")) {
+              grandchildMenu.style.height = "0px";
+              grandchildMenu.classList.remove("open");
+              openGrandchildMenu = null;
+            } else {
+              const scrollHeight = grandchildMenu.scrollHeight + "px";
+              grandchildMenu.style.height = scrollHeight;
+              grandchildMenu.classList.add("open");
+              openGrandchildMenu = grandchildMenu;
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <script>
+      $( document ).ready(function() {
+        $("span.expand-icon-container").click(function(e) {
+          e.preventDefault();
+          var toClose = $("#mobile-navigation ul").not($(this).parents("ul"));
+          toClose.slideUp();
+          toClose.parent().removeClass("open");
+          if(!$(this).parent().next().is(":visible")) {
+            var toOpen = $(this).parent().next()
+            toOpen.slideDown();
+            toOpen.parent().not(".open").addClass("open");
+          }
+          e.stopPropagation();
+        });
+    });
+  </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".mega__menu").forEach(menu => {
+            const childItems = menu.querySelectorAll("[mega__child-li]");
+            const grandWrappers = menu.querySelectorAll(".mega__grand-wrapper");
+
+            let firstMatchedChild = null;
+            let firstMatchedWrapper = null;
+
+            for (let child of childItems) {
+                const dataChild = child.getAttribute("data-child");
+                firstMatchedWrapper = [...grandWrappers].find(wrapper => wrapper.getAttribute("data-child") === dataChild);
+                if (firstMatchedWrapper) {
+                    firstMatchedChild = child;
+                    break;
+                }
+            }
+
+            if (firstMatchedChild) firstMatchedChild.classList.add("active");
+            if (firstMatchedWrapper) firstMatchedWrapper.classList.add("active");
+
+            childItems.forEach(child => {
+                child.addEventListener("mouseenter", function () {
+                    const dataChild = this.getAttribute("data-child");
+
+                    childItems.forEach(item => item.classList.remove("active"));
+                    grandWrappers.forEach(wrapper => wrapper.classList.remove("active"));
+
+
+                    grandWrappers.forEach(wrapper => {
+                        if (wrapper.getAttribute("data-child") === dataChild) {
+                            wrapper.classList.add("active");
+                            this.classList.add("active");
+                        }
+                    });
+                });
+            });
+        });
+    });
+  </script>
+{% endcomment %}

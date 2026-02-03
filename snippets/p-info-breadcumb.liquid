@@ -1,0 +1,160 @@
+{% comment %}
+<style>
+  .badge__brradgump_wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+  }  
+  .pinfo-breadcrumbs {
+    visibility: hidden;
+  }
+  .pinfo-breadcrumbs.visible {
+    visibility: visible;
+  }
+  .pinfo-breadcrumbs{
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    gap: 8px;
+    flex-wrap: wrap;
+   }
+  .pinfo-breadcrumbs a{
+    display: inline-block;
+    color: #000;
+    {% comment %} font-size: 14px;
+    line-height: 20px; {% endcomment %}
+    font-size: var(--Font-Size-Paragraph-Tiny);
+    line-height: var(--Line-Height-Paragraph-Tiny);
+    text-transform: uppercase;
+    min-width: max-content;
+  }
+  .pinfo-breadcrumbs span{
+    display: inline-block;
+  }
+
+  @media screen and (max-width: 768px){
+    .pinfo-breadcrumbs a{
+      {% comment %} font-size: 12px;
+      line-height: 16px; {% endcomment %}
+    }
+  }
+</style>
+<div class="badge__brradgump_wrapper">
+  <div class="pinfo-breadcrumbs {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+    <a href="/">Home</a>
+    <svg width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="4" height="4" rx="2" fill="currentColor"/>
+    </svg>
+ <a href="/collections/best-sellers">Best Sellers</a>
+    {% comment %} <span id="collection-link">
+     
+    </span> {% endcomment %}
+    {% comment %}
+      <svg width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="4" height="4" rx="2" fill="currentColor"/>
+        </svg>
+
+      <a  href="{{ product.url }}">{{ product.title | escape }}</a>
+    {% endcomment %}
+  </div>
+  {% if product.metafields.custom.product_badge.value %}
+    <div class="pinfo-badge-wrapper  {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+      {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+        {% if forloop.last %}
+          <a class="pinfo-single-badge" href="{{ product.url }}">{{ badge | strip | escape }}</a>
+        {% else %}
+          <a class="pinfo-single-badge" href="{{ product.url }}">{{ badge | strip | escape }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+   
+    const breadcrumbs = document.querySelectorAll('.pinfo-breadcrumbs');
+    const collectionLinkSpan = document.getElementById('collection-link');
+    const referrer = document.referrer;
+    const shopDomain = '{{ shop.url }}';
+    const productCollections = {{ product.collections | json }};
+
+    if (referrer && referrer.includes(shopDomain) && referrer.match(/\/collections\/([^\/?]+)/)) {
+      const collectionHandle = referrer.match(/\/collections\/([^\/?]+)/)[1];
+      const matchedCollection = productCollections.find(collection => collection.handle === collectionHandle);
+      if (matchedCollection) {
+        collectionLinkSpan.innerHTML = `<a href="/collections/${matchedCollection.handle}">${matchedCollection.title}</a>`;
+      } else {
+        collectionLinkSpan.innerHTML = `<a href="/collections/best-sellers">Best Sellers</a>`;
+      }
+    }
+    
+    breadcrumbs.forEach((breadcrumb)=>{
+      breadcrumb.classList.add('visible');
+    }) 
+  });
+</script>
+{% endcomment %}
+
+<style>
+  .badge__brradgump_wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+  }  
+  
+  .pinfo-breadcrumbs {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .pinfo-breadcrumbs a {
+    display: inline-block;
+    color: #000;
+    {% comment %} font-size: var(--Font-Size-Paragraph-Tiny); {% endcomment %}
+    {% comment %} line-height: var(--Line-Height-Paragraph-Tiny); {% endcomment %}
+     font-size: 10px;
+      line-height: 10px;
+    text-transform: uppercase;
+    min-width: max-content;
+  }
+  
+  .pinfo-breadcrumbs span {
+    display: inline-block;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pinfo-breadcrumbs a {
+      /* Responsive styles if needed */
+      font-size: 8px;
+      line-height: 8px;
+    }
+  }
+</style>
+
+<div class="badge__brradgump_wrapper">
+  <div class="pinfo-breadcrumbs {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+    <a href="/">Home</a>
+    <svg width="4" height="4" viewBox="0 0 4 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="4" height="4" rx="2" fill="currentColor"/>
+    </svg>
+    
+    {% if collection %}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+    {% else %}
+      <a href="/collections/best-sellers">Best Sellers</a>
+    {% endif %}
+  </div>
+  
+  {% if product.metafields.custom.product_badge.value %}
+    <div class="pinfo-badge-wrapper {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+      {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+        <a class="pinfo-single-badge" href="{{ product.url }}">{{ badge | strip | escape }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

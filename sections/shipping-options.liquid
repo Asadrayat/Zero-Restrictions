@@ -1,0 +1,273 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    background: #000;
+    .heading  {
+        margin: 0 0 var(--Spacing-Container-lg, 40px);
+    }
+    .heading h2 {
+        color: var(--Content-Base-main, #1F2937);
+        text-align: center;
+
+        /* Headings/H2 */
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H2, 40px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--Line-Height-Heading-H2, 40px); /* 100% */
+        letter-spacing: -0.4px;
+        text-transform: capitalize;
+        margin: 0 0 8px;        
+    }
+    .heading p {
+        color: var(--Content-Base-base, #4B5563);
+        text-align: center;
+
+        /* Paragraph/S */
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Small, 14px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Small, 20px); /* 142.857% */     
+        margin: 0;   
+    }
+    .block__wrap {
+        border: 1px solid #2B2A2D;
+        background-color: #19181A;
+        padding: var(--Spacing-Container-lg, 32px);
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: var(--Spacing-Container-lg, 32px);
+        justify-content: space-between;
+        transition: background-color 0.1s ease-in-out;
+    }   
+    .block__wrap:hover {
+        border: 1px solid #fff;
+        background: #fff;
+    }
+    .block__wrap:hover * {
+      color: #000 !important;
+    }
+  }
+  .wrapper-{{ id }} {
+    display: grid;
+    gap: var(--Spacing-Container-md, 24px);
+    align-items: stretch;
+    grid-template-columns: 1fr 1fr 1fr;
+    @media(max-width: 1200px) {
+        grid-template-columns: 1fr 1fr;
+    }
+    @media(max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+    h3 {
+        margin: 0 0 8px;
+    }
+    span {
+        color: var(--Content-Base-base, #4B5563);
+
+        /* Paragraph/S */
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Small, 14px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Small, 20px); /* 142.857% */
+        margin: 0;        
+    }
+    p{
+        color: var(--Content-Base-main, #1F2937);
+
+        /* Paragraph/M */
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px); /* 150% */  
+        margin: 0;   
+        em {
+            font-style: normal;
+            display: block;
+        }      
+    }
+  }
+  #shopify-section-{{id}}  * {
+    color: #fff !important;
+  }
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="heading">
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.subtitle }}</p>
+    </div>
+    <div class="wrapper-{{ id }}">
+    {% for block in section.blocks %}
+      <div class="block__wrap">
+        <div>
+        <h3>{{ block.settings.title }}</h3>
+        <span>{{ block.settings.text }}</span>
+        </div>
+        <p>{{ block.settings.info }}</p>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Shipping Table",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+    },
+    {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "info",
+          "label": "info"
+        },
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping Table"
+    }
+  ]
+}
+{% endschema %}

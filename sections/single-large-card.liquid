@@ -1,0 +1,493 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    background: #000;
+    .--single__card {
+        border-radius: var(--rounded-xl, 12px);
+        border: 1px solid #1F2937;
+        background: #19181A;
+        display: flex;
+        {% comment %} max-width: 800px; {% endcomment %}
+        width: 100%;
+        padding: var(--Spacing-Container-xl, 64px);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        margin: 0 auto;
+    }    
+    .richtext__ {
+        padding: var(--Spacing-Container-xl, 64px) 0;
+        h2 {
+            margin: 0 0 8px;
+        }
+    }    
+    p.divider__wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: var(--Spacing-Container-sm, 16px) 0;
+    }
+    p.address {
+        width: 100%;
+        padding-top: var(--Spacing-Container-sm, 16px);
+        margin-top: var(--Spacing-Container-lg, 16px);
+        border-top: 1px solid var(--Border-Base-dense, #D1D5DB);
+    }    
+    span.divider__or {
+        background: #FFF;
+        width: 32px;
+        height: 1px;
+        display: block;
+    }    
+    .sc__icons {
+        display: flex;
+        padding: var(--Spacing-Container-sm, 16px);
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.10);
+        width: max-content;
+        line-height: 0;       
+    }
+    .sc__icons svg{
+      width: 28px;
+      height: 28px;      
+    }
+    h2 {
+        color: #F3F4F6;
+        text-align: center;
+
+        /* Headings/H2 */
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H2, 40px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--Line-Height-Heading-H2, 40px); /* 100% */
+        letter-spacing: -0.4px;
+        text-transform: capitalize;
+        margin: 0;        
+    }
+    p {
+        text-align: center;
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px);
+        margin: 0;        
+    }
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  .wrapper-{{ id }} *{
+    color: #fff;
+  }
+
+
+.sec-{{ id }}{
+      .wrapper-{{ id }}{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 64px;
+    @media(max-width: 768px){
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    }
+      }
+        /* Contact Form */
+      .contact-form-wrapper {
+        background: transparent;
+        backdrop-filter: blur(8px);
+        padding: var(--Spacing-Container-lg);
+        border-radius: var(--Spacing-Container-sm);
+        border: 1px solid #e5e7eb36;
+      }
+
+      .form-status--message{
+        color: #fff;
+        /* font-family: var(--font-family-Title, "Neue Plak"); */
+        font-size: var(--Font-Size-Heading-H4);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Heading-H4); /* 100% */
+        letter-spacing: -0.4px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      .field__label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #333;
+        display: block; /* Ensures label is visible */
+      }
+
+      .field__input {
+        padding: 10px;
+        font-size: 14px;
+        transition: border-color 0.3s ease-in-out;
+        border-radius: var(--rounded-lg, 8px);
+        border: 1px solid var(--Border-Base-main, #D1D5DB);        
+        color: rgb(193, 195, 204);
+        background: transparent;
+        backdrop-filter: blur(8px);        
+      }
+
+      .field__input:focus {
+        border-color: rgb(193, 195, 204);
+        outline: none;
+      }
+
+      .text-area {
+        min-height: 180px;
+      }
+
+      .contact__button {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .button {
+        width: 100%;
+        cursor: pointer;
+        border-radius: 999px;
+        background: #fff;
+        border: 2px solid rgb(0, 0, 0);
+        padding: var(--Spacing-Container-xs, 12px) var(--Spacing-Container-lg, 40px);
+        color: #101116;
+        text-align: center;
+        /* font-family: var(--font-family-Body, "Neue Plak"); */
+        font-size: var(--Font-Size-UI-Controls-Control-Button-Regular, 20px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-UI-Controls-Control-Button-Regular, 20px);
+        text-transform: capitalize;
+        transition: all 0.1s ease-in;
+      }
+      .button:hover {
+        color: #fff;
+        background: #101116;
+        border: 2px solid rgb(193, 195, 204);
+      }
+      .field:before {
+        content: unset;
+      }
+      .field:after {
+        content: unset;
+      }
+      .field__label{
+        position: static;
+        color: #fff;
+        /* font-family: var(--font-family-Body, "Neue Plak"); */
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px); /* 150% */
+        @media(max-width: 768px){
+
+        }
+      }
+      .field__input {
+          margin: 0 0 4px 0;
+          /* border-bottom: 1px solid #00000054; */
+          @media(max-width: 768px){
+            /* padding: 0;          */
+          }
+      }
+      .field__input:focus{
+        margin: 0 0 4px 0;
+        box-shadow: unset;
+      }
+      .field__input::placeholder {
+        opacity: 1;
+        color: #fff;
+        font-family: var(--font-family-Body, "Neue Plak");
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px); /* 150% */
+      }
+    }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="--single__card">
+        <span class="sc__icons">{% render 'all-icons', name: 'headpgone' %}</span>
+        {% if section.settings.top_info %}
+          <div class="richtext__">
+            {{ section.settings.top_info }}
+          </div>
+        {% endif %}
+        {% if section.settings.phone %}
+          <h2 class="phone">{{ section.settings.phone }}</h2>
+        {% endif %}
+        <p class="divider__wrap"><span class="divider__or"></span>or<span class="divider__or"></span></p>
+        {% if section.settings.mail %}
+          <p class="mail">{{ section.settings.mail }}</p>
+        {% endif %}
+        {% if section.settings.time %}
+          <p class="address">{{ section.settings.time }}</p>
+        {% endif %}
+      </div>
+
+      <div class="contact-form-wrapper">
+        {%- form 'contact', id: 'ContactForm', class: 'contact-form' -%}
+          {%- if form.posted_successfully? -%}
+            <h2 class="form-status form-status-list form__message form-status--message" tabindex="-1" autofocus>
+              {{ 'templates.contact.form.post_success' | t }}
+            </h2>
+          {%- elsif form.errors -%}
+            <div class="form__message">
+              <h2 class="form-status caption-large text-body form-status--message" role="alert" tabindex="-1" autofocus>
+                {{ 'templates.contact.form.error_heading' | t }}
+              </h2>
+            </div>
+            <ul class="form-status-list caption-large form-status--message" role="list">
+              <li>
+                <a href="#ContactForm-email" class="link">
+                  {{ form.errors.translated_fields.email | capitalize }}
+                  {{ form.errors.messages.email }}
+                </a>
+              </li>
+            </ul>
+          {%- endif -%}
+
+          <!-- Name Field -->
+          <div class="field">
+            <label for="ContactForm-name" class="field__label">Name</label>
+            <input
+              class="field__input"
+              type="text"
+              id="ContactForm-name"
+              name="contact[name]"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              required
+            >
+          </div>
+
+          <!-- Email Field -->
+          <div class="field">
+            <label for="ContactForm-email" class="field__label">Email</label>
+            <input
+              type="email"
+              id="ContactForm-email"
+              class="field__input"
+              name="contact[email]"
+              spellcheck="false"
+              autocapitalize="off"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              required
+            >
+          </div>
+
+          <!-- Number Field -->
+          <div class="field">
+            <label for="ContactForm-tel" class="field__label">US Phone Number</label>
+            <input
+              type="tel"
+              id="ContactForm-phone"
+              class="field__input"
+              autocomplete="tel"
+              name="contact[{{ 'templates.contact.form.phone' | t }}]"
+              pattern="[0-9\-]*"
+              value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+              {% comment %} placeholder="{{ 'templates.contact.form.phone' | t }}" {% endcomment %}
+            >
+          </div>
+
+          <!-- Dropdown Field -->
+          {% comment %}
+            <div class="custom-select field">
+              <label class="field__label" for="request-type">Reason for Contacting</label>
+              <select class="field__input" id="request-type" name="contact[request_type]">
+                <option>Sizing & Product Informatioon</option>
+                <option>Wholesale & Partnership Opportunities</option>
+                <option>Shipping & Returns</option>
+                <option>Order Inquiries & Status</option>
+                <option>Other</option>
+              </select>
+            </div>
+          {% endcomment %}
+
+          <!-- Order Field -->
+          {% comment %}
+            <div class="field">
+              <label for="ContactForm-order" class="field__label">Order No.</label>
+              <input class="field__input" type="text" name="contact[order_number]" id="order-number">
+            </div>
+          {% endcomment %}
+
+          <!-- Message Field -->
+          <div class="field">
+            <label for="ContactForm-body" class="field__label">Message</label>
+            <textarea
+              rows="5"
+              id="ContactForm-body"
+              class="text-area field__input"
+              name="contact[message]"
+              placeholder="Type your message..."
+              required
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="contact__button">
+            <button type="submit" class="button">Send</button>
+          </div>
+        {%- endform -%}
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Single Large Card",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "top_info",
+      "label": "Top Info"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "phone",
+      "label": "Phone"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "mail",
+      "label": "Mail"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "time",
+      "label": "Date Time"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Single Large Card"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+<div class="searches-featured-collection">
+    {% if settings.featured__collection__title != blank %}
+        <h4>{{ settings.featured__collection__title }}</h4>
+    {% endif %}
+
+    <div class="searches-featured-collection-wrapper">
+        {% for collection in settings.featured__collection %}
+            {% assign index = forloop.index %}
+            {% assign key = 'fc_image_' | append: index %}
+            {% assign custom_image = settings[key] %}
+            {% assign display_image = custom_image | default: collection.featured_image | default: collection.image %}
+
+            <div class="search-collection-item">
+                <div class="search__collection-item-image">
+                    {% if display_image %}
+                        <picture>
+                            <source media="(max-width: 600px)" srcset="{{ display_image | image_url: width: 200 }}">
+                            <source media="(max-width: 1400px)" srcset="{{ display_image | image_url: width: 250 }}">
+                            {{ display_image | image_url: width: 300 | image_tag: loading: 'lazy' }}
+                        </picture>
+                    {% endif %}
+                </div>
+                <p>{{ collection.title }}</p>
+                <a href="{{ collection.url }}"></a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

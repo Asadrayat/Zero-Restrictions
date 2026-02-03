@@ -1,0 +1,140 @@
+<style>
+.timer-container.product-section-timer {
+
+	background: {{ settings.timer_bg }};
+	border-radius: 6px;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+    @media(max-width:768px) {
+      padding-inline: 10px;
+    }
+	.timer-promotion-text {
+		font-size: 20px !important;
+		line-height: 1em !important;
+		letter-spacing: 0px !important;
+		background: linear-gradient(90deg, #fff 0% 40%, gold);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-transform: none !important;
+		font-weight: 700 !important;
+		{% comment %} font-family: Urbanist !important; {% endcomment %}
+		color: #222323 !important;
+		text-align: center;
+
+		@media(max-width:768px) {
+			font-size: 14px !important;
+		}
+	}
+
+	.countdown-timer {
+		display: flex;
+		gap: 0px;
+		justify-content: center;
+		align-items: center;
+		font-weight: 700;
+
+		@media(max-width:768px) {
+			max-width: fit-content;
+		}
+
+		.time-unit {
+			background: unset;
+			padding: 8px;
+			border-radius: unset;
+			text-align: center;
+
+			.label {
+				color: #fff !important;
+				text-transform: uppercase;
+				font-weight: 400;
+				font-size: 12px !important;
+				{% comment %} font-family: Urbanist !important; {% endcomment %}
+
+				@media(max-width:768px) {
+					font-size: 8px !important;
+				}
+			}
+
+			span.-number {
+				line-height: 1.3em;
+				color: #fff !important;
+				font-size: 20px !important;
+				padding-bottom: 4px !important;
+				{% comment %} font-family: Urbanist !important; {% endcomment %}
+
+				@media(max-width:768px) {
+					font-size: 16px !important;
+				}
+			}
+
+		}
+	}
+
+}
+</style>
+<div class="timer-container product-section-timer">
+  <div class="timer-promotion-text hidden ">{{ settings.rc_timer_text }}</div>
+  <div class="countdown-timer">
+    <div class="time-unit">
+      <span class="-number days"></span>
+      <div class="label">DAYS</div>
+    </div>
+    <span class="--seperator">:</span>
+    <div class="time-unit">
+      <span class="-number hours"></span>
+      <div class="label">HRS</div>
+    </div>
+    <span class="--seperator">:</span>
+    <div class="time-unit">
+      <span class="-number minutes"></span>
+      <div class="label">MIN</div>
+    </div>
+    <span class="--seperator desktop-only">:</span>
+    <div class="time-unit">
+      <span class="-number seconds desktop-only"></span>
+      <div class="label desktop-only">SECONDS</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var year = {{ settings.rc_year }};
+    var month = {{ settings.rc_month }} - 1;
+    var day = {{ settings.rc_day }};
+    var hour = {{ settings.rc_hour }};
+    var minute = {{ settings.rc_minute }};
+    var second = {{ settings.rc_second }};
+
+    var targetDate = new Date(year, month, day, hour, minute, second).getTime();
+
+    function padNumber(number) {
+       return number < 10 ? '0' + number : number;
+    }
+    function updateCountdown() {
+      var now = new Date().getTime();
+      var distance = targetDate - now;
+
+      if (distance < 0) {
+        document.querySelector('.countdown-timer').style.display = 'none';
+        return;
+      }
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.querySelector('.-number.days').textContent = padNumber(days);
+      document.querySelector('.-number.hours').textContent = padNumber(hours);
+      document.querySelector('.-number.minutes').textContent = padNumber(minutes);
+      document.querySelector('.-number.seconds').textContent = padNumber(seconds);
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  });
+</script>

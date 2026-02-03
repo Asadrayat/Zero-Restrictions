@@ -1,0 +1,460 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};    
+  }
+  #shopify-section-{{id}} {
+    background: #000;
+    .timeline {
+        position: relative;        
+        color: #fff;
+        {% comment %} min-height: 85vh; {% endcomment %}
+        overflow: hidden;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    .timeline .big-year {
+      color: rgba(243, 244, 246, 0.34);
+      text-align: center;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: rgba(209, 213, 219, 0.50);
+      font-family: var(--font-family-Heading, "Neue Plak");
+      font-size: 400px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 456px;
+      letter-spacing: -8px;
+      opacity: 1;
+      position: relative;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.6s ease;
+      font-family: var(--font-family-Title);
+      @media(max-width: 768px) {
+        font-size: 160px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 148px;        
+      }
+    }
+
+    .timeline .content {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 80px 0;
+      @media(max-width: 768px) {
+        padding: 40px 0;
+      }
+    }
+
+    .timeline .content h3 {
+        color: #fff;
+        text-align: center;
+        font-family: var(--font-family-Title);
+        font-size: var(--Font-Size-Heading-H3, 32px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Heading-H3, 40px);
+        text-transform: capitalize;
+        margin: 0 0 var(--Spacing-Container-md);
+        font-weight: 700;
+    }
+
+    .timeline .content p {
+        color: #fff;
+        text-align: center;
+        font-family: var(--font-family-Body, "Neue Plak");
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px);
+        margin: 0;
+    }
+
+    .timeline .nav {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .timeline .nav .btn {
+      background: #03101C;
+      border-radius: 0;
+      width: max-content;
+      height: max-content;
+      padding: 8px;
+      svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;     
+      }
+      svg path {
+        stroke: #fff;
+      }      
+    }
+
+    .timeline .nav .btn:hover {
+        background: #fff;
+        svg path {
+          stroke: #000;
+        }
+    }
+
+    .timeline .nav .btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .timeline .nav svg {
+        width: 18px;
+        height: 18px;
+        fill: #fff;
+    }
+
+    .years-rail {
+        border-top: 2px solid #333;
+        padding: var(--Spacing-Container-xl) 0;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(6px);
+    }
+
+    .years-rail .swiper-slide {
+        width: auto;
+        color: #aaa;
+        cursor: pointer;
+        transition: color 0.2s, transform 0.2s;
+        padding: 8px 16px;
+        border-radius: 10px;
+    }
+
+    .year {
+        color: #fff;
+        text-align: center;
+        font-family: var(--font-family-Title, "Neue Plak");
+        font-size: var(--Font-Size-Heading-H2, 40px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Heading-H2, 40px);
+        letter-spacing: 0.4px;
+        text-transform: capitalize;
+        margin: 0 0 8px;
+         opacity: 0.7;
+    }
+
+    .years-rail .label {
+        color: #F3F4F6;
+        text-align: center;
+
+        /* Paragraph/S */
+        font-family: var(--font-family-Body, "Neue Plak");
+        font-size: var(--Font-Size-Paragraph-Small, 14px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Small, 20px); /* 142.857% */
+        opacity: 0.7;
+    }
+
+    .years-rail .swiper-slide-thumb-active,
+    .years-rail .swiper-slide:hover {
+        color: #fff;
+        transform: translateY(-2px);
+    }
+    .years-rail .swiper-slide-thumb-active .label , .years-rail .swiper-slide-thumb-active .year {
+      opacity: 1;
+    }
+
+    .timeline .swiper {
+        width: 100%;
+        height: 100%;
+    }
+  }
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="timeline">
+        <div class="big-year" id="bigYear">{{ section.settings.big_year }}</div>
+        <div class="nav small-hide">
+          <button class="btn" id="prevBtn" aria-label="Previous">
+            {%render 'all-icons', name: 'left_arrow' %}
+          </button>
+          <button class="btn" id="nextBtn" aria-label="Next">
+            {%render 'all-icons', name: 'right_arrow' %}
+          </button>
+        </div>
+        <!-- Main Timeline Swiper -->
+        <div class="swiper" id="timelineMain">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% if block.type == 'content' %}
+                <div class="swiper-slide" data-year="{{ block.settings.year }}">
+                  <div class="content">
+                    <h3>{{ block.settings.label }}</h3>
+                    <p>{{ block.settings.info }}</p>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+
+
+        <!-- Years Rail (Thumbs) -->
+        <div class="years-rail">
+          <div class="swiper" id="timelineYears">
+            <div class="swiper-wrapper">
+              {% for block in section.blocks %}
+                {% if block.type == 'thumb' %}
+                  <div class="swiper-slide">
+                    <div class="year">{{ block.settings.year }}</div>
+                    <div class="label">{{ block.settings.label }}</div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const updateBigYear = (index) => {
+      const mainSlides = document.querySelectorAll('#timelineMain .swiper-slide');
+      const year = mainSlides[index].getAttribute('data-year');
+      const bigYear = document.getElementById('bigYear');
+
+      bigYear.style.opacity = '0';
+      setTimeout(() => {
+        bigYear.textContent = year;
+        bigYear.style.opacity = '1';
+      }, 300);
+    };
+
+    const updateNavButtons = (swiper) => {
+      document.getElementById('prevBtn').disabled = swiper.isBeginning;
+      document.getElementById('nextBtn').disabled = swiper.isEnd;
+    };
+
+    // Initialize Years Swiper (Thumbs) //active slide should move to the fist slide
+    const yearsSwiper = new Swiper('#timelineYears', {
+      slidesPerView: 2,
+      spaceBetween: 16,
+      freeMode: true,
+      loop: false,
+      watchSlidesProgress: true,
+      resistanceRatio: 0.85,
+      grabCursor: true,
+      slideToClickedSlide: true,
+      centeredSlides: false,
+      breakpoints: {
+        768: {
+          slidesPerView: 5,
+          spaceBetween: 16,
+          centeredSlides: true
+        },
+      },      
+    });
+
+    // Initialize Main Swiper
+    const mainSwiper = new Swiper('#timelineMain', {
+      speed: 600,
+      effect: 'fade',
+      grabCursor: true,
+      fadeEffect: { crossFade: true },
+      thumbs: { swiper: yearsSwiper },
+      keyboard: { enabled: true },
+      mousewheel: { forceToAxis: true, sensitivity: 0.8 },
+      on: {
+        init(sw) {
+          updateBigYear(sw.activeIndex);
+          updateNavButtons(sw);
+        },
+        slideChange(sw) {
+          updateBigYear(sw.activeIndex);
+          updateNavButtons(sw);
+          yearsSwiper.slideTo(sw.activeIndex);
+        },
+      },
+    });
+
+    // Navigation Button Handlers
+    document.getElementById('prevBtn').addEventListener('click', () => mainSwiper.slidePrev());
+    document.getElementById('nextBtn').addEventListener('click', () => mainSwiper.slideNext());
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Timeline Slide",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "big_year",
+      "label": "Big Year",
+      "default": "1996"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "content",
+      "name": "Main Content",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "textarea",
+          "id": "info",
+          "label": "Info"
+        },
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year"
+        }
+      ]
+    },
+    {
+      "type": "thumb",
+      "name": "Thumb Content",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Timeline Slide"
+    }
+  ]
+}
+{% endschema %}

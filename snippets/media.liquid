@@ -1,0 +1,75 @@
+{% comment %}
+  Snippet: optimized-image.liquid
+  Description: Renders an optimized image with WebP, lazy loading, and responsive sizes.
+  Usage: {% render 'optimized-image', image: product.featured_image, alt: product.title, class: 'product-image', sizes: sizes_array %}
+  Variables:
+    - image: Shopify image object (required)
+    - alt: Alt text for the image (optional, defaults to empty)
+    - class: CSS class for the image container (optional)
+    - sizes: Array of image sizes (optional, defaults to ['600x', '1200x', '1920x'])
+{% endcomment %}
+
+{% assign sizes = sizes | default: '600x,1200x,1920x' | split: ',' %}
+{% assign alt = alt | default: '' %}
+{% assign class = class | default: 'optimized-image' %}
+
+<div class="{{ class }}-container">
+  <picture>
+    {% if image %}
+      {% for size in sizes %}
+        {% assign max_width = size | split: 'x' | first %}
+        <source 
+          media="(max-width: {{ max_width }}px)" 
+          srcset="{{ image | img_url: size | format: 'webp' }}" 
+          type="image/webp">
+      {% endfor %}
+      <source 
+        srcset="{{ image | img_url: sizes.last | format: 'webp' }}" 
+        type="image/webp">
+      <img 
+        src="{{ image | img_url: sizes.last }}" 
+        alt="{{ alt | escape }}" 
+        class="{{ class }}" 
+        loading="lazy">
+    {% else %}
+      <img 
+        src="https://via.placeholder.com/1200" 
+        alt="Placeholder image" 
+        class="{{ class }}" 
+        loading="lazy">
+    {% endif %}
+  </picture>
+</div>
+
+<style>
+  .{{ class }}-container {
+    max-width: 100%;
+    height: auto;
+  }
+  .{{ class }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+{% unless settings.lazy_load_observer_included %}
+  {% assign settings.lazy_load_observer_included = true %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const images = document.querySelectorAll("img[loading='lazy']");
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src || img.src;
+              observer.unobserve(img);
+            }
+          });
+        });
+        images.forEach(img => observer.observe(img));
+      }
+    });
+  </script>
+{% endunless %}

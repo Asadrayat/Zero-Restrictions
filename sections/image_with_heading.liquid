@@ -1,0 +1,189 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    background: #000;
+    * {
+        color: #fff !important;
+    }
+    .heading__ {
+        color: var(--Content-Base-main, #1F2937);
+        text-align: center;
+        font-family: var(--font-family-Title);
+        font-size: var(--Font-Size-Heading-H2);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--Line-Height-Heading-H20px); /* 100% */
+        letter-spacing: -0.4px;
+        text-transform: capitalize;
+        margin: 0 0 var(--Spacing-Container-md);
+    }
+    .img_custom__wrap {
+        line-height: 0;
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    }
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <h2 class="heading__">{{ section.settings.heading }}</h2>
+    <div class="wrapper-{{ id }}">
+      {% assign image = section.settings.img %}
+      {% assign image_mobile = section.settings.img_m %}
+      {% if image %}
+        <div class="image-wrap img_custom__wrap {% if image_mobile %}small-hide{% endif %} mb">
+          {{ image | image_url: width: image.width | image_tag }}
+        </div>
+      {% endif %}
+      {% if image_mobile %}
+        <div class="image-wrap img_custom__wrap large-up-hide medium-hide mb">
+          {{ image_mobile | image_url: width: image_mobile.width | image_tag }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image With Heading",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Holiday Shipping Deadlines"
+    },
+    {
+      "type": "image_picker",
+      "id": "img",
+      "label": "Image Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "img_m",
+      "label": "Image Mobile"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image With Heading"
+    }
+  ]
+}
+{% endschema %}

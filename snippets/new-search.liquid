@@ -1,0 +1,37 @@
+<predictive-search-new class="predictive-search-container glass__bg-full page-width">
+  <div class="predictive-search-wrapper">
+    <div class="sm-hide">
+      <button class="close-search" aria-label="Close search">{% comment %}{% render 'all-icons', name: 'close' %}{% endcomment %}Close</button>
+    </div>
+    <form action="/search" method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        id="predictive-search"
+        placeholder="What are you looking for?"
+        autocomplete="off"
+      >
+      <button class="search-btn" type="submit">{% render 'header-icons', name: 'search' %}</button>
+    </form>
+    <div class="search__utensils search-popular {% unless settings.popular_search %}no-popular-search{% endunless %}">
+      {% if settings.popular_search %}
+        {% render 'popular-searches' %}
+      {% endif %}
+      {% if settings.collection_list != blank %}
+        {% render 'search-popular-collection' %}
+      {% endif %}
+    </div>
+    
+    {% if settings.featured__collection != blank %}
+      <div class="search__utensils search-featured-collection-container {% unless settings.featured__collection %}no-search-featured-collection{% endunless %}">
+        {% render 'search-featured-collection' %}
+      </div>
+    {% endif %}
+
+    <div id="predictive-results" class="predictive-results"></div>
+  </div>
+</predictive-search-new>
+<button class="close-search close-search-mbl lg-hide" aria-label="Close search">
+  {% comment %} {% render 'all-icons', name: 'close' %} {% endcomment %}
+   Close
+</button>

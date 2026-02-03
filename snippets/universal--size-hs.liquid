@@ -1,0 +1,458 @@
+<style>
+  .universal__sizechart_wrapper {
+    --bg: #f7f7f7;
+    --card-bg: #ffffff;
+    --border: #fff;
+    --text: #000;
+    --muted: #666666;
+    --heading: #111111;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    table:not([class]) td, table:not([class]) th {
+        padding: 1em;
+        border: 1px solid #fff;
+    }    
+  }
+
+  .universal__sizechart_wrapper body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .universal__sizechart_wrapper .size-chart-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+    .universal__sizechart_wrapper .size-chart-wrapper {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+  .universal__sizechart_wrapper .size-chart-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--heading);
+  }
+
+  .universal__sizechart_wrapper .size-chart-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+
+  .universal__sizechart_wrapper .section-heading {
+    margin: 12px 0;
+    color: var(--heading);
+  }
+
+  .universal__sizechart_wrapper .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 0;
+    border: 1px solid #fff !important;
+    margin-bottom: 18px;
+    background-color: #ffffff;
+  }
+
+  .universal__sizechart_wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+    font-size: 13px;
+  }
+
+  .universal__sizechart_wrapper th,
+  .universal__sizechart_wrapper td {
+    border: 1px solid #fff !important;
+    padding: 8px 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .universal__sizechart_wrapper th {
+    background: #000;
+    font-weight: 600;
+    color: #fff;
+  }
+  .universal__sizechart_wrapper td {
+    padding: 16px;
+    border: 1px solid #fff !important;
+    background: #E5E7EB;    
+  }
+
+  .universal__sizechart_wrapper tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .universal__sizechart_wrapper .size-chart-wrapper {
+        padding: 0;
+    }     
+
+    .universal__sizechart_wrapper .size-chart-title {
+      font-size: 18px;
+    }
+
+    .universal__sizechart_wrapper .section-heading {
+      font-size: 16px;
+    }
+
+    .universal__sizechart_wrapper table {
+      font-size: 12px;
+      min-width: 850px;
+    }
+    .universal__sizechart_wrapper table.women {
+        min-width: 1200px;
+    }
+  }
+</style>
+
+{% assign size_charts = product.metafields.custom.shop_for.value %}
+
+{% if size_charts != blank %}
+  {% for size_chart in size_charts %}
+    {% assign size_type = size_chart | downcase %}
+    <div class="universal__sizechart_wrapper">
+      <div class="size-chart-wrapper">
+        <div class="size-chart-card">
+          {% comment %} <h1 class="size-chart-title">Universal Clothing Size Chart</h1>
+          <p class="size-chart-subtitle">
+            Conversion chart for women, men, and kids, including international sizes and measurements.
+          </p> {% endcomment %}
+          {% if size_type == 'women' %}
+            <!-- WOMEN TABLE -->
+            <h3 class="section-heading">Women’s Clothing Size Conversion</h3>
+            <div class="table-wrapper">
+              <table class="women">
+                <thead>
+                  <tr>
+                    <th>International</th>
+                    <th>US</th>
+                    <th>UK</th>
+                    <th>EU</th>
+                    <th>AU</th>
+                    <th>JP</th>
+                    <th>Bust (in)</th>
+                    <th>Waist (in)</th>
+                    <th>Hips (in)</th>
+                    <th>Bust (cm)</th>
+                    <th>Waist (cm)</th>
+                    <th>Hips (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>XS</td>
+                    <td>2</td>
+                    <td>6</td>
+                    <td>34</td>
+                    <td>6</td>
+                    <td>5</td>
+                    <td>32</td>
+                    <td>24</td>
+                    <td>34</td>
+                    <td>81</td>
+                    <td>61</td>
+                    <td>86</td>
+                  </tr>
+                  <tr>
+                    <td>S</td>
+                    <td>4-6</td>
+                    <td>8-10</td>
+                    <td>36-38</td>
+                    <td>8-10</td>
+                    <td>7-9</td>
+                    <td>34-35</td>
+                    <td>26-27</td>
+                    <td>36-37</td>
+                    <td>86-89</td>
+                    <td>66-69</td>
+                    <td>91-94</td>
+                  </tr>
+                  <tr>
+                    <td>M</td>
+                    <td>8-10</td>
+                    <td>12-14</td>
+                    <td>40-42</td>
+                    <td>12-14</td>
+                    <td>11-13</td>
+                    <td>36-37</td>
+                    <td>28-29</td>
+                    <td>38-39</td>
+                    <td>91-94</td>
+                    <td>71-74</td>
+                    <td>97-99</td>
+                  </tr>
+                  <tr>
+                    <td>L</td>
+                    <td>12-14</td>
+                    <td>16-18</td>
+                    <td>44-46</td>
+                    <td>16-18</td>
+                    <td>15-17</td>
+                    <td>38.5-40</td>
+                    <td>31-33</td>
+                    <td>41-43</td>
+                    <td>98-102</td>
+                    <td>79-84</td>
+                    <td>104-109</td>
+                  </tr>
+                  <tr>
+                    <td>XL</td>
+                    <td>16-18</td>
+                    <td>20-22</td>
+                    <td>48-50</td>
+                    <td>20-22</td>
+                    <td>19-21</td>
+                    <td>41.5-43</td>
+                    <td>34-36</td>
+                    <td>44-46</td>
+                    <td>105-109</td>
+                    <td>86-91</td>
+                    <td>112-117</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          {% elsif size_type == 'men' %}
+            <!-- MEN TABLE -->
+            <h3 class="section-heading">Men’s Clothing Size Conversion</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>International</th>
+                    <th>US</th>
+                    <th>UK</th>
+                    <th>EU</th>
+                    <th>JP</th>
+                    <th>Chest (in)</th>
+                    <th>Waist (in)</th>
+                    <th>Chest (cm)</th>
+                    <th>Waist (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>XS</td>
+                    <td>34</td>
+                    <td>34</td>
+                    <td>44</td>
+                    <td>S</td>
+                    <td>34</td>
+                    <td>28</td>
+                    <td>86</td>
+                    <td>71</td>
+                  </tr>
+                  <tr>
+                    <td>S</td>
+                    <td>36</td>
+                    <td>36</td>
+                    <td>46</td>
+                    <td>M</td>
+                    <td>36</td>
+                    <td>30</td>
+                    <td>91</td>
+                    <td>76</td>
+                  </tr>
+                  <tr>
+                    <td>M</td>
+                    <td>38</td>
+                    <td>38</td>
+                    <td>48</td>
+                    <td>L</td>
+                    <td>38</td>
+                    <td>32</td>
+                    <td>97</td>
+                    <td>81</td>
+                  </tr>
+                  <tr>
+                    <td>L</td>
+                    <td>40</td>
+                    <td>40</td>
+                    <td>50</td>
+                    <td>LL</td>
+                    <td>40</td>
+                    <td>34</td>
+                    <td>102</td>
+                    <td>86</td>
+                  </tr>
+                  <tr>
+                    <td>XL</td>
+                    <td>42</td>
+                    <td>42</td>
+                    <td>52</td>
+                    <td>3L</td>
+                    <td>42</td>
+                    <td>36</td>
+                    <td>107</td>
+                    <td>91</td>
+                  </tr>
+                  <tr>
+                    <td>XXL</td>
+                    <td>44</td>
+                    <td>44</td>
+                    <td>54</td>
+                    <td>4L</td>
+                    <td>44</td>
+                    <td>38</td>
+                    <td>112</td>
+                    <td>97</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <!-- KIDS TABLE -->
+            <h3 class="section-heading">Kids Clothing Size Conversion</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Age</th>
+                    <th>US</th>
+                    <th>UK</th>
+                    <th>EU</th>
+                    <th>AU</th>
+                    <th>JP</th>
+                    <th>Height (in)</th>
+                    <th>Height (cm)</th>
+                    <th>Chest (cm)</th>
+                    <th>Waist (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0-3M</td>
+                    <td>0-3M</td>
+                    <td>0-3M</td>
+                    <td>56</td>
+                    <td>000</td>
+                    <td>60</td>
+                    <td>22</td>
+                    <td>56</td>
+                    <td>40</td>
+                    <td>39</td>
+                  </tr>
+                  <tr>
+                    <td>3-6M</td>
+                    <td>3-6M</td>
+                    <td>3-6M</td>
+                    <td>68</td>
+                    <td>00</td>
+                    <td>70</td>
+                    <td>26</td>
+                    <td>66</td>
+                    <td>43</td>
+                    <td>42</td>
+                  </tr>
+                  <tr>
+                    <td>6-12M</td>
+                    <td>6-12M</td>
+                    <td>6-12M</td>
+                    <td>74</td>
+                    <td>0</td>
+                    <td>80</td>
+                    <td>29</td>
+                    <td>74</td>
+                    <td>45</td>
+                    <td>44</td>
+                  </tr>
+                  <tr>
+                    <td>1-2Y</td>
+                    <td>2T</td>
+                    <td>1-2Y</td>
+                    <td>86-92</td>
+                    <td>1-2</td>
+                    <td>90</td>
+                    <td>33</td>
+                    <td>86</td>
+                    <td>49</td>
+                    <td>47</td>
+                  </tr>
+                  <tr>
+                    <td>3-4Y</td>
+                    <td>4T</td>
+                    <td>3-4Y</td>
+                    <td>98-104</td>
+                    <td>3-4</td>
+                    <td>100</td>
+                    <td>39</td>
+                    <td>100</td>
+                    <td>53</td>
+                    <td>50</td>
+                  </tr>
+                  <tr>
+                    <td>5-6Y</td>
+                    <td>6</td>
+                    <td>5-6Y</td>
+                    <td>110-116</td>
+                    <td>5-6</td>
+                    <td>110</td>
+                    <td>45</td>
+                    <td>114</td>
+                    <td>58</td>
+                    <td>53</td>
+                  </tr>
+                  <tr>
+                    <td>7-8Y</td>
+                    <td>8</td>
+                    <td>7-8Y</td>
+                    <td>122-128</td>
+                    <td>7-8</td>
+                    <td>120</td>
+                    <td>50</td>
+                    <td>127</td>
+                    <td>63</td>
+                    <td>56</td>
+                  </tr>
+                  <tr>
+                    <td>9-10Y</td>
+                    <td>10</td>
+                    <td>9-10Y</td>
+                    <td>134-140</td>
+                    <td>9-10</td>
+                    <td>130</td>
+                    <td>55</td>
+                    <td>140</td>
+                    <td>68</td>
+                    <td>59</td>
+                  </tr>
+                  <tr>
+                    <td>11-12Y</td>
+                    <td>12</td>
+                    <td>11-12Y</td>
+                    <td>146-152</td>
+                    <td>11-12</td>
+                    <td>140</td>
+                    <td>59</td>
+                    <td>150</td>
+                    <td>73</td>
+                    <td>62</td>
+                  </tr>
+                  <tr>
+                    <td>13-14Y</td>
+                    <td>14</td>
+                    <td>13-14Y</td>
+                    <td>158-164</td>
+                    <td>13-14</td>
+                    <td>150</td>
+                    <td>63</td>
+                    <td>160</td>
+                    <td>78</td>
+                    <td>65</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}

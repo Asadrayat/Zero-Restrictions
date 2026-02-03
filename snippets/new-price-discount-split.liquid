@@ -1,0 +1,35 @@
+{%- assign variant = card_variant -%}
+{%- assign regular_price = variant.price -%}
+
+{%- assign discount_percent_raw = product.metafields.custom.discount_percentage_price.value | default: 0.0 | plus: 0.0 -%}
+{%- assign discount_amount = regular_price | times: discount_percent_raw | divided_by: 100.0 -%}
+{%- assign discounted_price = regular_price | minus: discount_amount -%}
+
+{%- assign discount_percent_int = discount_percent_raw | round -%}
+{%- if discount_percent_raw == discount_percent_int -%}
+  {%- assign discount_display = discount_percent_int -%}
+{%- else -%}
+  {%- assign discount_display = discount_percent_raw | round: 2 -%}
+{%- endif -%}
+
+<div
+  class="price-wrapper"
+  data-product-id="{{ product.id }}"
+  data-variant-id="{{ variant.id }}"
+>
+  <span class="price-regular">
+
+    <span class="price-sale">
+      {{ discounted_price | money }}
+    </span>
+
+    <span class="price-compare-at">
+      {{ regular_price | money }}
+    </span>
+
+    <div class="saved__money">
+      Save {{ discount_display }}%
+    </div>
+
+  </span>
+</div>

@@ -1,0 +1,67 @@
+{% comment %}
+  Price snippet:
+  - Shows Compare at Price and Regular Price if Compare at Price > Regular Price
+  - Otherwise shows Regular Price
+{% endcomment %}
+
+{% comment %}
+  <div class="price-wrapper"
+       data-product-id="{{ product.id }}"
+       data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+    <span class="price-regular">
+      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+        <span class="price-sale">{{ product.selected_or_first_available_variant.price | money }}</span>
+        <span class="price-compare-at">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+      {% else %}
+        {% if collection.metafields.custom.is_sale_collection == true %}
+           {% comment %} <span class="price-standard">{{ product.price_min | money }} </span> {% endcomment %}
+           <span class="price-sale">{{ product.price_min | money }}</span>
+            <span class="price-compare-at">{{ product.selected_or_first_available_variant.price | money }}</span>
+          {% else %}
+             <span class="price-standard">{{ product.selected_or_first_available_variant.price | money }}</span>
+          {% endif %}
+
+      {% endif %}
+    </span>
+  </div>
+{% endcomment %}
+<div
+  class="price-wrapper"
+  data-product-id="{{ product.id }}"
+  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+>
+  <span class="price-regular">
+    {% if collection.metafields.custom.is_sale_collection == true and product.compare_at_price > product.price %}
+      {% comment %}
+        <span class="price-sale">{{ product.selected_or_first_available_variant.price | money }}</span>
+        <span class="price-compare-at">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+      {% endcomment %}
+      <span class="price-sale">{{ product.selected_or_first_available_variant.price | money }}</span>
+      <span class="price-compare-at">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+    {% elsif settings.enable_custom_price == true and product.metafields.custom.exclude_from_custom_pricing != true %}
+      {% assign discounted_percentage = 100 | minus: settings.discount_percentage %}
+      {% assign discounted_price = product.selected_or_first_available_variant.price
+        | times: discounted_percentage
+        | divided_by: 100.0
+        | money
+      %}
+      <span class="price-sale">{{ discounted_price }}</span>
+      <span class="price-compare-at">{{ product.selected_or_first_available_variant.price | money }}</span>
+    {% else %}
+      <span class="price-standard">{{ product.selected_or_first_available_variant.price | money }}</span>
+    {% endif %}
+    {% if collection.metafields.custom.is_sale_collection == true and product.selected_or_first_available_variant.price
+        < product.selected_or_first_available_variant.compare_at_price
+    %}
+      <div class="saved__money">
+        {% assign cap = product.selected_or_first_available_variant.compare_at_price %}
+        {% assign saved_money = cap | minus: product.selected_or_first_available_variant.price %}
+        {% assign saved = saved_money | times: 100 %}
+        {% assign saved_percentage = saved | divided_by: cap %}
+        Save {{ saved_percentage | append: '%' }}
+      </div>
+    {% elsif settings.enable_custom_price == true and product.metafields.custom.exclude_from_custom_pricing != true %}
+      <div class="saved__money">Save {{ settings.discount_percentage | append: '%' }} With Code</div>
+    {% endif %}
+  </span>
+</div>

@@ -1,0 +1,191 @@
+<style>
+  .collection-card-wrapper-{{ block.id }} {
+    position: relative;
+  }
+  .collection-card-wrapper-{{ block.id }} .content-media--img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .collection-card-wrapper-{{ block.id }} .card-content-wrapper {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: var(--Spacing-Container-md);
+    box-sizing: border-box;
+    cursor: pointer; 
+  }
+  .collection-card-wrapper-{{ block.id }} .card--content {
+    display: flex;
+    padding: var(--Spacing-Container-sm, 16px);
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(4px);
+  }
+  .collection-card-wrapper-{{ block.id }} .card-des-wrapper {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    /* padding: var(--Spacing-Container-xs, 12px); */
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: rgb(0 0 0 / 16%);
+    backdrop-filter: saturate(180%) blur(5px);
+    transition: opacity .5s ease, visibility .5s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 2;
+  }
+  .collection-card-wrapper-{{ block.id }}.is-active  .card-des-wrapper{
+    opacity: 1;
+    visibility: visible;
+  }
+  .collection-card-wrapper-{{ block.id }} .card-des-content {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(4px);
+    display: flex;
+    padding: 12px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--Spacing-Container-xs, 12px);
+    flex: 1 0 0;
+    align-self: stretch;
+    position: relative; 
+  }
+  .collection-card-wrapper-{{ block.id }} .card-des {
+    color: var(--Content-Inverted-main, #F3F4F6);
+    text-align: center;
+    font-family: var(--font-family-Body, Archivo);
+    font-size: var(--Font-Size-Paragraph-Regular, 16px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Paragraph-Regular, 24px); 
+    margin: 0;
+  }
+  .collection-card-wrapper-{{ block.id }} .card-title {
+    color: var(--Content-Inverted-main, #F3F4F6);
+    font-family: var(--font-family-Body, "Aktiv Grotesk");
+    font-size: var(--Font-Size-Paragraph-Regular, 16px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Paragraph-Regular, 24px);
+    margin: 0;
+  }
+  .collection-card-wrapper-{{ block.id }} .card-open--title {
+    color: var(--Content-Inverted-main, #F3F4F6);
+    text-align: center;
+    font-family: var(--font-family-Title, Archivo);
+    font-size: var(--Font-Size-Heading-H3, 24px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: var(--Line-Height-Heading-H3, 28px); 
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .collection-card-wrapper-{{ block.id }} .card-title {
+      font-size: var(--Font-Size-Heading-H4, 18px);
+      line-height: var(--Line-Height-Heading-H4, 22px);
+    }
+  }
+  .collection-card-wrapper-{{ block.id }} .icon-wrapper {
+    line-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: transform .5s ease;
+  }
+  .collection-card-wrapper-{{ block.id }}.is-active .icon-wrapper {
+    transform: rotate(180deg); 
+  }
+  .collection-card-wrapper-{{ block.id }} .block--close-button {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 4;
+    transform: translateX(-50%);
+    padding: 0;
+  }
+  .collection-card-wrapper-{{ block.id }} .block--close-button svg {
+    width: 24px;
+    height: 24px;
+  }
+</style>
+
+<div class="collection-card-wrapper-{{ block.id }}">
+  <div class="media-wrapper">
+    {% if block.settings.image != null %}
+      {{ block.settings.image | image_url: width: block.settings.image.width | image_tag: class: 'content-media--img', loading: 'lazy' }}
+    {% else %}
+      {{ 'image' | placeholder_svg_tag: 'content-media--img' }}
+    {% endif %}
+  </div>
+  <div class="card-content-wrapper" data-toggle="card-{{ block.id }}">
+    <div class="card--content">
+      <h5 class="card-title">{{ title }}</h5>
+      <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 15L12 9L6 15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="card-des-wrapper" data-des="card-{{ block.id }}">
+    <div class="card-des-content">
+      <h5 class="card-open--title">{{ title }}</h5>
+      <p class="card-des">{{ des }}</p>
+      <button class="block--close-button" aria-label="Close description">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M7 17L17 7M17 17L7 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.querySelector('.collection-card-wrapper-{{ block.id }}');
+    const toggle = wrapper.querySelector('[data-toggle="card-{{ block.id }}"]');
+    const desWrapper = wrapper.querySelector('[data-des="card-{{ block.id }}"]');
+    const closeButton = desWrapper.querySelector('.block--close-button');
+
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      wrapper.classList.toggle('is-active');
+    });
+
+    closeButton.addEventListener('click', () => {
+      wrapper.classList.remove('is-active');
+    });
+
+    // Close when clicking outside 
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target) && wrapper.classList.contains('is-active')) {
+        wrapper.classList.remove('is-active');
+      }
+    });
+  });
+</script>

@@ -1,0 +1,59 @@
+<style>
+  
+</style>
+<div id="lottie-container-spark"></div>
+
+<script>
+(function(){
+  const containerId = 'lottie-container-spark';
+  const lottieSrc = 'https://lottie.host/663374ec-0abb-4161-925b-ead2ab0e2c89/xDYG7QlT8c.lottie';
+  const loaderUrl = 'https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js';
+  {% comment %} const lottieSrc = 'https://lottie.host/6ab7811b-6204-4f95-b68b-00eda071683c/6WDIR8InjC.lottie';
+  const loaderUrl = 'https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js'; {% endcomment %}
+
+  function ensureDotLottieLoaded(){
+    return new Promise((resolve) => {
+      if (customElements && customElements.get && customElements.get('dotlottie-wc')) return resolve();
+      if (window.__dotlottieWcLoading) return window.__dotlottieWcLoading.then(resolve);
+      const s = document.createElement('script');
+      s.type = 'module';              // IMPORTANT
+      s.src = loaderUrl;
+      s.onload = () => resolve();
+      document.head.appendChild(s);
+      window.__dotlottieWcLoading = new Promise(r => s.addEventListener('load', r, { once: true }));
+    });
+  }
+
+  function mount(){
+    const wrap = document.getElementById(containerId);
+    if (!wrap) return;
+    // avoid remounting if theme re-renders
+    if (wrap.__mounted) return;
+    wrap.__mounted = true;
+
+    const el = document.createElement('dotlottie-wc');
+    el.setAttribute('src', lottieSrc);
+    el.setAttribute('autoplay', '');
+    el.setAttribute('loop', '');
+    {% comment %} el.style.width = '';
+    el.style.height = '300px'; {% endcomment %}
+    wrap.appendChild(el);
+  }
+
+  function init(){
+    ensureDotLottieLoaded().then(() => {
+      if (customElements.whenDefined) {
+        customElements.whenDefined('dotlottie-wc').then(mount);
+      } else {
+        mount();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>

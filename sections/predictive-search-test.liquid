@@ -1,0 +1,43 @@
+{% comment %} sections/predictive-search-test.liquid {% endcomment %}
+<div id="predictive-search-results" class="predictive-search-results">
+  <div class="search-results-container">
+    {% if predictive_search.performed %}
+      {% if predictive_search.resources.products.size > 0 %}
+        <h3>Products</h3>
+        <ul>
+          {% for product in predictive_search.resources.products %}
+            <li>
+              <a href="{{ product.url }}">
+                {{ product.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if predictive_search.resources.articles.size > 0 %}
+        <h3>Articles</h3>
+        <ul>
+          {% for article in predictive_search.resources.articles %}
+            <li>
+              <a href="{{ article.url }}">
+                {{ article.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Predictive Search Test",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Predictive Search Test"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,121 @@
+<div class="account__drawer">
+  <div class="account__drawer-wrapper">
+    <div class="account__drawer-close">
+      <button account-drawer-close class="btn-reset">{% render 'all-icons', name: 'close' %}</button>
+    </div>
+    <div class="account__steps">
+      <div class="account__steps-wrapper">
+        {% unless customer %}
+          <div data-step="1" class="account__login account__step-item">
+            <h5>LOGIN</h5>
+            <p>Enter your credentials to log in :</p>
+            <div class="account__login-form">
+              {% form 'customer_login' %}
+                {%- if form.errors -%}
+                  {{ form.errors | default_errors }}
+                {% endif %}
+                <div class="email">
+                  <input placeholder="Email" type="email" name="customer[email]">
+                </div>
+                {%- if form.password_needed -%}
+                  <div class="password">
+                    <input placeholder="Password" type="password" name="customer[password]">
+                  </div>
+                {% endif %}
+                <div class="submit">
+                  <button class="primary-btn" type="submit">Sign In</button>
+                </div>
+                <div class="account__recover">
+                  <button class="btn-reset linked-btn" data-procceed="2" account-recovery-btn>Forgot Password</button>
+                </div>
+              {% endform %}
+            </div>
+            <div class="account__signup-link">
+              <h6>Create a Zero Restriction account</h6>
+              <p>
+                Save all your favourite products and easily find them in your account, so you can quickly add them to
+                your cart Make e-reservations in store
+              </p>
+              <button class="secondary-btn" data-procceed="3" signup-step-link>Sign Up</button>
+            </div>
+          </div>
+
+          <div data-step="2" class="account__recovery account__step-item">
+            <h5>RECOVERY</h5>
+            <p>Enter your mail to recover :</p>
+            <div class="account__recovery-form">
+              {%- form 'recover_customer_password' -%}
+                {% assign recover_success = form.posted_successfully? %}
+                <div class="email">
+                  <input
+                    type="email"
+                    value=""
+                    name="email"
+                    placeholder="Email"
+                  >
+                </div>
+                {%- if form.errors -%}
+                  <small>
+                    {{ form.errors.messages.form }}
+                  </small>
+                {%- endif -%}
+                <div class="submit">
+                  <button class="primary-btn" recovery-submit>Submit</button>
+                </div>
+                <div class="cancel">
+                  <button data-procceed="1" class="secondary-btn btn-reset" recovery-cancel>Cancel</button>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+
+          <div data-step="3" class="account__signup account__step-item">
+            <h5>SIGNUP</h5>
+            <p>Enter your credentials to sign up :</p>
+            <div class="account__signup-form">
+              {% form 'create_customer' %}
+                {%- if form.errors -%}
+                  {{ form.errors | default_errors }}
+                {% endif %}
+                <div class="first-name">
+                  <input placeholder="First name" type="text" name="customer[first_name]">
+                </div>
+
+                <div class="last-name">
+                  <input placeholder="Last name" type="text" name="customer[last_name]">
+                </div>
+
+                <div class="email">
+                  <input placeholder="Email" type="email" name="customer[email]">
+                </div>
+
+                <div class="password">
+                  <input placeholder="Password" type="password" name="customer[password]">
+                </div>
+
+                <div class="submit">
+                  <button class="primary-btn" type="submit">Sign Up</button>
+                </div>
+              {% endform %}
+            </div>
+            <div class="account__sign-link">
+              <h6>Login to your Zero Restriction account If You are already registered</h6>
+              <button class="secondary-btn" data-procceed="1" login-step-link>Sign In</button>
+            </div>
+          </div>
+        {% else %}
+          <div data-step="4" class="account__details account__step-item">
+            <h5>Hi, {{ customer.name }}</h5>
+            <div class="account__details-customer">
+              <a href="/account">Account Details</a>
+              <a href="/account/addresses">Adresses</a>
+              <a href="/account/login#recover">Reset Your Password</a>
+              <a href="/account/logout">Sign Out</a>
+            </div>
+          </div>
+        {% endunless %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="overlay"></div>

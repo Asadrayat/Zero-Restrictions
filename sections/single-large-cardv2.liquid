@@ -1,0 +1,245 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    background: #000;
+    .--single__card {
+        border-radius: var(--rounded-xl, 12px);
+        border: 1px solid #1F2937;
+        background: #19181A;
+        display: flex;
+        max-width: 800px;
+        width: 100%;
+        padding: var(--Spacing-Container-xl, 64px);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        margin: 0 auto;
+    }    
+    .richtext__ {
+        padding: var(--Spacing-Container-xl, 64px) 0 0;
+        h2 {
+            margin: 0 0 var(--Spacing-Container-md, 16px);
+        }
+    }    
+    p.divider__wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: var(--Spacing-Container-md, 16px) 0;
+    }
+    p.address {
+        width: 100%;
+        margin-top: var(--Spacing-Container-lg, 16px);
+        {% comment %} padding-top: var(--Spacing-Container-sm, 16px);
+        margin-top: var(--Spacing-Container-lg, 16px);
+        border-top: 1px solid var(--Border-Base-dense, #D1D5DB); {% endcomment %}
+    }    
+    span.divider__or {
+        background: #FFF;
+        width: 32px;
+        height: 1px;
+        display: block;
+    }    
+    .sc__icons {
+        display: flex;
+        padding: var(--Spacing-Container-sm, 16px);
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.10);
+        width: max-content;
+        line-height: 0;       
+    }
+    .sc__icons svg{
+      width: 28px;
+      height: 28px;      
+    }
+    h2 {
+        color: #F3F4F6;
+        text-align: center;
+
+        /* Headings/H2 */
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H2, 40px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--Line-Height-Heading-H2, 40px); /* 100% */
+        letter-spacing: -0.4px;
+        text-transform: capitalize;
+        margin: 0;        
+    }
+    p {
+        text-align: center;
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Regular, 16px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Regular, 24px);
+        margin: 0;        
+    }
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  .wrapper-{{ id }} *{
+    color: #fff;
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="--single__card">
+        <span class="sc__icons">{% render 'all-icons', name: 'tech' %}</span>
+        {% if section.settings.top_info %}
+          <div class="richtext__">
+            {{ section.settings.top_info }}
+          </div>
+        {% endif %}
+        {% if section.settings.mail %}
+          <p class="mail">{{ section.settings.mail }}</p>
+        {% endif %}
+        {% if section.settings.time %}
+          <p class="address">{{ section.settings.time }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Single Large Card V2",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "top_info",
+      "label": "Top Info"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "mail",
+      "label": "text1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "time",
+      "label": "Text2"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Single Large Card V2"
+    }
+  ]
+}
+{% endschema %}

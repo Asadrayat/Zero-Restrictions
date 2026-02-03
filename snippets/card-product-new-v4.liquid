@@ -1,0 +1,117 @@
+<div class="--product-card-v3 --august-product-card product-card">
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+  <div class="--image-wrapper">
+    {% render 'card-product-new-v4-media', product: product, loading_priority: loading_priority %}
+  </div>
+
+  <div class="--product-info product-card__details">
+    <a class="absolute-link" href="{{ product.selected_or_first_available_variant.url | within: collection }}"></a>
+    <div class="product-card__color-rating">
+      <div class="--color-options color-swatches --quick-add-trigger-- -hidden {% if product.template_suffix == 'custom-logo-product' %}hidden{% endif %}">
+        {%- assign color_option = product.options_with_values | where: 'name', 'Color' | first -%}
+
+        {%- if color_option and color_option.values.size > 0 -%}
+          {% for color in color_option.values %}
+            {% assign color_handle = color | handle %}
+            {% assign swatch_image = color_handle | append: '.png' | file_img_url: '45x' %}
+            {% assign color_variant = product.variants | where: 'option1', color | first %}
+            {% comment %}
+              <a
+                href="{{ color_variant.url | within: collection }}"
+                class="--color-swatch --quick-add-trigger color-swatch"
+                style="{% if images[color_handle] %}background-image: url({{ swatch_image }});{% else %}background-color: {{ color_handle }};{% endif %}"
+                data-url="{{ color_variant.url | within: collection }}"
+              >
+              </a>
+            {% endcomment %}
+            <a
+              href="{{ color_variant.url | within: collection }}"
+              class="--color-swatch --quick-add-trigger color-swatch"
+
+              data-url="{{ color_variant.url | within: collection }}"
+            >
+              {%- if images[color_handle] %}
+                <img
+                  src="{{ swatch_image }}"
+                  alt="{{ color }}"
+                  class="color-swatch-img swiper-lazy"
+                  loading="lazy"
+                  decoding="async"
+                >
+              {% else %}
+                <span class="color-swatch-fallback" style="background-color: {{ color_handle }};"></span>
+              {% endif %}
+            </a>
+          {% endfor %}
+
+          {% comment %}
+            {% if color_option.values.size > 3 %}
+              <a
+                class="--remaining-color-count "
+                href="{{ product.selected_or_first_available_variant.url | within: collection }}"
+                >+
+                {{- color_option.values.size | minus: 3 -}}
+              </a>
+            {% endif %}
+          {% endcomment %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="--custom-badge-wrapper  {% if collection.metafields.custom.is_sale_collection == true  %} hidden {% endif %}">
+      {% if product.metafields.custom.product_badge.value %}
+        {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+          <span class="--single-badge">
+            {% if forloop.last %}
+              <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% else %}
+              <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% endif %}
+          </span>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="product-card__header">
+      {% if product.selected_variant.compare_at_price > product.selected_variant.price or product.tags contains 'EMBROIDER'  or product.tags contains 'embroider' or product.tags contains 'Ryder Cup 2025' %}
+      <div class="--sale-badge-on-card">Final Sale</div>
+    {% endif %}
+      <h3 class="--product-title product-card__title">
+        <a class="absolute-link" href="{{ product.selected_or_first_available_variant.url | within: collection }}"></a>
+        {% if product.title contains '|' %}
+          {% assign custom_title = product.title | split: '|' %}
+          {% for piece in custom_title %}
+            {{ piece }}
+            {% unless forloop.last %}<br>{% endunless %}
+          {% endfor %}
+
+        {% else %}
+          {{ product.title }}
+        {% endif %}
+      </h3>
+      {% if product.metafields.custom.unique_element != blank %}
+        <p class="pc__unique_element">{{ product.metafields.custom.unique_element.value }}</p>
+      {% endif %}      
+    </div>
+    <div class="--price-review-wrapper">
+      <div class="product-card__pricing" data-price-container>
+        {%- assign discount_percent = product.metafields.custom.discount_percentage_price.value | default: 0.0 | plus: 0.0 -%}
+
+        {% if discount_percent > 0 %}
+          {% render 'new-price-discount', product: product %}
+        {% else %}
+          {% render 'new-price', product: product %}
+        {% endif %}
+      </div>
+      <!-- Yotpo Star Rating(Category) | location: snippets/card-product.liquid -->
+      <div
+        class="yotpo-widget-instance"
+        data-yotpo-instance-id="1080298"
+        data-yotpo-product-id="{{product.id}}"
+        data-yotpo-cart-product-id="{{item.product.id}}"
+        data-yotpo-section-id="{{template.name}}"
+      ></div>
+      <!-- End of Yotpo Star Rating(Category) -->
+    </div>
+  </div>
+</div>

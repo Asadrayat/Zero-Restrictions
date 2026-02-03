@@ -1,0 +1,40 @@
+{%- assign discount_percent_raw = product.metafields.custom.discount_percentage_price.value | default: 0.0 | plus: 0.0 -%}
+
+{%- if discount_percent_raw > 0 -%}
+  {%- assign variant = product.selected_or_first_available_variant -%}
+  {%- assign regular_price = variant.price -%}
+
+  {%- assign discount_amount = regular_price | times: discount_percent_raw | divided_by: 100.0 -%}
+  {%- assign discounted_price = regular_price | minus: discount_amount -%}
+
+  {%- assign discount_percent_int = discount_percent_raw | round -%}
+
+  {%- if discount_percent_raw == discount_percent_int -%}
+    {%- assign discount_display = discount_percent_int -%}
+  {%- else -%}
+    {%- assign discount_display = discount_percent_raw | round: 2 -%}
+  {%- endif -%}
+
+  <div class="p-info-price-wrapper   {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}">
+    <div class="p-info-price-inner">
+      <div class="p-info-price">
+        <p class="p-info-rgular-price">
+          {{ discounted_price | money }}
+        </p>
+
+        <p class="p-info-compare-price">
+          <s>{{ regular_price | money }}</s>
+        </p>
+
+        <div class="saved__money">
+          Save {{ discount_display }}%
+        </div>
+    </div>
+    {% for block in section.blocks %}
+        {% if block.type == '@app' %}
+            <div class="p-info-app-block p-info-review-app">{% render block %}</div>
+        {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+{%- endif -%}

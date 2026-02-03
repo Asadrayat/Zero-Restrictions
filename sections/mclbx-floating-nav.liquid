@@ -1,0 +1,420 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  :root {
+    --total-header-height : 0px;
+  }
+
+    /* Section Styling */
+    #shopify-section-{{id}} {
+      box-sizing: border-box;
+      /* margin-top: {{section.settings.margin_top | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+      padding-top: {{section.settings.padding_top | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+      background: var(--Background-base-subtle, #F3F4F6); */
+    }
+
+    @media(max-width: 600px) {
+      #shopify-section-{{id}} {
+        /* margin-top: {{section.settings.margin_top_m | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+        padding-top: {{section.settings.padding_top_m | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}}; */
+      }
+    }
+
+    .--button-container {
+        margin-top: {{section.settings.margin_top | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+        padding-top: {{section.settings.padding_top | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+        background: var(--Background-base-subtle, #F3F4F6);
+        display: flex;
+        gap: var(--Spacing-Container-md);
+        justify-content: center;
+        z-index: 1000;
+        box-sizing: border-box;
+        @media(max-width: 600px){
+         margin-top: {{section.settings.margin_top_m | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+        padding-top: {{section.settings.padding_top_m | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+          display: flex;
+          flex-wrap: nowrap;
+          overflow: scroll;
+          justify-content: flex-start;
+          padding-inline: 1.5rem;
+        }
+    }
+    .--button-container::-webkit-scrollbar {
+        width: 0px;
+        display: none;
+      }
+    .--button-container::-webkit-scrollbar-thumb {
+        background: var(--Content-Base-main, #1F2937);
+        border-radius: 10px;
+      }
+
+
+    .--nav-button.button, button.--nav-button {
+      cursor: pointer;
+      display: inline-block;
+      border-radius: var(--rounded-3xl);
+      border: 1px solid var(--Border-Base-main, #D1D5DB);
+      background: rgba(255, 255, 255, 0.40);
+      padding: var(--Spacing-Container-xs) var(--Spacing-Container-lg);
+      color: var(--Content-Base-main);
+      text-align: center;
+      font-family: var(--font-family-Body, "Aktiv Grotesk");
+      font-size: var(--Font-Size-Paragraph-Small);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--Line-Height-Paragraph-Small);
+      text-transform: capitalize;
+      transition: all .4s ease;
+      @media(max-width: 600px){
+        padding: var(--Spacing-Container-xxs) var(--Spacing-Container-md);
+        min-width: fit-content;
+      }
+
+  }
+  button.--nav-button {
+    transition: all .4s ease;
+  }
+  button.--nav-button.activated-button {
+      color: #fff;
+      /* border: 1px solid var(--Border-Base-dense, #4B5563); */
+      background: #000;
+  }
+
+  .--button-container-{{ section.id }}.is-at-top,
+  .--button-container-{{ section.id }}.enable-sticky{
+    position: fixed;
+    /* width: 100%; */
+    width: 100vw;
+    top: var(--total-header-height);
+    left: 0;
+     @media(max-width: 600px){
+       /* width: calc(100vw - 3rem); */
+     }
+  }
+</style>
+
+<!-- Sticky Wrapper -->
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <!-- Sticky container must be inside a block-level container -->
+    <div class="sticky-wrapper">
+      <div class="--button-container --button-container-{{ section.id }}">
+        {% for block in section.blocks %}
+          <button
+            class="--nav-button  {% if forloop.first %}activated-button{% endif %}"
+            data-title="{{ block.settings.nav_id | downcase }}"
+          >
+            {{ block.settings.title }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+// Function to get total height of all header group sections dynamically
+function getTotalHeight(selector) {
+    const sections = document.querySelectorAll(selector);
+    let totalHeight = 0;
+
+    sections.forEach(section => {
+        totalHeight += section.offsetHeight; // Adds each section's height
+    });
+
+    // console.log(`Total ${selector} Height:`, totalHeight);
+    return totalHeight;
+}
+// const headerHeight = getTotalHeight('.shopify-section-group-header-group');
+const headerHeight = 0;
+const buttonContianerHeight = getTotalHeight('.--button-container-{{ section.id }}');
+const scrollOffset =    headerHeight +    buttonContianerHeight
+console.log("scrollOffset",scrollOffset)
+
+
+
+// <!-- Smooth Scroll Script -->
+      const navbuttons =  document.querySelectorAll(".--nav-button")
+       navbuttons.forEach(button => {
+            button.addEventListener("click", function() {
+                // navbuttons.forEach(x => { x.classList.remove("activated-button");   });
+                // button.classList.add('activated-button')
+                const targetId = this.getAttribute("data-title");
+                toggleButtonState(targetId)
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    // targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+                  if(window.innerWidth <= 600){
+                    window.scrollTo({
+                      top: targetElement.offsetTop - scrollOffset - 10,
+                      behavior: "smooth"
+                  });
+                  // console.log(" mobile scroll")
+                  } else {
+                    window.scrollTo({
+                      top: targetElement.offsetTop - scrollOffset - 30,
+                      behavior: "smooth"
+                  });
+                     // console.log(" pc scroll")
+                  }
+                  
+                    // console.log("Scrolled to##:", targetElement.offsetTop);
+                    // console.log("Scrolled to:", targetId ,targetElement.offsetTop - scrollOffset);
+                }
+            });
+        });
+
+const toggleButtonState = (datatitle) => {
+    const allButtons = document.querySelectorAll(".--nav-button");
+
+    allButtons.forEach((x) => {
+        if (x.dataset.title === datatitle) {
+            x.classList.add("activated-button");
+        } else {
+            x.classList.remove("activated-button");
+        }
+    });
+};
+
+
+// Select the sticky section
+const stickySection = document.querySelector(".sec-{{ id }}");
+const buttoncontainer = document.querySelector(".--button-container-{{ section.id }}");
+
+if (buttoncontainer) {
+    const observerCallback = (entries) => {
+        entries.forEach((entry) => {
+            const rect = entry.target.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const totalHeight = getTotalHeight('.shopify-section-group-header-group');
+
+            const isAtTop = rect.top <= 0 ; 
+            const isAtBottom = rect.bottom <= 0 ; // When the bottom exits
+            const entry_from_bottom = rect.top <= viewportHeight && rect.top >= 0;
+          
+            // Manage classes based on position in viewport
+            if (isAtTop) {
+                buttoncontainer.classList.add("is-at-top");
+                buttoncontainer.classList.remove("is-at-bottom");
+                // buttoncontainer.style.top = `${totalHeight}px`;
+                console.log("buttoncontainer Section reached top");
+            } else if (entry_from_bottom) {
+                buttoncontainer.classList.remove("is-at-top");
+                // buttoncontainer.style.top = `${totalHeight}px`;
+                console.log("buttoncontainer Entered from bottom");
+            } else if (isAtBottom) {
+                buttoncontainer.classList.add("is-at-bottom");
+                // buttoncontainer.classList.remove("is-at-top");
+                buttoncontainer.style.top = `${totalHeight}px`;
+                console.log("buttoncontainer Section reached bottom");
+            } else {
+                buttoncontainer.classList.remove("is-at-top", "is-at-bottom");
+                buttoncontainer.style.top = `0px`;
+                console.log("buttoncontainer Section Error");
+            }
+        });
+    };
+    const activatebutton = (entries) => {
+        entries.forEach((entry) => {
+            if (!entry.target) return; // Prevent errors if target is null
+    
+            const rect = entry.target.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+    
+            // Ensure getTotalHeight function returns a valid number
+            const totalHeight = getTotalHeight('.shopify-section-group-header-group') || 0;
+    
+            // Check if the element is partially visible (above top but still in view)
+            // const testPosition = rect.top < totalHeight  && rect.bottom > totalHeight * 2;
+            const testPosition = rect.top < totalHeight*2  && rect.bottom > viewportHeight / 2;
+    
+            // Debugging log
+            // console.log(`🔍 [${entry.target.id}] rect.top: ${rect.top}, rect.bottom: ${rect.bottom}, testPosition: ${testPosition}`,"totalHeight",totalHeight);
+    
+            // If the element is in the desired position, execute action
+            if (testPosition) {
+                console.log(`🔍 [${entry.target.id}] rect.top: ${rect.top}, rect.bottom: ${rect.bottom}, testPosition: ${testPosition}`,"totalHeight",totalHeight,"viewportHeight",viewportHeight);
+                console.log("✅ Section in position:", entry.target.id);
+                toggleButtonState(entry.target.id)
+            }
+        });
+    };
+
+
+
+    // Observer Configuration
+       const observerConfig = {
+        root: null, // Observing within the viewport
+        threshold: [0,.1, 0.25, 0.5, 0.75,.9, 1],// More precise triggers (0 = enter, 0.5 = halfway, 1 = fully visible)
+        rootMargin: "0px 0px 0px 0px" // Small offset to avoid false triggers
+    };
+
+
+    // Create Observer
+    const observer = new IntersectionObserver(observerCallback, observerConfig);
+    if (stickySection) {
+        observer.observe(stickySection);
+    }
+
+
+
+    const sectionIds = [
+        {% for block in section.blocks %}
+            "{{ block.settings.nav_id | downcase }}"{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+    ];
+
+
+
+    // Initialize IntersectionObservers for each section
+    sectionIds.forEach((id, index) => {
+        const sectionElement = document.getElementById(id);
+        if (sectionElement) {
+            const observer = new IntersectionObserver(activatebutton, observerConfig);
+            observer.observe(sectionElement);
+            console.log(`Observing section: ${id}`);
+        } else {
+            console.warn(`Section not found: ${id}`);
+        }
+    });
+}
+});
+</script>
+
+{% schema %}
+{
+  "name": "Floating Navigation",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav",
+      "name": "Navigation",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Navigation Label"
+        },
+        {
+          "type": "text",
+          "id": "nav_id",
+          "label": "Navigation id"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floating Navigation"
+    }
+  ]
+}
+{% endschema %}

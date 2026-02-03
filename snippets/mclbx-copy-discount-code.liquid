@@ -1,0 +1,109 @@
+{%- comment -%}
+  PDP Discount Code Block
+  • Set your code in a metafield (e.g., product.metafields.custom.discount_code)
+    or hardcode a fallback below.
+{%- endcomment -%}
+
+{% comment %} {%- assign pdp_discount_code = product.metafields.custom.discount_code.value | default: 'STYLE20' -%} {% endcomment %}
+{%- assign pdp_discount_code = block.settings.title | default: 'Set Discount Code' -%}
+
+<div class="pdp-discount {% if block.settings.enable_mb %}mb{% endif %} {% if block.settings.enable_bb %}bb{% endif %}" data-discount="{{ pdp_discount_code }}">
+  <div class="--pdp-discount-wrapper">
+    {% comment %} <div class="pdp-discount__label">Apply Code "{{ pdp_discount_code }}" at checkout</div> {% endcomment %}
+<div class="pdp-discount__label">{{ block.settings.discount-message  }}</div>
+    <div class="pdp-discount__code-wrap">
+      <code class="pdp-discount__code hidden" aria-label="Discount code">{{ pdp_discount_code }}</code>
+      <button type="button" class="pdp-discount__copy" aria-label="Copy discount code">
+        Copy
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8.17308 4.85391e-08H5.57308C4.39487 4.85391e-08 3.46154 4.77601e-08 2.73141 0.098077C1.98013 0.199359 1.3718 0.41218 0.891667 0.891667C0.41218 1.37179 0.199359 1.98013 0.0980771 2.73141C1.24176e-07 3.46218 4.85391e-08 4.39487 4.85391e-08 5.57308V9.45513C-0.000114994 10.0279 0.204269 10.5818 0.576345 11.0172C0.94842 11.4527 1.46374 11.7409 2.02949 11.8301C2.11731 12.3199 2.28718 12.7378 2.62692 13.0782C3.01282 13.4641 3.49872 13.6295 4.07564 13.7077C4.63141 13.7821 5.33846 13.7821 6.21474 13.7821H8.20833C9.08462 13.7821 9.79167 13.7821 10.3474 13.7077C10.9244 13.6295 11.4103 13.4641 11.7962 13.0782C12.1821 12.6923 12.3474 12.2064 12.4256 11.6295C12.5 11.0737 12.5 10.3667 12.5 9.49038V6.21474C12.5 5.33846 12.5 4.63141 12.4256 4.07564C12.3474 3.49872 12.1821 3.01282 11.7962 2.62692C11.4558 2.28718 11.0378 2.11731 10.5481 2.02949C10.4589 1.46374 10.1706 0.94842 9.7352 0.576344C9.29978 0.204269 8.74582 -0.000114994 8.17308 4.85391e-08ZM9.53846 1.93654C9.44099 1.65192 9.25696 1.40491 9.01213 1.23008C8.76729 1.05525 8.47392 0.961355 8.17308 0.961538H5.60897C4.38654 0.961538 3.51859 0.962821 2.85897 1.05128C2.21474 1.13782 1.84295 1.30064 1.57179 1.57179C1.30064 1.84295 1.13782 2.21474 1.05128 2.85897C0.962821 3.51859 0.961539 4.38654 0.961539 5.60897V9.45513C0.961355 9.75597 1.05525 10.0493 1.23008 10.2942C1.40491 10.539 1.65192 10.723 1.93654 10.8205C1.92308 10.4295 1.92308 9.98718 1.92308 9.49038V6.21474C1.92308 5.33846 1.92308 4.63141 1.99808 4.07564C2.075 3.49872 2.24167 3.01282 2.62692 2.62692C3.01282 2.24103 3.49872 2.07564 4.07564 1.99808C4.63141 1.92308 5.33846 1.92308 6.21474 1.92308H8.20833C8.70513 1.92308 9.14744 1.92308 9.53846 1.93654ZM3.30641 3.30769C3.48397 3.13013 3.73269 3.01474 4.20385 2.95128C4.68718 2.88654 5.32949 2.88526 6.24936 2.88526H8.17244C9.09231 2.88526 9.73397 2.88654 10.2186 2.95128C10.6891 3.01474 10.9378 3.13077 11.1154 3.30769C11.2929 3.48526 11.4083 3.73397 11.4718 4.20513C11.5365 4.68846 11.5378 5.33077 11.5378 6.25064V9.45577C11.5378 10.3756 11.5365 11.0173 11.4718 11.5019C11.4083 11.9724 11.2923 12.2212 11.1154 12.3987C10.9378 12.5763 10.6891 12.6917 10.2179 12.7551C9.73398 12.8199 9.09231 12.8212 8.17244 12.8212H6.24936C5.32949 12.8212 4.68718 12.8199 4.20321 12.7551C3.73269 12.6917 3.48397 12.5756 3.30641 12.3987C3.12885 12.2212 3.01346 11.9724 2.95 11.5013C2.88526 11.0173 2.88397 10.3756 2.88397 9.45577V6.25064C2.88397 5.33077 2.88526 4.68846 2.95 4.20449C3.01346 3.73397 3.12949 3.48526 3.30641 3.30769Z" fill="black"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <span class="pdp-discount__status hidden" role="status" aria-live="polite">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M7.9585 15L3.2085 10.25L4.396 9.06252L7.9585 12.625L15.6043 4.97919L16.7918 6.16669L7.9585 15Z" fill="black"/>
+    </svg>
+    Code “{{ pdp_discount_code }}” has been copied successfully
+  </span>
+</div>
+
+<style>
+    .pdp-discount {
+       display: flex;
+       flex-direction: column;
+      {% comment %} align-items: center; {% endcomment %}
+      gap: 10px; 
+      width: 100%;
+  }
+    .--pdp-discount-wrapper {
+
+        width: 100%;
+      padding: 6px 12px;
+      
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid var(--Border-Base-subtle, #E5E7EB);
+      background: var(--Background-base-subtle, #F3F4F6);
+    }
+    .pdp-discount__label { font-size: 14px; opacity: .8; }
+    .pdp-discount__code-wrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+    .pdp-discount__code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+      padding: 6px 8px;
+      background: rgba(0,0,0,.05);
+      border-radius: 6px;
+    }
+    .pdp-discount__copy {
+      cursor: pointer;
+      font-size: 14px;
+      border: 1px solid var(--Border-Base-main, #D1D5DB);
+      background: #420D09;
+      display: flex;
+      padding: 4px var(--Spacing-Container-sm, 12px);
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      svg {
+            filter: invert(1);
+      }
+    }
+    .pdp-discount__link {
+      font-size: 13px;
+      text-decoration: underline;
+    }
+    .pdp-discount__status { font-size: 13px;     display: flex;
+    gap: 8px; }
+</style>
+
+<script>
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.pdp-discount__copy');
+    if (!btn) return;
+
+    const root = btn.closest('.pdp-discount');
+    const code = root?.dataset?.discount || '';
+    const status = root.querySelector('.pdp-discount__status');
+    {% comment %} const status = root.querySelector('.pdp-discount__copy'); {% endcomment %}
+
+    try {
+      await navigator.clipboard.writeText(code);
+      status.classList.remove('hidden');
+      {% comment %} status.textContent = 'Code has been copied successfully.'; {% endcomment %}
+      // Optional: store for later use
+      try { localStorage.setItem('last_discount_code', code); } catch {}
+    } catch (err) {
+      status.textContent = 'Copy blocked';
+      console.error(err);
+    }
+
+    clearTimeout(btn._t);
+    {% comment %} btn._t = setTimeout(() => { status.textContent = ''; }, 1500); {% endcomment %}
+
+  });
+</script>

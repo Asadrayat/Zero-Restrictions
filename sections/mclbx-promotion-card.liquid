@@ -1,0 +1,229 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+    #shopify-section-{{id}} {
+      box-sizing: border-box;
+      margin-top: {{section.settings.margin_top | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+      padding-top: {{section.settings.padding_top | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    }
+
+    @media(max-width: 600px) {
+      #shopify-section-{{id}} {
+        margin-top: {{section.settings.margin_top_m | append: 'px'}};
+        margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+        padding-top: {{section.settings.padding_top_m | append: 'px'}};
+        padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+      }
+    }
+  .sec-{{ id }}  {
+    .--card-container {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: var(--Spacing-Container-md);
+        @media(max-width: 600px) {
+          grid-template-columns: 1fr;
+        }
+    }
+    .--card-wrapper {
+      padding: var(--Spacing-Container-md, 24px);
+      border-radius: var(--rounded-2xl, 16px);
+      background: var(--Background-base-subtle, #F3F4F6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+    h3.--card-title {
+      color: var(--Content-Base-main, #1F2937);
+      font-family: var(--font-family-Title, "Neue Plak");
+      font-size: var(--Font-Size-Heading-H3, 24px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--Line-Height-Heading-H3, 28px);
+      margin-block: 0 var(--Spacing-Container-xs);
+  }
+  .--card-content {
+      color: var(--Content-Base-main, #1F2937);
+      font-family: var(--font-family-Body, "Neue Plak");
+      font-size: var(--Font-Size-Paragraph-Regular, 16px);
+      line-height: var(--Line-Height-Paragraph-Regular, 24px);
+  }
+    a.--button {
+      color: #FFF;
+      text-align: center;
+      /* font-family: var(--font-family-Body, "Neue Plak"); */
+      font-size: var(--Font-Size-UI-Controls-Control-Button-Regular, 20px);
+      line-height: var(--Line-Height-UI-Controls-Control-Button-Regular, 20px);
+      text-transform: capitalize;
+      border-radius: var(--rounded-3xl, 24px);
+      background: var(--Content-Base-main, #1F2937);
+      display: block;
+      /* padding: var(--Spacing-Container-sm, 16px) var(--Spacing-Container-lg, 40px) var(--Spacing-Container-xs, 12px) var(--Spacing-Container-lg, 40px); */
+      padding: var(--Spacing-Container-xs) var(--Spacing-Container-lg) var(--Spacing-Container-sm);
+      max-width: max-content;
+      margin-block: var(--Spacing-Container-md) 0;
+  }
+
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="--card-container">
+        {% for block in section.blocks %}
+          <div class="--card-wrapper">
+            <div class="--text-block">
+              <h3 class="--card-title">{{ block.settings.title }}</h3>
+              <div class="--card-content">
+                {{ block.settings.content }}
+              </div>
+            </div>
+
+            {% if block.settings.button_url != blank %}
+              <a class="--button" href="{{ block.settings.button_url }}"> {{ block.settings.button_label }}</a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promotion Cards",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "content",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotion Cards"
+    }
+  ]
+}
+{% endschema %}

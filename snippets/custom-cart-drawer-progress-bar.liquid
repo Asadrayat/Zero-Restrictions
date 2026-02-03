@@ -1,0 +1,112 @@
+{% assign money_object = shop.metaobjects.custom_currency_object['rate-1'] %}
+{% assign rate = money_object.shopify_money.value | divided_by: money_object.money_number | divided_by: 100.00 %}
+{% assign tier_1_amount = settings.tier_1_amount | times: 100.00 | times: rate %}
+{% assign tier_2_amount = settings.tier_2_amount | times: 100.00 | times: rate %}
+{% assign tier_3_amount = settings.tier_3_amount | times: 100.00 | times: rate %}
+{% assign tier_count = 3 %}
+{% if settings.tier_1_amount == blank or settings.tier_1_amount == 0 %}
+  {% assign tier_count = tier_count | minus: 1 %}
+{% endif %}
+{% if settings.tier_2_amount == blank or settings.tier_2_amount == 0 %}
+  {% assign tier_count = tier_count | minus: 1 %}
+{% endif %}
+{% if settings.tier_3_amount == blank or settings.tier_3_amount == 0 %}
+  {% assign tier_count = tier_count | minus: 1 %}
+{% endif %}
+
+<style>
+  .--tier-container {
+    display: grid;
+    grid-template-columns: repeat({{ tier_count }}, 1fr);
+    background: #E8E8E8;
+    margin-block: 20px;
+  }
+  .--single-tier {
+      position: relative;
+      height: 6px;
+
+  }
+  span.--bar {
+      display: block;
+      background: #000;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+  }
+  img.--tier-icon {
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      top: -15px;
+      right: 0px;
+      z-index: 1;
+      background: #fff;
+      padding: 5px;
+      border-radius: 30px;
+      border: 1px solid;
+  }
+</style>
+
+<div class="--free-shipping-container">
+  <div class="--custom-deliver-range">
+    {% if cart.total_price < tier_1_amount %}
+      {% assign remaining_amount = tier_1_amount | minus: cart.total_price | money %}
+      {{ settings.cart_intial_message | replace: '[remaining_amount]', remaining_amount }}
+    {% elsif cart.total_price < tier_2_amount and tier_count > 1 %}
+      {% assign remaining_amount = tier_2_amount | minus: cart.total_price | money %}
+      {{ settings.tier_1_success_message | replace: '[remaining_amount]', remaining_amount }}
+    {% elsif cart.total_price < tier_3_amount and tier_count > 2 %}
+      {% assign remaining_amount = tier_3_amount | minus: cart.total_price | money %}
+      {{ settings.tier_2_success_message | replace: '[remaining_amount]', remaining_amount }}
+    {% else %}
+      {{ settings.tier_3_success_message }}
+    {% endif %}
+  </div>
+  <div class="--tier-container">
+    {% if settings.tier_1_amount != blank and settings.tier_1_amount > 0 %}
+      <div class="--single-tier">
+        {{ settings.tier_1_icon | image_url: width: 40 | image_tag: class: '--tier-icon' }}
+        <span
+          class="--bar"
+          style="
+            width: {% if tier_1_amount < cart.total_price %}
+              100%
+            {% else -%}
+              {{- cart.total_price | times: 100 | divided_by: tier_1_amount | append: '%' -}}
+            {%- endif %}
+          "
+        ></span>
+      </div>
+    {% endif %}
+    {% if settings.tier_2_amount != blank and settings.tier_2_amount > 0 %}
+      <div class="--single-tier">
+        {{ settings.tier_2_icon | image_url: width: 40 | image_tag: class: '--tier-icon' }}
+        <span
+          class="--bar"
+          style="
+            width: {% if tier_2_amount < cart.total_price %}
+              100%
+            {% else -%}
+              {{- cart.total_price | minus: tier_1_amount | times: 100 | divided_by: tier_2_amount | append: '%' -}}
+            {%- endif %}
+          "
+        ></span>
+      </div>
+    {% endif %}
+    {% if settings.tier_3_amount != blank and settings.tier_3_amount > 0 %}
+      <div class="--single-tier">
+        {{ settings.tier_3_icon | image_url: width: 40 | image_tag: class: '--tier-icon' }}
+        <span
+          class="--bar"
+          style="
+            width: {% if tier_3_amount < cart.total_price %}
+              100%
+            {% else -%}
+              {{- cart.total_price | minus: tier_2_amount | times: 100 | divided_by: tier_3_amount | append: '%' -}}
+            {%- endif %}
+          "
+        ></span>
+      </div>
+    {% endif %}
+  </div>
+</div>

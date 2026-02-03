@@ -1,0 +1,77 @@
+{% comment %}
+  Color swatches snippet:
+  - Displays up to 3 color swatches
+  - Shows +More link if more colors exist
+  - Checks all variants for a color to determine availability
+  - Fixed variant lookup to ensure data-variant-id is populated
+  - Added debug output for color values and variant options
+{% endcomment %}
+
+{%- assign color_option = product.options_with_values | where: 'name', 'Color' | first -%}
+
+{%- if color_option and color_option.values.size > 0 -%}
+  <div class="color-swatches">
+    {% assign max_visible_colors = 5 %}
+    {% comment %} {% assign visible_colors = color_option.values | slice: 0, max_visible_colors %} {% endcomment %}
+    {% assign visible_colors = color_option.values %}
+
+    {% for color in visible_colors %}
+      {% assign color_variant = null %}
+      {% assign is_color_available = false %}
+      {% for variant in product.variants %}
+        {% if variant.options contains color %}
+          {% assign color_variant = variant %}
+          {% if variant.available %}
+            {% assign is_color_available = true %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% assign color_handle = color | handle %}
+      {% assign swatch_image = color_handle | append: '.png' | file_img_url: '50x' %}
+
+      <button
+        type="button"
+        class="color-swatch {% if forloop.first and is_color_available %}color-swatch--selected{% endif %} {% if images[color_handle] %}color-swatch--image{% endif %} {% unless is_color_available %}color-swatch--disabled--{% endunless %} {% if forloop.index > max_visible_colors %}desktop-only{% endif %}"
+        style="{% if images[color_handle] %}background-image: url({{ swatch_image }});{% else %}background-color: {{ color_handle }};{% endif %}"
+        data-variant-id="{{ color_variant.id | default: '' }}"
+        data-color-value="{{ color | escape }}"
+        data-filtered-color="{{  product.selected_or_first_available_variant.title | split: ' / ' | first }}"
+        {% unless is_color_available %}
+          disabled-
+        {% endunless %}
+        aria-label="{{ color }}{% unless is_color_available %} (Out of stock){% endunless %}"
+      >
+        <span class="visually-hidden">{{ color }}</span>
+      </button>
+    {% endfor %}
+
+    {% if color_option.values.size > max_visible_colors %}
+      <a href="{{ product.url }}" class="color-swatch-more mobile-only" title="View all {{ color_option.values.size }} colors"
+        >+ {{ color_option.values.size | minus: max_visible_colors }}</a
+      >
+    {% endif %}
+  </div>
+{%- else -%}
+  {% comment %} Debug output to identify option names and color values {% endcomment %}
+  <div class="color-swatch-debug" style="display: none;">
+    Available option names:
+    {%- for option in product.options_with_values -%}
+      {{ option.name | escape -}}
+      {%- unless forloop.last %}, {% endunless %}
+    {%- endfor -%}
+    <br>
+    Available color values:
+    {%- for option in product.options_with_values -%}
+      {%- if option.name contains 'Color' or option.name contains 'Colour' -%}
+        {{ option.values | join: ', ' | escape }}
+      {%- endif -%}
+    {%- endfor -%}
+    <br>
+    Variant options:
+    {%- for variant in product.variants -%}
+      {{ variant.options | join: ', ' | escape -}}
+      {%- unless forloop.last %}; {% endunless %}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

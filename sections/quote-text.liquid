@@ -1,0 +1,249 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    {% if section.settings.color == "light" %}
+      background-color: inherit;
+      color: 
+    {% else %}
+      background-color: #000;
+    {% endif %}    
+    * {
+        {% if section.settings.color == "light" %}
+        color: #1F2937;
+        color: 
+        {% else %}
+        color: #fff;
+        {% endif %}            
+    }
+    p.featured_text {
+        text-align: center;
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H3, 24px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: 32px;
+        letter-spacing: 0.48px;
+        text-transform: capitalize;
+        margin: 0 0 var(--Spacing-Container-xs);
+    }   
+    p.featured_subtext {
+        color: #909090;
+        text-align: center;
+        font-family: var(--font-family-Body, Archivo);
+        font-size: var(--Font-Size-Paragraph-Medium, 18px);
+        font-style: normal;
+        font-weight: 400;
+        line-height: var(--Line-Height-Paragraph-Medium, 26px);
+        margin: 0;
+    }   
+    .wrapper-{{ id }} {
+        display: flex;
+        min-height: 480px;
+        padding: var(--Spacing-Container-lg, 40px) var(--Spacing-Container-xl, 64px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--Spacing-Container-xs, 12px);
+        align-self: stretch;
+        border-radius: var(--rounded-none, 0);
+        background: linear-gradient(113deg, rgba(86, 86, 86, 0.03) 16.98%, rgba(255, 255, 255, 0.08) 99.01%);
+        max-width: 856px;
+        margin: auto;
+        position: relative;  
+        transition: all 0.4s ease-in-out;    
+        @media(max-width: 768px) {
+           max-width: 85%;
+           min-height: 100%;
+           padding: var(--Spacing-Container-md) ;
+        }
+        &:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 1000px;
+            border: 1px solid #e5e7eb33;
+            z-index: 1;
+            box-sizing: border-box;  
+            transition: all 0.4s ease-in-out;          
+        } 
+        &:after {
+            content: "";
+            position: absolute;
+            width: 3000px;
+            height: 100%;
+            border: 1px solid #e5e7eb33;
+            z-index: 1;
+            box-sizing: border-box;
+            transition: all 0.4s ease-in-out;          
+        }  
+        &:hover::before {
+          border: 1px solid #e5e7eb;
+        }
+        &:hover::after {
+          border: 1px solid #e5e7eb;
+        }
+    }      
+  }
+
+  @media(max-width: 600px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <p class="featured_text">{{ section.settings.featured_text }}</p>
+      <p class="featured_subtext">{{ section.settings.featured_subtext }}</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Quote Text",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark Mode"
+        },
+        {
+          "value": "light",
+          "label": "Light Mode"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "textarea",
+      "id": "featured_text",
+      "label": "Featured Text"
+    },
+    {
+      "type": "text",
+      "id": "featured_subtext",
+      "label": "Featured Subext"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quote Text"
+    }
+  ]
+}
+{% endschema %}

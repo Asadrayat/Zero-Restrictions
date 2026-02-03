@@ -1,0 +1,95 @@
+<button class="button get-cols-btn">Get Collections</button>
+
+<script>
+    const STORE_URL = "https://zero-restriction-ltd.myshopify.com/api/2025-01/graphql.json";
+    const STOREFRONT_ACCESS_TOKEN = "4e73d8f984dd6806307edabae56bf173";
+
+    async function fetchAllCollections(cursor = null, allCollections = []) {
+        const query = `
+            query($cursor: String) {
+                collections(first: 250, after: $cursor) {
+                    edges {
+                        node {
+                            id
+                            title
+                            handle
+                            metafieldTitle: metafield(namespace: "custom", key: "collegiate_apparel_title") {
+                                type
+                                value
+                            }
+                            metafieldLogo: metafield(namespace: "custom", key: "collegiate_apparel_logo") {
+                                type
+                                value
+                                reference {
+                                ... on MediaImage {
+                                  image {
+                                    url
+                                    altText
+                                  }
+                                }
+                              }
+                            }
+                        }
+                        cursor
+                    }
+                    pageInfo {
+                        hasNextPage
+                    }
+                }
+            }
+        `;
+      
+
+        const response = await fetch(STORE_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Shopify-Storefront-Access-Token": STOREFRONT_ACCESS_TOKEN
+            },
+            body: JSON.stringify({
+                query,
+                variables: { cursor } // Send the cursor for pagination
+            })
+        });
+
+        const result = await response.json();
+
+        if (!result.data || !result.data.collections) {
+            console.error("Error fetching collections:", result.errors || result);
+            return allCollections;
+        }
+
+        const collections = result.data.collections.edges.map(edge => edge.node);
+        allCollections.push(...collections);
+
+        const hasNextPage = result.data.collections.pageInfo.hasNextPage;
+        if (hasNextPage) {
+            const lastCursor = result.data.collections.edges.slice(-1)[0].cursor;
+            return fetchAllCollections(lastCursor, allCollections);
+        }
+
+        return allCollections;
+    }
+
+    function displayCollections(collections) {
+      // console.log("collections", collections);
+      // return;
+      
+      const filteredCollections = collections?.filter(collection => collection.metafieldTitle !== null).map(collection => {
+        return {
+          title: collection.title,
+          handle: collection.handle,
+          apparelTitle: collection?.metafieldTitle?.value,
+          apparelLogo: collection?.metafieldLogo?.reference?.image
+        }
+      })
+      console.log("filteredCollections", filteredCollections)
+    }
+
+    document.querySelector(".get-cols-btn").addEventListener("click", async () => {
+        document.querySelector(".get-cols-btn").textContent = "Loading...";
+        const collections = await fetchAllCollections();
+        displayCollections(collections);
+        document.querySelector(".get-cols-btn").textContent = "Get Collections";
+    });
+</script>

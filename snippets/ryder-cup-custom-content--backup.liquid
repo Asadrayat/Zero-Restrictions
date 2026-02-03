@@ -1,0 +1,408 @@
+{% comment %} <style>
+.ryder--cup-preview-img-container {
+    display: flex;
+    position: relative;
+}
+.ryder--cup-secound-preview-img-wrapper {
+    overflow: hidden;
+   @media(max-width: 768px){
+      display: none;
+    }
+}
+  #ryder-cup-main-preview, #ryder-cupsecound-main-preview{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    aspect-ratio: unset;
+  }
+  #ryder-cupsecound-main-preview{
+    scale: 1.7;
+    transform-origin: top!important;
+  }
+
+  .front-swatch,
+  .back-swatch,
+  .button-group--left-sleeve--custom,
+  .button-group--right-sleeve--custom {
+    border: 2px solid transparent;
+    padding: 2px;
+    margin: 2px;
+    cursor: pointer;
+    background: none;
+    width: 80px;
+    height: 80px;
+  }
+
+  .front-swatch img,
+  .back-swatch img,
+  .button-group--left-sleeve--custom img,
+  .button-group--right-sleeve--custom img {
+     width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .front-swatch.active,
+  .back-swatch.active,
+  .button-group--left-sleeve--custom.active,
+  .button-group--right-sleeve--custom.active {
+    border-color: #000;
+  }
+
+  .back-swatches-group,
+  .left-sleeve-button-group-wrapper,
+  .right-sleeve-button-group-wrapper {
+    display: none;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .back-swatches-group.active,
+  .left-sleeve-button-group-wrapper.active,
+  .right-sleeve-button-group-wrapper.active {
+    display: flex;
+  }
+
+  .left-sleeve-designs,
+  .right-sleeve-designs {
+    display: none;
+  }
+
+  .left-sleeve-designs.active,
+  .right-sleeve-designs.active {
+    display: block;
+  }
+
+  /* Visibility rules for gallery */
+  .product__media-list .product__media-item {
+    display: none;
+  }
+  .product__media-list .product__media-item.is-active {
+    display: block;
+  }
+
+  .ryder-container--custom {
+    color: #000;
+    font-family: var(--font-family-Body, Archivo);
+    font-size: var(--Font-Size-Paragraph-Small, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-Height-Paragraph-Small, 20px);
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+
+  .linked-product-container--custom {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .linked-product-container--custom p {
+    color: #4B5563;
+    font-size: 14px;
+    line-height: 22px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ryder-cup--custom--blocks {
+    margin-block: 8px;
+  }
+</style>
+
+{% assign ryder_cup_link_products = product.metafields.custom.ryder_cup_linked_products.value %}
+{% if ryder_cup_link_products %}
+    <div class="ryder-cup--custom--blocks">
+    <div class="ryder-container--custom">Color: {{ product.title | split: '|' | last }}</div>
+    <div class="linked-product-container--custom">
+        {% if ryder_cup_link_products %}
+        {% for product in ryder_cup_link_products %}
+            <div class="linked-product-wrapper--custom">
+            <a class="linked-product-link--custom" href="{{ product.url }}">
+                {% if product.featured_image %}
+                {{
+                    product.featured_image
+                    | image_url: width: 60
+                    | image_tag: class: 'linked-product-featured-img--custom'
+                }}
+                {% endif %}
+                {% comment %} <p>{{ product.title | split: '|' | last }}</p> {% endcomment %}
+            </a>
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
+{% endif %}
+
+{% assign ryder_cup = product.metafields.custom.ryder_cup.value %}
+{% assign first_group = ryder_cup | first %}
+{% assign has_left_sleeve = first_group.left_sleeve %}
+{% assign has_right_sleeve = first_group.right_sleeve %}
+{% assign has_back = first_group.back_image_for_swatch %}
+
+<div class="ryder-cup-selector">
+  <!-- FRONT DESIGN SWATCHES -->
+  <div class="front-designs ryder-cup--custom--blocks">
+    <p class="ryder-container--custom">Select Front Design:</p>
+    <div class="front-swatches">
+      {% for group in ryder_cup %}
+        <button
+          class="front-swatch {% if forloop.first %}active{% endif %}"
+          data-group-index="{{ forloop.index0 }}"
+          data-front-image="{{ group.front_image | image_url }}"
+          data-front-logo-placement="{{ group.front_logo_placement }}"
+          data-has-left-sleeve="{% if group.left_sleeve %}true{% else %}false{% endif %}"
+          data-has-right-sleeve="{% if group.right_sleeve %}true{% else %}false{% endif %}"
+        >
+          <img src="{{ group.front_image_for_swatch | img_url: '100x100' }}" alt="Front Swatch {{ forloop.index }}">
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- BACK DESIGN SWATCHES -->
+  {% if has_back %}
+    <div class="back-designs ryder-cup--custom--blocks">
+      <p class="ryder-container--custom">Select Back Design:</p>
+      {% for group in ryder_cup %}
+        <div class="back-swatches-group {% if forloop.first %}active{% endif %}" data-group-index="{{ forloop.index0 }}">
+          {% for back_swatch in group.back_image_for_swatch.value %}
+            {% assign x = forloop.index0 %}
+            {% for back_image in group.back_image.value %}
+              {% assign y = forloop.index0 %}
+              {% if x == y %}
+                {% assign back_image_match = back_image %}
+                <button
+                  class="back-swatch {% if x == 0 and forloop.parentloop.index0 == 0 %}active{% endif %}"
+                  data-back-image="{{ back_image_match | image_url }}"
+                  data-back-logo-placement="{{ group.back_logo_placement }}"
+                >
+                  <img src="{{ back_swatch | img_url: '100x100' }}" alt="Back Swatch {{ x }}">
+                </button>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- LEFT SLEEVE DESIGN SWATCHES -->
+
+    <div class="left-sleeve-designs {% if has_left_sleeve %}active{% endif %} ryder-cup--custom--blocks">
+      <div class="ryder-container--custom text-container--left-sleeve--custom">
+        SELECT LEFT SLEEVE DESIGN:
+      </div>
+      <div class="patter-container--left-sleeve--custom" data-block-id="0">
+        {% for group in ryder_cup %}
+          {% if group.left_sleeve %}
+            <div
+              class="left-sleeve-button-group-wrapper {% if forloop.first %}active{% endif %}"
+              data-group-id="{{ forloop.index0 }}"
+              {% unless forloop.index0 == 0 %}style="display: none;"{% endunless %}
+            >
+              {% for left_sleeve_swatch in group.left_sleeve.value %}
+                <button
+                  class="button-group--left-sleeve--custom {% if forloop.first and forloop.parentloop.first %}active{% endif %}"
+                  data-sleeve-id="{{ forloop.index0 }}"
+                  data-block-id="{{ forloop.parentloop.index0 }}"
+                  data-image-name="{{ left_sleeve_swatch | image_url | split: 'files/' | last | split: '.' | first }}"
+                >
+                  <div class="swatch-preview--left-sleeve--custom">
+                    {{ left_sleeve_swatch | image_url: width: 100 | image_tag: class: 'img' }}
+                  </div>
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+
+  <!-- RIGHT SLEEVE DESIGN SWATCHES -->
+
+    <div class="right-sleeve-designs {% if has_right_sleeve %}active{% endif %} ryder-cup--custom--blocks">
+      <div class="ryder-container--custom text-container--right-sleeve--custom">
+        SELECT RIGHT SLEEVE DESIGN:
+      </div>
+      <div class="patter-container--right-sleeve--custom" data-block-id="0">
+        {% for group in ryder_cup %}
+          {% if group.right_sleeve %}
+            <div
+              class="right-sleeve-button-group-wrapper {% if forloop.first %}active{% endif %}"
+              data-group-id="{{ forloop.index0 }}"
+              {% unless forloop.index0 == 0 %}style="display: none;"{% endunless %}
+            >
+              {% for right_sleeve_swatch in group.right_sleeve.value %}
+                <button
+                  class="button-group--right-sleeve--custom {% if forloop.first and forloop.parentloop.first %}active{% endif %}"
+                  data-sleeve-id="{{ forloop.index0 }}"
+                  data-block-id="{{ forloop.parentloop.index0 }}"
+                  data-image-name="{{ right_sleeve_swatch | image_url | split: 'files/' | last | split: '.' | first }}"
+                >
+                  <div class="swatch-preview--right-sleeve--custom">
+                    {{ right_sleeve_swatch | image_url: width: 100 | image_tag: class: 'img' }}
+                  </div>
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $ = (s, root = document) => root.querySelector(s);
+    const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
+
+    // Prevent URL pollution
+    const productForm = document.querySelector('form[action*="/cart/add"]') || document.querySelector('product-form form');
+    if (productForm) {
+      productForm.addEventListener('change', e => {
+        if (e.target.name?.includes('properties[')) e.stopImmediatePropagation();
+      }, true);
+    }
+    const orig612PushState = history.pushState;
+    history.pushState = function(data, title, url) {
+      if (typeof url === 'string' && url.includes('properties[')) return;
+      return origPushState.apply(this, arguments);
+    };
+
+    function setHiddenByName(name, value) {
+      const escaped = CSS.escape(name);
+      $$(`input[name="${escaped}"]`).forEach(el => {
+        el.value = value || '';
+        el.dispatchEvent(new Event('change', { bubbles: false }));
+      });
+    }
+
+    // SMART: Always get fresh image elements — no stale references EVER
+    const getPreviews = () => ({
+      main: document.getElementById('ryder-cup-main-preview'),
+      zoom: document.getElementById('ryder-cupsecound-main-preview')
+    });
+
+    function updatePreviewImage(src) {
+      if (!src) return;
+      const { main, zoom } = getPreviews();
+      const cacheBust = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+      if (main) main.src = cacheBust;
+      if (zoom) zoom.src = cacheBust;
+    }
+
+    function syncToActiveFront() {
+      const activeFront = $('.front-swatch.active') || $('.front-swatch');
+      if (!activeFront) return;
+
+      const groupIndex = activeFront.dataset.groupIndex || '0';
+      const frontImg = activeFront.dataset.frontImage;
+      const frontName = frontImg?.split('files/').pop()?.split('.')[0] || '';
+
+      setHiddenByName('properties[_Front Design]', frontName);
+      setHiddenByName('properties[_Front Placement]', activeFront.dataset.frontLogoPlacement || 'chest');
+
+      const hasLeft = activeFront.dataset.hasLeftSleeve === 'true';
+      const hasRight = activeFront.dataset.hasRightSleeve === 'true';
+      $('.left-sleeve-designs')?.classList.toggle('active', hasLeft);
+      $('.right-sleeve-designs')?.classList.toggle('active', hasRight);
+      if (!hasLeft) setHiddenByName('properties[_Left Sleeve Design]', '');
+      if (!hasRight) setHiddenByName('properties[_Right Sleeve Design]', '');
+
+      $$('.back-swatches-group').forEach(g => g.classList.toggle('active', g.dataset.groupIndex === groupIndex));
+      $$('.left-sleeve-button-group-wrapper').forEach(g => g.style.display = g.dataset.groupId === groupIndex ? 'flex' : 'none');
+      $$('.right-sleeve-button-group-wrapper').forEach(g => g.style.display = g.dataset.groupId === groupIndex ? 'flex' : 'none');
+
+      const backGroup = $(`.back-swatches-group[data-group-index="${groupIndex}"]`);
+      if (backGroup && backGroup.querySelector('.back-swatch')) {
+        const firstBack = $('.back-swatch', backGroup);
+        $$('.back-swatch', backGroup).forEach(b => b.classList.remove('active'));
+        firstBack.classList.add('active');
+        setHiddenByName('properties[_Back Design]', firstBack.dataset.backImage?.split('files/').pop()?.split('.')[0] || '');
+        setHiddenByName('properties[_Back Placement]', firstBack.dataset.backLogoPlacement || '');
+      } else {
+        setHiddenByName('properties[_Back Design]', '');
+        setHiddenByName('properties[_Back Placement]', '');
+      }
+
+      ['left', 'right'].forEach(side => {
+        const group = $(`.${side}-sleeve-button-group-wrapper[data-group-id="${groupIndex}"]`);
+        if (group && group.querySelector(`.button-group--${side}-sleeve--custom`)) {
+          const firstBtn = $(`.button-group--${side}-sleeve--custom`, group);
+          $$(`.button-group--${side}-sleeve--custom`, group).forEach(b => b.classList.remove('active'));
+          firstBtn.classList.add('active');
+          setHiddenByName(`properties[_${side.charAt(0).toUpperCase() + side.slice(1)} Sleeve Design]`, firstBtn.dataset.imageName || '');
+        } else {
+          setHiddenByName(`properties[_${side.charAt(0).toUpperCase() + side.slice(1)} Sleeve Design]`, '');
+        }
+      });
+
+      updatePreviewImage(frontImg);
+    }
+
+    // Click handlers
+    document.addEventListener('click', e => {
+      const t = e.target;
+
+      if (t.closest('.front-swatch')) {
+        $$('.front-swatch').forEach(b => b.classList.remove('active'));
+        t.closest('.front-swatch').classList.add('active');
+        syncToActiveFront();
+        return;
+      }
+
+      if (t.closest('.back-swatch')) {
+        const btn = t.closest('.back-swatch');
+        const group = btn.closest('.back-swatches-group');
+        $$('.back-swatch', group).forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setHiddenByName('properties[_Back Design]', btn.dataset.backImage?.split('files/').pop()?.split('.')[0] || '');
+        setHiddenByName('properties[_Back Placement]', btn.dataset.backLogoPlacement || '');
+        updatePreviewImage(btn.dataset.backImage);
+        return;
+      }
+
+      const sleeveBtn = t.closest('.button-group--left-sleeve--custom, .button-group--right-sleeve--custom');
+      if (sleeveBtn) {
+        const group = sleeveBtn.closest('.left-sleeve-button-group-wrapper, .right-sleeve-button-group-wrapper');
+        const isLeft = sleeveBtn.classList.contains('button-group--left-sleeve--custom');
+        $$(`.button-group--${isLeft ? 'left' : 'right'}-sleeve--custom`, group).forEach(b => b.classList.remove('active'));
+        sleeveBtn.classList.add('active');
+        setHiddenByName(`properties[_${isLeft ? 'Left' : 'Right'} Sleeve Design]`, sleeveBtn.dataset.imageName || '');
+        const frontImg = $('.front-swatch.active')?.dataset.frontImage;
+        if (frontImg) updatePreviewImage(frontImg);
+      }
+    });
+
+    // FINAL FIX: Works perfectly on variant change
+    document.addEventListener('variant:change', () => {
+      setTimeout(() => {
+        const firstFront = $('.front-swatch');
+        if (firstFront) {
+          $$('.front-swatch').forEach(b => b.classList.remove('active'));
+          firstFront.classList.add('active');
+          syncToActiveFront();  // Uses fresh DOM → images update perfectly
+        }
+      }, 100);
+    });
+
+    // Initial load
+    setTimeout(() => {
+      const firstFront = $('.front-swatch');
+      if (firstFront && !$('.front-swatch.active')) {
+        firstFront.classList.add('active');
+      }
+      syncToActiveFront();
+    }, 150);
+  });
+</script> {% endcomment %}

@@ -1,0 +1,48 @@
+<ul class="site__nav-wrapper">
+  {% for link in section.settings.menu.links %}
+    <li>
+      {% if link.links != blank %}
+        <a class="{% if link.active %}active{% endif %}" href="{{ link.url }}"
+          ><span>{{ link.title }}</span></a
+        >
+        {% liquid
+          assign title_handle = link.title | handleize
+          assign has_mega_item = false
+        %}
+        {% for block in section.blocks %}
+          {% liquid
+            assign menu_title = block.settings.heading | handleize
+
+            if menu_title == blank or menu_title != title_handle
+              continue
+            endif
+
+            if menu_title == title_handle
+              assign has_mega_item = true
+            endif
+          %}
+          {% assign has_images = false %}
+          {% if has_mega_item == true %}
+            {% for i in (1..5) %}
+              {% liquid
+                capture collection
+                  echo 'collection_' | append: i
+                endcapture
+              %}
+              {% if block.settings[collection] != blank %}
+                {% assign has_images = true %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+        {% if has_mega_item %}
+          {% render 'mega-menu', section: section, link: link, has_mega_item: has_mega_item, has_images: has_images %}
+        {% else %}
+          {% render 'drop-down-menu', section: section, link: link %}
+        {% endif %}
+      {% else %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

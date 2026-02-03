@@ -1,0 +1,5 @@
+{%- render 'header-icons', name: 'bag' -%}
+  <span class="sm-hide">{% if cart != empty %}<span class="cart__count">{{ cart.item_count }}</span>{% endif %}</span>
+{% if cart != empty %}
+  <span class="cart__count lg-hide">{{ cart.item_count }}</span>
+{% endif %}

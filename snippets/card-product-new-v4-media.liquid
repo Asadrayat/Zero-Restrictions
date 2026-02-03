@@ -1,0 +1,247 @@
+  {% comment %} Check if product has featured video metafield {% endcomment %}
+  {% assign has_video = false %}
+  {% if product.metafields.custom.product_card_featured_video %}
+    {% assign has_video = true %}
+  {% endif %}
+
+
+<div class="product-card__media ">
+  {% comment %}
+    <div class="--custom-badge-wrapper {% if collection.metafields.custom.is_sale_collection == true  %} hidden {% endif %}">
+    {% if product.metafields.custom.product_badge.value %}
+        {% for badge in product.metafields.custom.product_badge.value limit: 2 %}
+        <span class="--single-badge">
+            {% if forloop.last %}
+            <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% else %}
+            <a href="{{ product.url }}">{{ badge | strip | escape }}</a>
+            {% endif %}
+        </span>
+        {% endfor %}
+    {% endif %}
+    </div>
+  {% endcomment %}
+
+  {% assign first_color_value = product.selected_or_first_available_variant.options[0] %}
+  {% assign matched_media = product.media | where: 'alt', first_color_value %}
+  {% assign first_variant_with_image = product.variants | where: 'featured_image' | first %}
+  {% assign media_index = 0 %}
+  
+  {% if first_variant_with_image %}
+    {% for m in product.media %}
+      {% if m.id == first_variant_with_image.featured_image.id %}
+        {% assign media_index = forloop.index0 %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
+  {% assign next_index = media_index | plus: 1 %}
+  
+
+  {% comment %} Primary Image/Video Link {% endcomment %}
+  <a
+    href="{{ product.selected_or_first_available_variant.url | within: collection }}"
+    class="
+      product-card__image-link js-product-link {% if has_video %}
+          has-video
+      {% elsif first_color_value != '' and matched_media.size > 1 %}
+          has-multiple-media
+      {% elsif matched_media.size == 0 and first_variant_with_image and product.media.size > next_index %}
+          has-multiple-media-reverse
+      {% endif %}
+    "
+  >
+    {% if has_video %}
+      {% comment %} Display video from metafield with play/pause button {% endcomment %}
+      <div class="product-card__video-wrapper">
+        {{ product.metafields.custom.product_card_featured_video.value | video_tag: 
+          controls: false, 
+          autoplay: true, 
+          muted: true, 
+          loop: true, 
+          width: '500px',
+          playsinline: true,
+          class: 'product-card__primary-video'
+        }}
+        <button class="product-card__video-toggle" aria-label="Play/Pause video">
+          <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <svg class="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        </button>
+      </div>
+    {% elsif first_color_value != '' and matched_media.size > 0 %}
+      {% assign first_media = matched_media.first %}
+      {% assign variant_for_media = product.variants | where: 'featured_image', first_media | first %}
+      <picture>
+        <source media="(max-width:600px)" srcset="{{ first_media | image_url: width: 300 }}">
+        <source media="(max-width:1600px)" srcset="{{ first_media | image_url: width: 500 }}">
+        <source media="(max-width:2000px)" srcset="{{ first_media | image_url: width: 800 }}">
+        <img src="{{ first_media | image_url: width: 800 }}" class="product-card__primary-image" {{ loading_priority }}>
+      </picture>
+    {% elsif matched_media.size == 0 and first_variant_with_image %}
+      {% if product.media.size > next_index %}
+        {% assign first_media = product.media[next_index] %}
+        <picture>
+          <source media="(max-width:600px)" srcset="{{ first_media | image_url: width: 300 }}">
+          <source media="(max-width:1600px)" srcset="{{ first_media | image_url: width: 500 }}">
+          <source media="(max-width:2000px)" srcset="{{ first_media | image_url: width: 800 }}">
+          <img
+            src="{{ first_media | image_url: width: 800 }}"
+            class="product-card__primary-image"
+            {{ loading_priority }}
+          >
+        </picture>
+      {% endif %}
+    {% endif %}
+  </a>
+
+  {% unless has_video %}
+  <div
+    class="
+      product-card__gallery swiper-container--lazy {% if first_color_value != '' and matched_media.size > 1 %}
+          has-multiple-media
+      {% elsif matched_media.size == 0 and first_variant_with_image and product.media.size > next_index %}
+          has-multiple-media-reverse
+      {% endif %}
+    "
+    data-media-count="{{ product.media.size }}"
+    {% if first_color_value != '' and matched_media.size > 1 %}
+      data-start="1"
+    {% endif %}
+    aria-hidden="true"
+  >
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {% if first_color_value != '' %}
+          {% if matched_media.size > 0 %}
+            {% for media in matched_media limit: 3 %}
+              {% assign variant_for_media = product.variants | where: 'featured_image', media | first %}
+              <div
+                class="swiper-slide {% if forloop.first %}first-swiper-slide{% elsif forloop.index == 2 %}second-swiper-slide{% endif %}"
+                data-media-id="{{ media.id }}"
+                data-media-position="{{ forloop.index }}"
+                data-variant-id="{{ variant_for_media.id | default: '' }}"
+              >
+                <a href="{{ product.selected_or_first_available_variant.url | within: collection }}">
+                  <picture>
+                    <source media="(max-width: 600px)" srcset="{{ media | image_url: width: 400 }}">
+                    <source media="(max-width: 2000px)" srcset="{{ media | image_url: width: 500 }}">
+                    <source media="(max-width: 2600px)" srcset="{{ media | image_url: width: 700 }}">
+
+                    <img
+                      src="{{ media | image_url: width: first_media.width }}"
+                      class="product-card__gallery-image swiper-lazy"
+                      alt="{{  product.title }}"
+                      {% if forloop.first %}
+                        {{ loading_priority }}
+                      {% else %}
+                        loading="lazy"
+                        decoding="async"
+                      {% endif %}
+                    >
+                  </picture>
+                </a>
+              </div>
+            {% endfor %}
+          {% else %}
+            {% assign first_variant_with_image = product.variants | where: 'featured_image' | first %}
+            {% if first_variant_with_image %}
+              {% assign media = first_variant_with_image.featured_image %}
+              <div
+                class="swiper-slide first-swiper-slide"
+                data-media-id="{{ media.id }}"
+                data-media-position="1"
+                data-variant-id="{{ first_variant_with_image.id }}"
+              >
+                <a href="{{ product.selected_or_first_available_variant.url | within: collection }}">
+                  <picture>
+                    <source media="(max-width: 600px)" srcset="{{ media | image_url: width: 400 }}">
+                    <source media="(max-width: 2000px)" srcset="{{ media | image_url: width: 500 }}">
+                    <source media="(max-width: 2600px)" srcset="{{ media | image_url: width: 700 }}">
+
+                    <img
+                      src="{{ media | image_url: width: first_media.width }}"
+                      class="product-card__gallery-image swiper-lazy"
+                      alt="{{  product.title }}"
+                      {% if forloop.first %}
+                        {{ loading_priority }}
+                      {% else %}
+                        loading="lazy"
+                        decoding="async"
+                      {% endif %}
+                    >
+                  </picture>
+                </a>
+              </div>
+            {% else %}
+              {% assign media = product.media.first %}
+              <div
+                class="swiper-slide first-swiper-slide"
+                data-media-id="{{ media.id }}"
+                data-media-position="1"
+                data-variant-id="{{ product.selected_or_first_available_variant.id | default: '' }}"
+              >
+                <a href="{{ product.selected_or_first_available_variant.url | within: collection }}">
+                  <picture>
+                    <source media="(max-width: 600px)" srcset="{{ media | image_url: width: 400 }}">
+                    <source media="(max-width: 2000px)" srcset="{{ media | image_url: width: 500 }}">
+                    <source media="(max-width: 2600px)" srcset="{{ media | image_url: width: 700 }}">
+
+                    <img
+                      src="{{ media | image_url: width: first_media.width }}"
+                      class="product-card__gallery-image swiper-lazy"
+                      alt="{{  product.title }}"
+                      {% if forloop.first %}
+                        {{ loading_priority }}
+                      {% else %}
+                        loading="lazy"
+                        decoding="async"
+                      {% endif %}
+                    >
+                  </picture>
+                </a>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% else %}
+          {% assign media = product.media.first %}
+          <div
+            class="swiper-slide first-swiper-slide"
+            data-media-id="{{ media.id }}"
+            data-media-position="1"
+            data-variant-id="{{ product.selected_or_first_available_variant.id | default: '' }}"
+          >
+            <a href="{{ product.selected_or_first_available_variant.url | within: collection }}">
+              <picture>
+                <source media="(max-width: 600px)" srcset="{{ media | image_url: width: 400 }}">
+                <source media="(max-width: 2000px)" srcset="{{ media | image_url: width: 500 }}">
+                <source media="(max-width: 2600px)" srcset="{{ media | image_url: width: 700 }}">
+
+                <img
+                  src="{{ media | image_url: width: media.width }}"
+                  class="product-card__gallery-image swiper-lazy"
+                  alt="{{  product.title }}"
+                  {% if forloop.first %}
+                    {{ loading_priority }}
+                  {% else %}
+                    loading="lazy"
+                    decoding="async"
+                  {% endif %}
+                >
+              </picture>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev">{% render 'card-icons', name: 'prev' %}</div>
+      <div class="swiper-button-next">{% render 'card-icons', name: 'next' %}</div>
+    </div>
+  </div>
+  {% endunless %}
+</div>

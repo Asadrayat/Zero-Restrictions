@@ -1,0 +1,765 @@
+{% comment %}
+  {
+    "type": "color",
+    "id": "btn_color",
+    "label": "Button Color",
+    "default": "#1f2937"
+  },
+  {
+    "type": "color",
+    "id": "btn_bgcolor",
+    "label": "Button Background Color",
+    "default": "#eeedf7"
+  },
+{% endcomment %}
+
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+  .wrapper-{{ id }} .image-wrap img {
+    width: 100%;
+    object-fit: cover;
+  }
+  .wrapper-{{ id }} .image-wrap.original img {
+    height: auto;
+  }
+    .wrapper-{{ id }} .image-wrap.custom :is(img, video) {
+    height: auto;
+    max-height: {{ section.settings.banner_max_height | append:'px' }};
+    @media(max-width: 600px) {
+      height: auto;
+      aspect-ratio: 9 / 16;
+    }
+  }
+  .wrapper-{{ id }} .image-wrap.adaptive img {
+    height: auto;
+    aspect-ratio: 4/1;
+    @media(max-width: 768px) {
+      aspect-ratio: unset;
+    }
+  }
+  .wrapper-{{ id }} .image-wrap.adaptive img {
+    height: auto;
+    aspect-ratio: 4/1;
+    @media(max-width: 768px) {
+      aspect-ratio: unset;
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper {
+    position: relative;
+  }
+  .wrapper-{{ id }} .content__wrapper  {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: var(--Spacing-Container-lg);
+    top: 0;
+    left: 0;
+  }
+  .wrapper-{{ id }} .content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+  }
+  .wrapper-{{ id }} .content__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* css for content customization starts ............................................................*/
+
+  .wrapper-{{ id }} .block__wrapper .content.middle_left {
+    justify-content: center;
+    align-items: start;
+    p{
+      /* text-align: left; */
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper .content.middle_center {
+    justify-content: center;
+    align-items: center;
+  }
+  .wrapper-{{ id }} .block__wrapper .content.middle_right {
+    justify-content: center;
+    align-items: end;
+  }
+  .wrapper-{{ id }} .block__wrapper .content.top_left {
+    justify-content: start;
+    align-items: start;
+    p{
+      /* text-align: left; */
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper .content.top_center {
+    justify-content: start;
+    align-items: center;
+  }
+  .wrapper-{{ id }} .block__wrapper .content.top_right {
+    justify-content: start;
+    align-items: end;
+  }
+  .wrapper-{{ id }} .block__wrapper .content.bottom_left {
+    justify-content: end;
+    align-items: start;
+    p{
+      /* text-align: left; */
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper .content.bottom_center {
+    justify-content: end;
+    align-items: center;
+  }
+  .wrapper-{{ id }} .block__wrapper .content.bottom_right {
+    justify-content: end;
+    align-items: end;
+  }
+
+  /* css for content customization ends ..................................................... */
+  .wrapper-{{ id }} .block__wrapper p.pretitle {
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.10);
+    max-width: max-content;
+    font-family: var(--font-family-Body);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%;
+    letter-spacing: 0.96px;
+    text-transform: uppercase;
+    margin: 0 auto 16px ;
+    padding: 4px 8px;
+  }
+  .wrapper-{{ id }} .block__wrapper h1 {
+    /* color: var(--Content-Base-main); */
+    /* text-align: center; */
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Heading-H1);
+    letter-spacing: -0.48px;
+    margin: 0 0 24px 0;
+    em{
+      display: block;
+      font-style: normal;
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper h1.heading-medium {
+    font-size: var(--Font-Size-Heading-H1);
+  }
+  .wrapper-{{ id }} .block__wrapper h1.heading-large {
+    font-size: 80px;
+    font-family: var(--font-family-Title);
+    line-height: 100%;
+    @media(max-width: 768px) {
+      font-size: var(--Font-Size-Heading-H1);
+    }
+  }
+  .wrapper-{{ id }} .block__wrapper p.subtitle {
+    /* text-align: center; */
+    font-family: var(--font-family-Body, "Neue Plak");
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+    em {
+      display: block;
+      font-style: normal;
+      @media(max-width: 768px) {
+        display: unset;
+      }
+    }
+  }
+  .wrapper-{{ id }}  .banner_card_img {
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.10);
+    display: flex;
+    padding: var(--Spacing-Container-xs, 12px);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .wrapper-{{ id }}  .banner_card_img  img {
+      aspect-ratio: 1;
+      width: 20px;
+      height: 20px;
+  }
+  .wrapper-{{ id }} .banner__cards.btn__wrapper.justify-center {
+      display: grid;
+      align-items: flex-start;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--Spacing-Container-md, 24px);
+      align-self: stretch;
+      {% comment %} max-width: 1200px; {% endcomment %}
+      margin: 40px auto 16px;
+      @media(max-width: 900px) {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin: 16px 0;        
+      }
+  }
+  .wrapper-{{ id }} .banner__card {
+    display: flex;
+    padding: var(--Spacing-Container-md, 24px) var(--Spacing-Container-sm, 16px);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--Spacing-Container-md, 24px);
+    flex: 1 0 0;
+    border-radius: var(--rounded-xl, 12px);
+    border: 1px solid rgba(0, 0, 0, 0.80);
+    background-color: rgba(0, 0, 0, 0.50);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.1s ease-in-out;
+  }  
+  .wrapper-{{ id }} .banner__card:hover {
+    border: 1px solid #fff;
+    background: #fff;    
+  }
+  .wrapper-{{ id }} .banner__card:hover * {
+    color: #000;
+  }
+  .wrapper-{{ id }} .banner__card:hover .banner_card_img {
+    background: #000000;
+  }
+  
+  .wrapper-{{ id }}  .cc__subtitle {
+    color: #A1A1A1;
+    margin: 0;
+    /* Paragraph/XS */
+    font-family: var(--font-family-Body, Archivo);
+    font-size: var(--Font-Size-Paragraph-Tiny, 12px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-Height-Paragraph-Tiny, 16px); /* 133.333% */    
+  }
+  .wrapper-{{ id }}  .cc__title {
+        color: #FFF;
+        margin: 0 0 8px;
+        /* Headings/H4 */
+        font-family: var(--font-family-Title, Archivo);
+        font-size: var(--Font-Size-Heading-H4, 20px);
+        font-style: normal;
+        font-weight: 500;
+        line-height: var(--Line-Height-Heading-H4, 24px); /* 120% */
+        letter-spacing: -0.4px;
+        text-transform: capitalize;    
+  }
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .wrapper-{{ id }} .btn__wrapper a {
+      /* min-width: 170px; */
+    }
+    .static__mobile-position {
+      padding-top: 80px !important;
+      position: relative !important;
+      transform: unset !important;
+      top: unset !important;
+      left: unset !important;
+      margin: auto;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      {% for block in section.blocks %}
+         {% if block.type == 'image' %}
+        <style>
+          .block__wrapper-{{ section.id }} .info_color-{{ block.id }} {
+            color: {{ block.settings.info_color }};
+            @media(max-width: 768px) {
+              color: {{ block.settings.info_color_m }};
+            }
+          }
+          .block__wrapper-{{ section.id }} .btn__wrapper a {
+            /* color: {{ block.settings.btn_color }}; */
+            /* background-color : {{ block.settings.btn_bgcolor }}; */
+          }
+          .block__wrapper-{{ section.id }} .image-wrap {
+            filter: brightness({{ block.settings.image_overlay_opacity | append:'%' }});
+          }
+          @media(min-width: 601px) {
+            {% if  block.settings.content_width != blank %}
+            .block__wrapper-{{ section.id }} .content__info-{{ block.id }}{
+              max-width: {{ block.settings.content_width | append: 'px' }};
+            }
+            {% endif %}
+          }
+        </style>
+        {% assign image = block.settings.image %}
+        {% assign image_mobile = block.settings.image_mobile %}
+        {% assign pretitle = block.settings.pretitle %}
+        {% assign title = block.settings.title %}
+        {% assign subtitle = block.settings.subtitle %}
+        {% assign button_label_primary = block.settings.btn_label1 %}
+        {% assign button_url_primary = block.settings.btn_url1 %}
+        {% assign button_label_secondary = block.settings.btn_label2 %}
+        {% assign button_url_secondary = block.settings.btn_url2 %}
+        {% assign mobile_hide = block.settings.hide_image__mobile %}
+        <div class="block__wrapper block__wrapper-{{ section.id }}">
+          {% if image %}
+            <div class="image-wrap {% if mobile_hide %}small-hide{% endif %} {{ section.settings.banner_height }} {% if image_mobile %}small-hide{% endif %}">
+              {{ image | image_url: width: image.width | image_tag }}
+            </div>
+          {% else %}
+            <div class="image-wrap {% if mobile_hide %}small-hide{% endif %} {{ section.settings.banner_height }} {% if image_mobile %}small-hide{% endif %}">
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {% endif %}
+          {% if image_mobile %}
+            <div class="image-wrap {% if block.settings.hide_image__mobile %}small-hide{% endif %} large-up-hide medium-hide {{ section.settings.banner_height }}">
+              {{ image_mobile | image_url: width: image_mobile.width | image_tag }}
+            </div>
+          {% else %}
+            <div class="{% if block.settings.hide_image__mobile or image %}small-hide{% endif %} large-up-hide medium-hide">
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {% endif %}
+          <div class="content__wrapper {% if mobile_hide %}static__mobile-position{% endif %}">
+            <div class="content  {{ section.settings.content_position }}">
+              <div class="content__info content__info-{{ block.id }}">
+                {% if pretitle != blank %}
+                  <p class="pretitle info_color-{{ block.id }} {{ block.settings.info_align }}">
+                    {{ pretitle | escape }}
+                  </p>
+                {% endif %}
+                {% if title != blank %}
+                  <h1 class="heading-{{ block.settings.heading_size }} {{ block.settings.info_align }} info_color-{{ block.id }}">
+                    {{ title }}
+                  </h1>
+                {% endif %}
+                {% if subtitle != blank %}
+                  <p class="info_color-{{ block.id }} {{ block.settings.info_align }} subtitle {{ block.settings.description_size }}">
+                    {{ subtitle }}
+                  </p>
+                {% endif %}
+                <div class="banner__cards btn__wrapper justify-{{ block.settings.info_align }}">
+                    {% for block in section.blocks %}
+                      {% if block.type == 'card' %}
+                        <div class="banner__card">
+                            <div class="banner_card_img">
+                            {% unless block.settings.icon == blank %}
+                              {{ block.settings.icon | image_url: width: block.settings.icon.width | image_tag  }}
+                            {% endunless %}
+                            </div>
+                            <div class="card__content">
+                                <h4 class="info_color-{{ block.id }} {{ block.settings.info_align }} cc__title">{{ block.settings.text }}</h4>
+                                <p class="info_color-{{ block.id }} {{ block.settings.info_align }} cc__subtitle">{{ block.settings.textarea }}</p>
+                            </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                </div>
+                {% if button_label_primary != blank or button_label_secondary != blank %}
+                  <div class="btn__wrapper justify-{{ block.settings.info_align }}">
+                    {% if button_label_primary != blank %}
+                      <a class="button --secondary-button-style" href="{{ button_url_primary }}">{{ button_label_primary }}</a>
+                    {% endif %}
+                    {% if button_label_secondary != blank %}
+                      <a class="button --secondary-button-style" href="{{ button_url_secondary }}">{{ button_label_secondary }}</a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Exchange Banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Banner Content Postion"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner Height",
+      "info": "Select Adapitive To Showcase The Banner Within Aspect Ratio 4:1",
+      "options": [
+        {
+          "value": "adaptive",
+          "label": "Adaptive"
+        },
+        {
+          "value": "original",
+          "label": "Original"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "adaptive"
+    },
+        {
+      "type": "range",
+      "id": "banner_max_height",
+      "min": 50,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Banner Max Height",
+      "default": 500,
+      "info" : "Set Banner Height as Custom to use this feature "
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content Position",
+      "options": [
+        {
+          "value": "top_left",
+          "label": "Top Left"
+        },
+        {
+          "value": "top_center",
+          "label": "Top Center"
+        },
+        {
+          "value": "top_right",
+          "label": "Top Right"
+        },
+        {
+          "value": "middle_center",
+          "label": "Middle Center"
+        },
+        {
+          "value": "middle_right",
+          "label": "Middle Right"
+        },
+        {
+          "value": "middle_left",
+          "label": "Middle Left"
+        },
+        {
+          "value": "bottom_left",
+          "label": "Botttom Left"
+        },
+        {
+          "value": "bottom_center",
+          "label": "Botttom center"
+        },
+        {
+          "value": "bottom_right",
+          "label": "Bottom Right"
+        },
+      ],
+      "default": "middle_center"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "icon"          
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Title",
+          "default": "Refund Deadline"
+        },
+        {
+          "type": "textarea",
+          "id": "textarea",
+          "label": "Content",
+          "default": "We will accept returns of any non custom-embroidered for an exchange or a full refund within 30 days of purchase."
+        },
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Banner Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_image__mobile",
+          "label": "Hide Image On Mobile",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Banner Image (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "image_overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Image Overlay Opacity",
+          "default": 100
+        },
+        {
+          "type": "color",
+          "id": "info_color",
+          "label": "Text Color",
+          "default": "#1F2937"
+        },
+        {
+          "type": "color",
+          "id": "info_color_m",
+          "label": "Text Color (Mobile)",
+          "default": "#1F2937"
+        },
+        {
+          "type": "text",
+          "id": "content_width",
+          "label": "Content Width(Desktop)"
+        },
+        {
+          "type": "select",
+          "id": "info_align",
+          "label": "Info Align",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "pretitle",
+          "label": "Pre Title",
+          "default": "Pretitle",
+          "info": "Use Italic For Line Break"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading Size",
+          "options": [
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading",
+          "info": "Use Italic For Line Break"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subtitle",
+          "label": "Banner Description",
+          "default": "Banner Description",
+          "info": "Use Italic For Line Break"
+        },
+        {
+          "type": "select",
+          "id": "description_size",
+          "label": "Description Size",
+          "options": [
+            {
+              "value": "paragraph__large",
+              "label": "Large"
+            },
+            {
+              "value": "paragraph__medium",
+              "label": "Medium"
+            },
+            {
+              "value": "paragraph__regular",
+              "label": "Regular"
+            },
+            {
+              "value": "paragraph__small",
+              "label": "Small"
+            },
+            {
+              "value": "paragraph__tiny",
+              "label": "Tiny"
+            },
+          ],
+          "default": "paragraph__large"
+        },
+        {
+          "type": "header",
+          "content": "Buttons"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "btn_label1",
+          "label": "Button Label Primary",
+          "default": "Button Label 1"
+        },
+        {
+          "type": "url",
+          "id": "btn_url1",
+          "label": "Button Url Primary"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "btn_label2",
+          "label": "Button Label Secondary",
+          "default": "Button Label 2"
+        },
+        {
+          "type": "url",
+          "id": "btn_url2",
+          "label": "Button Url Secondary"
+        },
+
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Exchange Banner",
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

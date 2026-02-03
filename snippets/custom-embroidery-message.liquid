@@ -1,0 +1,64 @@
+{% if product.tags contains 'EMBROIDER' or product.tags contains 'embroider' or product.tags contains 'Ryder Cup 2025' %}
+  <style>
+          .--custom-embroidery-message-wrapper{
+                {% comment %} padding: 10px; {% endcomment %}
+                padding: var(--Spacing-Container-xs, 12px) var(--Spacing-Container-sm, 16px) var(--Spacing-Container-xs, 12px) var(--Spacing-Container-xs, 12px);
+                margin-block: 12px;
+                width: 100%;
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                border-radius: var(--rounded-lg, 8px);
+                border: 1px solid var(--Border-Base-subtle, #E5E7EB);
+                background: var(--Background-base, #FFF);
+        .--icon-wrapper {
+            svg {
+              width: 80px;
+              height: auto;
+               @media(max-width: 768px){
+              width: 20px;
+            }
+            }
+        }
+        h4 {
+        color: #000;
+            letter-spacing: -0.4px;
+            text-transform: capitalize;
+            margin-block: 0 var(--Spacing-Container-xxs, 8px);
+        }
+        h4 {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+        align-items: flex-start;
+      margin-block: 0 8px;
+      font-family: var(--font-family-Body);
+       font-size: var(--Font-Size-Paragraph-Small);
+    line-height: var(--Line-Height-Paragraph-Small);
+    }
+   h4  em {
+        font-style: normal;
+        color: #8c060a;
+    }
+        p{
+          margin-block: var(--Spacing-Container-xxs, 8px);
+           font-size: var(--Font-Size-Paragraph-Tiny, 12px); 
+          line-height: 1.5em;
+          text-align: left;
+        }
+          }
+  </style>
+  <div class="--custom-embroidery-message-wrapper">
+    <div class="--icon-wrapper desktop-only">
+      {% render 'all-icons', name: 'sewing' %}
+    </div>
+
+    <div>
+      <h4> <div class="--icon-wrapper mobile-only">
+      {% render 'all-icons', name: 'sewing' %}
+    </div>{{ settings.embroidery_message_title }}</h4>
+      {{ settings.embroidery_message_pdp }}
+      
+    </div>
+  </div>
+{% endif %}

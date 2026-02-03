@@ -1,0 +1,22 @@
+{% assign blocked_domains = settings.domain_list | split: '##' %}
+<script>
+  YETT_BLACKLIST = [
+        {%- for domain in blocked_domains -%}
+        {{- domain | split: '://' | last | replace: '.','\.' | replace: '/','\/' | append:"/" | prepend: "/" -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+    ]
+</script>
+
+<script src="https://unpkg.com/yett" async preload="true"></script>
+
+<script>
+  window.addEventListener(
+    'scroll',
+    function () {
+      console.log("Start Unblocking");
+      console.log("Start Unblocking",YETT_BLACKLIST);
+      window.yett.unblock();
+    },
+    { once: true }
+  );
+</script>

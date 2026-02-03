@@ -1,0 +1,370 @@
+{% doc %}
+  @prompt
+    vertical scrolling bar small height with a inline cta, section can have color option selector and rectangle border style cta
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-scroll-bar-{{ ai_gen_id }} {
+    width: 100%;
+    overflow: hidden;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.bar_height }}px 0;
+  }
+
+  .ai-scroll-bar-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    animation: ai-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+    width: max-content;
+  }
+
+  .ai-scroll-bar-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    white-space: nowrap;
+  }
+
+  .ai-scroll-bar-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    font-weight: {{ block.settings.text_weight }};
+    margin: 0;
+  }
+
+  .ai-scroll-bar-cta-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_text_size }}px;
+    font-weight: {{ block.settings.button_text_weight }};
+    transition: all 0.3s ease;
+  }
+
+  .ai-scroll-bar-cta-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    color: {{ block.settings.button_hover_text_color }};
+    border-color: {{ block.settings.button_hover_border_color }};
+  }
+
+  @keyframes ai-scroll-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-scroll-bar-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.85 }}px;
+    }
+
+    .ai-scroll-bar-cta-{{ ai_gen_id }} {
+      font-size: {{ block.settings.button_text_size | times: 0.85 }}px;
+      padding: {{ block.settings.button_padding_vertical | times: 0.8 }}px {{ block.settings.button_padding_horizontal | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+<scrolling-bar-{{ ai_gen_id }} class="ai-scroll-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-scroll-bar-wrapper-{{ ai_gen_id }}">
+    {% for i in (1..2) %}
+      <div class="ai-scroll-bar-item-{{ ai_gen_id }}">
+        {% if block.settings.text_1 != blank %}
+          <p class="ai-scroll-bar-text-{{ ai_gen_id }}">{{ block.settings.text_1 }}</p>
+        {% endif %}
+
+        {% if block.settings.button_text != blank and block.settings.button_link != blank %}
+          <a href="{{ block.settings.button_link }}" class="ai-scroll-bar-cta-{{ ai_gen_id }}">
+            {{ block.settings.button_text }}
+          </a>
+        {% endif %}
+
+        {% if block.settings.text_2 != blank %}
+          <p class="ai-scroll-bar-text-{{ ai_gen_id }}">{{ block.settings.text_2 }}</p>
+        {% endif %}
+
+        {% if block.settings.text_3 != blank %}
+          <p class="ai-scroll-bar-text-{{ ai_gen_id }}">{{ block.settings.text_3 }}</p>
+        {% endif %}
+
+        {% if block.settings.text_4 != blank %}
+          <p class="ai-scroll-bar-text-{{ ai_gen_id }}">{{ block.settings.text_4 }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</scrolling-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ScrollingBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        const wrapper = this.querySelector('.ai-scroll-bar-wrapper-{{ ai_gen_id }}');
+        
+        this.addEventListener('mouseenter', () => {
+          wrapper.style.animationPlayState = 'paused';
+        });
+
+        this.addEventListener('mouseleave', () => {
+          wrapper.style.animationPlayState = 'running';
+        });
+      }
+    }
+
+    customElements.define('scrolling-bar-{{ ai_gen_id }}', ScrollingBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scrolling bar with CTA",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll speed",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Text 1",
+      "default": "Free shipping on orders over $200"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "Text 2",
+      "default": "30-day returns"
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": "Text 3",
+      "default": "Premium quality guaranteed"
+    },
+    {
+      "type": "text",
+      "id": "text_4",
+      "label": "Text 4"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "text_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "button_text_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Button border"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border_color",
+      "label": "Hover border color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling bar with CTA"
+    }
+  ]
+}
+{% endschema %}
